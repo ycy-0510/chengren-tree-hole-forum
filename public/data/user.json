@@ -8,7 +8,7 @@
     {
         "id": "user_bob_02",
         "name": "Bob",
-        "avatar": "/assets/avatars/bob.png",
+        "avatar":"https://placehold.co/400",
         "password": "securepassword123"
     }
 ]

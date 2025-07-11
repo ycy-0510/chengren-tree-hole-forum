@@ -1,16 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/HomeView.vue'
-import AboutView from '@/views/AboutView.vue'
-import MemberView from '@/views/MemberView.vue'
-import RobotsView from '@/views/RobotsView.vue'
-import ContactView from '@/views/ContactView.vue'
 
 const routes = [
-  { path: '/', name: 'Home', component: HomeView },
-  { path: '/about', name: 'About', component: AboutView },
-  { path: '/member', name: 'Member', component: MemberView },
-  { path: '/robots', name: 'Robots', component: RobotsView },
-  { path: '/contact', name: 'Contact', component: ContactView },
+  { path: '/', name: 'Home', component: () => import('@/views/HomeView.vue') },
+  { path: '/board/:boardId', name: 'Board', component: () => import('@/views/BoardView.vue') },
+  //if not found, redirect to home
+  { path: '/:catchAll(.*)', redirect: '/' }
 ]
 
 const router = createRouter({

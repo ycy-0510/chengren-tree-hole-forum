@@ -2,7 +2,7 @@
     <div>
         <!-- Chat Button -->
         <button @click="open = !open"
-            class="fixed bottom-6 right-6 bg-green-600 text-white rounded-full p-4 shadow-lg hover:bg-green-700 transition">
+            class="fixed bottom-6 right-6 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full p-4 shadow-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 hover:scale-105">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.8L3 21l1.8-4A7.96 7.96 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -10,32 +10,46 @@
         </button>
 
         <!-- Chat Widget -->
-        <div v-if="open" class="z-50 fixed bottom-25 right-6 w-80 bg-white rounded-lg shadow-2xl flex flex-col"
+        <div v-if="open" class="z-50 fixed bottom-25 right-6 w-80 bg-white rounded-2xl shadow-2xl border border-emerald-200 flex flex-col overflow-hidden"
             style="height: 420px;">
-            <div class="flex items-center justify-between px-4 py-2 border-b">
-                <span class="font-semibold text-lg">UniQA</span>
-                <button @click="open = false" class="text-gray-400 hover:text-gray-600">&times;</button>
+            <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                        <span class="text-lg">🦄</span>
+                    </div>
+                    <div>
+                        <span class="font-semibold text-lg">UniQA</span>
+                        <p class="text-emerald-100 text-xs">AI 小幫手</p>
+                    </div>
+                </div>
+                <button @click="open = false" class="text-white/70 hover:text-white text-2xl w-8 h-8 rounded-full hover:bg-white/10 transition-colors">&times;</button>
             </div>
 
             <!-- Scrollable chat area -->
-            <div ref="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-2" style="min-height:0;">
+            <div ref="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50" style="min-height:0;">
                 <div v-for="(msg, i) in messages" :key="i" :class="msg.role === 'user' ? 'text-right' : 'text-left'">
-                    <div :class="msg.role === 'user' ? 'bg-green-100 text-green-800 ml-16' : 'bg-gray-100 text-gray-800 mr-16'"
-                        class="inline-block px-3 py-2 rounded-lg">
+                    <div :class="msg.role === 'user' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white ml-12' : 'bg-white text-gray-800 mr-12 border border-emerald-100'"
+                        class="inline-block px-4 py-3 rounded-2xl shadow-sm">
                         {{ msg.content }}
                     </div>
                 </div>
-                <div v-if="loading" class="text-gray-400 text-sm">UniQA 真在思考...</div>
+                <div v-if="loading" class="text-gray-500 text-sm flex items-center gap-2">
+                    <div class="w-4 h-4 border-2 border-emerald-300 border-t-emerald-600 rounded-full animate-spin"></div>
+                    UniQA 正在思考...
+                </div>
             </div>
 
             <!-- Input area -->
-            <form @submit.prevent="sendMessage" class="flex border-t">
-                <input v-model="input" type="text" placeholder="輸入你的問題..." class="flex-1 px-3 py-2 outline-none"
+            <form @submit.prevent="sendMessage" class="flex border-t border-emerald-200 bg-white">
+                <input v-model="input" type="text" placeholder="輸入你的問題..." 
+                    class="flex-1 px-4 py-3 outline-none bg-transparent text-gray-700 placeholder-gray-400"
                     :disabled="loading" />
                 <button type="submit"
-                    class="bg-green-600 text-white px-4 py-2 rounded-br-lg hover:bg-green-700 transition"
+                    class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-br-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     :disabled="loading || !input.trim()">
-                    傳送
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
                 </button>
             </form>
         </div>

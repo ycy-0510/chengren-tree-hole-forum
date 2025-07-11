@@ -1,10 +1,11 @@
 [
     {
         "id": "post_001",
+        "boardId": "life",
         "authorId": "user_alice_01",
         "title": "這個錯誤好難 debug",
         "content": "今天喝了很好喝的拿鐵，超幸福～",
-        "image": "/assets/images/post_001.png",
+        "image": null,
         "tags": [
             "日常",
             "活動",
@@ -29,10 +30,11 @@
     },
     {
         "id": "post_002",
+        "boardId": "academic",
         "authorId": "user_bob_02",
         "title": "生活碎念",
         "content": "剛完成一個 side project，超有成就感！",
-        "image": "/assets/images/post_002.png",
+        "image": "https://placehold.co/600x400",
         "tags": [
             "JavaScript",
             "活動"
