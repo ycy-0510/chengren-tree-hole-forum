@@ -1,10 +1,10 @@
 <template>
     <header
-        class="text-black sticky top-0 z-20 bg-green-200/30 backdrop-blur border-b border-green-500/20 px-5 py-3 md:ms-52">
+        class="sticky top-0 z-20 bg-theme-green/80 backdrop-blur border-b border-theme-green-dark/30 px-5 py-3 md:ms-52">
         <nav class="flex justify-between items-center container mx-auto">
             <!-- Hamburger Icon for mobile -->
             <div class="block md:hidden">
-                <button @click="toggleMenu" class="text-2xl h-8 w-8 relative">
+                <button @click="toggleMenu" class="text-theme-green-dark h-8 w-8 relative">
                     <font-awesome-icon :icon="['fas', 'bars']"
                         class="absolute left-0 top-0 h-8 w-8 transition-all duration-300"
                         :class="{ 'translate-x-0 opacity-100': !menuOpen, 'rotate-90 opacity-0': menuOpen }" />
@@ -14,13 +14,13 @@
                 </button>
             </div>
             <!-- Logo/Title -->
-            <h1 class="text-3xl font-bold tracking-wide text-amber-800 flex-1 text-left ms-4">成仁樹洞</h1>
+            <h1 class="text-3xl font-bold tracking-wide text-theme-green-dark flex-1 text-left ms-4">成仁樹洞</h1>
             <!-- Avatar and Name Placeholder -->
             <div class="flex items-center space-x-3">
-                <img :src="user.avatar" alt="Avatar" class="w-9 h-9 rounded-full object-cover bg-green-800" />
-                <span class="text-lg font-medium text-amber-900">{{ user.name }}</span>
+                <img :src="user.avatar" alt="Avatar" class="w-9 h-9 rounded-full object-cover bg-theme-green-light" />
+                <span class="text-lg font-medium text-theme-green-dark">{{ user.name }}</span>
             </div>
-            <button @click="signOut" class="ml-4 px-4 py-2 rounded  text-amber-800 hover:text-red-600 transition">
+            <button @click="signOut" class="ml-4 px-4 py-2 rounded text-theme-green-dark hover:text-theme-brown transition">
                 <font-awesome-icon :icon="['fas', 'sign-out']" class="mr-2" />
             </button>
         </nav>
@@ -59,11 +59,3 @@ const signOut = () => {
     localStorage.removeItem('user')
 }
 </script>
-
-<!-- <style scoped>
-/* Optional: add some styling for the toggle button */
-button {
-    background: transparent;
-    border: none;
-}
-</style> -->

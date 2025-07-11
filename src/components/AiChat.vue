@@ -2,7 +2,7 @@
     <div>
         <!-- Chat Button -->
         <button @click="open = !open"
-            class="fixed bottom-6 right-6 bg-green-600 text-white rounded-full p-4 shadow-lg hover:bg-green-700 transition">
+            class="fixed bottom-6 right-6 bg-theme-green text-white rounded-full p-4 shadow-lg hover:bg-theme-green-dark transition">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.8L3 21l1.8-4A7.96 7.96 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -10,30 +10,30 @@
         </button>
 
         <!-- Chat Widget -->
-        <div v-if="open" class="z-50 fixed bottom-25 right-6 w-80 bg-white rounded-lg shadow-2xl flex flex-col"
+        <div v-if="open" class="z-50 fixed bottom-25 right-6 w-80 bg-theme-beige rounded-lg shadow-2xl flex flex-col"
             style="height: 420px;">
-            <div class="flex items-center justify-between px-4 py-2 border-b">
-                <span class="font-semibold text-lg">UniQA</span>
-                <button @click="open = false" class="text-gray-400 hover:text-gray-600">&times;</button>
+            <div class="flex items-center justify-between px-4 py-2 border-b border-theme-green-light">
+                <span class="font-semibold text-lg text-theme-green-dark">UniQA</span>
+                <button @click="open = false" class="text-theme-green hover:text-theme-green-dark">&times;</button>
             </div>
 
             <!-- Scrollable chat area -->
             <div ref="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-2" style="min-height:0;">
                 <div v-for="(msg, i) in messages" :key="i" :class="msg.role === 'user' ? 'text-right' : 'text-left'">
-                    <div :class="msg.role === 'user' ? 'bg-green-100 text-green-800 ml-16' : 'bg-gray-100 text-gray-800 mr-16'"
+                    <div :class="msg.role === 'user' ? 'bg-theme-green-light text-theme-green-dark ml-16' : 'bg-white text-gray-700 mr-16'"
                         class="inline-block px-3 py-2 rounded-lg">
                         {{ msg.content }}
                     </div>
                 </div>
-                <div v-if="loading" class="text-gray-400 text-sm">UniQA 真在思考...</div>
+                <div v-if="loading" class="text-theme-green text-sm">UniQA 真在思考...</div>
             </div>
 
             <!-- Input area -->
-            <form @submit.prevent="sendMessage" class="flex border-t">
-                <input v-model="input" type="text" placeholder="輸入你的問題..." class="flex-1 px-3 py-2 outline-none"
+            <form @submit.prevent="sendMessage" class="flex border-t border-theme-green-light">
+                <input v-model="input" type="text" placeholder="輸入你的問題..." class="flex-1 px-3 py-2 outline-none bg-transparent placeholder-gray-500"
                     :disabled="loading" />
                 <button type="submit"
-                    class="bg-green-600 text-white px-4 py-2 rounded-br-lg hover:bg-green-700 transition"
+                    class="bg-theme-green text-white px-4 py-2 rounded-br-lg hover:bg-theme-green-dark transition"
                     :disabled="loading || !input.trim()">
                     傳送
                 </button>
@@ -145,7 +145,7 @@ watch(open, async (val) => {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #e5e7eb;
+    background: #A2C5AC; /* theme-green-light */
     border-radius: 3px;
 }
 </style>

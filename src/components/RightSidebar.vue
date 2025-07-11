@@ -28,20 +28,20 @@ const boards = [
         :class="{ 'translate-x-52 opacity-20': !prop.show }">
         <nav>
             <button
-                class="w-full mb-4 py-2 px-4 bg-green-600 text-white rounded hover:bg-green-700 transition-colors font-bold">
+                class="w-full mb-4 py-2 px-4 bg-theme-green text-white rounded hover:bg-theme-green-dark transition-colors font-bold">
                 我要發文
             </button>
-            <div class="border border-green-700 rounded-xl p-5 bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
-                <p class="my-2 text-lg font-semibold text-green-800 flex items-center gap-2">
-                    <i class="fa-solid fa-fire text-amber-500"></i>
+            <div class="border border-theme-green-dark rounded-xl p-5 bg-theme-green-light shadow-lg">
+                <p class="my-2 text-lg font-semibold text-theme-green-dark flex items-center gap-2">
+                    <i class="fa-solid fa-fire text-theme-brown"></i>
                     熱門排行榜
                 </p>
                 <ul class="list-decimal list-inside p-0 m-0 space-y-2">
                     <li v-for="board in boards" :key="board.path" class="flex items-center gap-2">
-                        <font-awesome-icon :icon="board.icon" class=" w-10 text-green-600" />
+                        <font-awesome-icon :icon="board.icon" class=" w-10 text-theme-green" />
                         <RouterLink :to="board.path"
-                            class="no-underline font-medium hover:text-amber-700 transition-colors rounded px-2 py-1 hover:bg-green-200"
-                            active-class="text-amber-800 font-bold bg-green-100">
+                            class="no-underline font-medium hover:text-theme-brown transition-colors rounded px-2 py-1 hover:bg-theme-green-xlight"
+                            active-class="text-theme-brown font-bold bg-theme-green-xlight">
                             {{ board.name }}
                         </RouterLink>
                     </li>

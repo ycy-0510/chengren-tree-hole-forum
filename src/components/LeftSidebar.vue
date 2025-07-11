@@ -45,14 +45,14 @@ const boards = [
 
 <template>
     <aside
-        class="fixed top-0 left-0 z-30 w-52 h-screen bg-green-900 text-white border-r border-green-600 p-5 transition-all duration-300 md:translate-x-0 md:opacity-100"
+        class="fixed top-0 left-0 z-30 w-52 h-screen bg-theme-green-dark text-theme-beige border-r border-theme-green p-5 transition-all duration-300 md:translate-x-0 md:opacity-100"
         :class="{ '-translate-x-52 opacity-20': !prop.show }">
         <nav>
             <ul class="list-none p-0 m-0">
                 <li v-for="board in boards" :key="board.path" class="my-2">
                     <RouterLink :to="board.path"
-                        class="no-underline hover:text-amber-700 transition-colors text-lg flex items-center gap-2"
-                        active-class="text-amber-600 font-bold">
+                        class="no-underline hover:text-theme-green-light transition-colors text-lg flex items-center gap-2"
+                        active-class="text-white font-bold">
                         <font-awesome-icon :icon="board.icon" class=" w-10" />
                         {{ board.name }}
                     </RouterLink>
