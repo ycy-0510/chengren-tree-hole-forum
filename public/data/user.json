@@ -1,0 +1,14 @@
+[
+    {
+        "id": "user_alice_01",
+        "name": "Alice",
+        "avatar": "https://placehold.co/400",
+        "password": "1234"
+    },
+    {
+        "id": "user_bob_02",
+        "name": "Bob",
+        "avatar": "/assets/avatars/bob.png",
+        "password": "securepassword123"
+    }
+]

@@ -6,9 +6,31 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { 
+    faBars, 
+    faXmark, 
+    faSignOut, 
+    faHouse, 
+    faGraduationCap, 
+    faUtensils, 
+    faShirt, 
+    faComments, 
+    faBasketball, 
+    faLeaf 
+} from '@fortawesome/free-solid-svg-icons'
 
-library.add(faBars, faXmark)
+library.add(
+    faBars, 
+    faXmark, 
+    faSignOut, 
+    faHouse, 
+    faGraduationCap, 
+    faUtensils, 
+    faShirt, 
+    faComments, 
+    faBasketball, 
+    faLeaf
+)
 
 const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)

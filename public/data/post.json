@@ -1,0 +1,46 @@
+[
+    {
+        "id": "post_001",
+        "authorId": "user_alice_01",
+        "title": "這個錯誤好難 debug",
+        "content": "今天喝了很好喝的拿鐵，超幸福～",
+        "image": "/assets/images/post_001.png",
+        "tags": [
+            "日常",
+            "活動",
+            "筆記"
+        ],
+        "label": "問題",
+        "createdAt": "2025-06-21T01:22:13",
+        "likes": 28,
+        "shares": 20,
+        "comments": [
+            {
+                "userId": "user_bob_02",
+                "time": "2025-06-01T09:12:44",
+                "content": "這篇寫得不錯！"
+            },
+            {
+                "userId": "user_bob_02",
+                "time": "2025-07-02T04:04:35",
+                "content": "這個觀點很有趣！"
+            }
+        ]
+    },
+    {
+        "id": "post_002",
+        "authorId": "user_bob_02",
+        "title": "生活碎念",
+        "content": "剛完成一個 side project，超有成就感！",
+        "image": "/assets/images/post_002.png",
+        "tags": [
+            "JavaScript",
+            "活動"
+        ],
+        "label": "閒聊",
+        "createdAt": "2025-06-15T18:44:00",
+        "likes": 51,
+        "shares": 11,
+        "comments": []
+    }
+]
