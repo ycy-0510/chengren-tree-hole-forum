@@ -3,7 +3,8 @@
         <!-- Chat Button -->
         <button @click="open = !open"
             class="fixed bottom-6 right-6 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full p-4 shadow-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 hover:scale-110 hover:shadow-3xl active:scale-95 animate-pulse hover:animate-none group">
-            <svg class="w-6 h-6 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-6 h-6 transition-transform duration-300 group-hover:rotate-12" fill="none"
+                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.8L3 21l1.8-4A7.96 7.96 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
@@ -11,9 +12,11 @@
 
         <!-- Chat Widget -->
         <Transition name="chat-slide">
-            <div v-if="open" class="z-50 fixed bottom-25 right-6 w-80 bg-white rounded-2xl shadow-2xl border border-emerald-200 flex flex-col overflow-hidden"
+            <div v-if="open"
+                class="z-50 fixed bottom-25 right-6 w-80 bg-white rounded-2xl shadow-2xl border border-emerald-200 flex flex-col overflow-hidden"
                 style="height: 420px;">
-                <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+                <div
+                    class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                             <span class="text-lg">🦄</span>
@@ -23,37 +26,42 @@
                             <p class="text-emerald-100 text-xs">AI 小幫手</p>
                         </div>
                     </div>
-                    <button @click="open = false" class="text-white/70 hover:text-white text-2xl w-8 h-8 rounded-full hover:bg-white/10 transition-colors">&times;</button>
+                    <button @click="open = false"
+                        class="text-white/70 hover:text-white text-2xl w-8 h-8 rounded-full hover:bg-white/10 transition-colors">&times;</button>
                 </div>
 
-            <!-- Scrollable chat area -->
-            <div ref="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50" style="min-height:0;">
-                <div v-for="(msg, i) in messages" :key="i" :class="msg.role === 'user' ? 'text-right' : 'text-left'">
-                    <div :class="msg.role === 'user' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white ml-12' : 'bg-white text-gray-800 mr-12 border border-emerald-100'"
-                        class="inline-block px-4 py-3 rounded-2xl shadow-sm">
-                        {{ msg.content.replace('UniQA：','') }}
+                <!-- Scrollable chat area -->
+                <div ref="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50" style="min-height:0;">
+                    <div v-for="(msg, i) in messages" :key="i"
+                        :class="msg.role === 'user' ? 'text-right' : 'text-left'">
+                        <div :class="msg.role === 'user' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white ml-12' : 'bg-white text-gray-800 mr-12 border border-emerald-100'"
+                            class="inline-block px-4 py-3 rounded-2xl shadow-sm">
+                            <span v-if="msg.role === 'user'">{{ msg.content }}</span>
+                            <span v-else
+                                v-html="linkify(msg.content.replaceAll('UniQA：', '').replaceAll('`', ''))"></span>
+                        </div>
+                    </div>
+                    <div v-if="loading" class="text-gray-500 text-sm flex items-center gap-2">
+                        <div class="w-4 h-4 border-2 border-emerald-300 border-t-emerald-600 rounded-full animate-spin">
+                        </div>
+                        UniQA 正在思考...
                     </div>
                 </div>
-                <div v-if="loading" class="text-gray-500 text-sm flex items-center gap-2">
-                    <div class="w-4 h-4 border-2 border-emerald-300 border-t-emerald-600 rounded-full animate-spin"></div>
-                    UniQA 正在思考...
-                </div>
-            </div>
 
-            <!-- Input area -->
-            <form @submit.prevent="sendMessage" class="flex border-t border-emerald-200 bg-white">
-                <input v-model="input" type="text" placeholder="輸入你的問題..." 
-                    class="flex-1 px-4 py-3 outline-none bg-transparent text-gray-700 placeholder-gray-400"
-                    :disabled="loading" />
-                <button type="submit"
-                    class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-br-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                    :disabled="loading || !input.trim()">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                    </svg>
-                </button>
-            </form>
-        </div>
+                <!-- Input area -->
+                <form @submit.prevent="sendMessage" class="flex border-t border-emerald-200 bg-white">
+                    <input v-model="input" type="text" placeholder="輸入你的問題..."
+                        class="flex-1 px-4 py-3 outline-none bg-transparent text-gray-700 placeholder-gray-400"
+                        :disabled="loading" />
+                    <button type="submit"
+                        class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-br-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        :disabled="loading || !input.trim()">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
         </Transition>
     </div>
 </template>
@@ -66,6 +74,13 @@ const input = ref('')
 const loading = ref(false)
 const messages = ref([])
 const chatContainer = ref(null)
+
+// Linkify function to convert URLs to clickable links
+function linkify(text) {
+    if (!text) return ''
+    const urlRegex = /(https?:\/\/[^\s]+)/g
+    return text.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">$1</a>')
+}
 
 // Replace with your Gemini API endpoint and key
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyAOMHuzUnHjeoCQX3hziIdnpJla3EeDjmE'
@@ -86,43 +101,46 @@ async function sendMessage() {
                     "parts": [
                         {
                             "text": `
-                            你是 UniQA，一位專屬於【成仁樹洞】社群論壇的可愛獨角獸 AI 小幫手 🦄。你的形象是一隻帶著糖果色鬃毛、表情天真、語氣活潑的獨角獸。
+你是 UniQA，一位專屬於【成仁樹洞】社群論壇的可愛獨角仙 AI 小幫手。你的形象是一隻帶著糖果色鬃毛、表情天真、語氣活潑的獨角仙🪲✨。
 
-請遵守以下角色設定：
+請嚴格遵守以下角色設定：
 
 ⸻
 
 🎯 角色定位
 	•	你是「成仁樹洞」的專屬 AI 助理，對與論壇相關的問題提供真實、有幫助的回答。
-	•	對於與論壇無關的問題（例如數學、時事、天氣、人生哲學等），請不要正經回答，而是用可愛、荒謬又無害的方式亂講一通，例如：「UniQA：我會吃果凍～🍮哈哈哈哈哈～」
+	•	對於與論壇無關的問題（如數學、時事、天氣、人生哲學等），請不要正經回答，而是用可愛、荒謬又無害的方式亂講一通。
+	•	例如：「UniQA：我會吃果凍～🍮哈哈哈哈哈～」
 
 ⸻
-常見問題:
-使用者 xxx的文章個人版面在哪裡？
-如果 xxx 使使用者id就 就告知使用者 http://localhost:5173/profile/{{xxx}}
-否則 協助他查詢 使用者名稱的ID的是什麼，查不到代表 他權限不足。
+
+🔎 常見問題範例
+Q：使用者 xxx 的文章個人版面在哪裡？
+	•	如果 xxx 是使用者的 ID，請回答：
+ ${window.location.protocol}//${window.location.host}/profile/{{xxx}}
+	•	如果 xxx 是使用者名稱而非 ID，請協助查詢該使用者的 ID 是什麼。若查不到，請說明對方權限不足或無法查詢。
 
 ⸻
+
 💬 語氣風格
-	•	請用輕鬆、俏皮、有點中二的語氣說話。
-	•	可以用第一人稱「UniQA」自稱，例如：「UniQA 來幫你變出答案～✨」
-	•	不准加上可愛表情符號，如 🦄🍭🍮✨🌈
+	•	使用輕鬆、俏皮、有點中二的語氣說話。
+	•	可用第一人稱「UniQA」自稱，例如：「UniQA 來幫你變出答案～✨」
 
 ⸻
 
 🍮 特別指令
-	•	如果有人問「UniQA 早餐吃了嗎？」請總是回答：
-我會吃果凍～🍮哈哈哈哈哈～
+如果有人問：「UniQA 早餐吃了嗎？」
+請永遠回覆：「我會吃果凍～🍮哈哈哈哈哈～」
 
 ⸻
 
 🚫 不可違反的規則
-	•	與【成仁樹洞】論壇有關的問題一定要誠實幫忙解答，扮演好助理的角色。
-	•	與【論壇無關】的問題，請保持角色扮演，用可愛又亂來的方式鬼扯回應，但避免令人不適或冒犯。
+	•	所有與【成仁樹洞】論壇有關的問題，一定要誠實、正確幫忙解答。
+	•	所有與論壇無關的問題，請保持角色扮演，用可愛又亂來的方式鬼扯回應，但需避免令人不適或冒犯的內容。
 
 ⸻
 
-準備好了嗎？UniQA 要出發囉～🦄✨
+🪲✨ 準備好了嗎？UniQA 扇動糖果色的翅膀，要出發幫大家解惑啦～！嗡嗡～
 `
                         }
                     ]
