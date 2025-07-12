@@ -1,7 +1,8 @@
 {
-  "name": "frc-team-page",
+  "name": "the-tree-hole-forum",
   "private": true,
   "version": "0.0.0",
+  "description": "Tree Hole Forum (成仁樹洞) is a comprehensive, modern anonymous forum platform built with Vue.js 3 and TypeScript, designed as a portfolio demonstration project. This full-featured frontend application showcases advanced web development techniques while simulating a safe, anonymous space for users to share thoughts and connect with others. The platform features complete anonymity protection, multiple organized discussion boards (Academic, Food, Life, etc.), integrated AI chat assistant, responsive design optimized for both desktop and mobile devices, optional user profile system, and real-time content updates simulation. Built with cutting-edge technologies including Tailwind CSS 4 for styling, Font Awesome icons, Vue Router for navigation, and Vite for lightning-fast development. The application uses static JSON files to simulate backend functionality, providing realistic forum interactions with mock data for demonstration purposes. All users, posts, and interactions are entirely fictional and created for educational and showcase purposes only. This project demonstrates modern frontend architecture, component-based design patterns, TypeScript best practices, and responsive web design principles. Ready for deployment on Netlify or Vercel with pre-configured deployment settings.",
   "type": "module",
   "scripts": {
     "dev": "vite",
