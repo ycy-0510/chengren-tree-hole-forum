@@ -28,7 +28,7 @@ const post = () => {
 
 <template>
     <aside
-        class="fixed top-0 right-0 z-10 w-64 h-auto max-h-screen p-6 pt-42 transition-all duration-300 md:translate-x-0 md:opacity-100"
+        class="fixed top-0 right-0 z-10 w-64 h-auto max-h-screen p-6 pt-30 transition-all duration-300 md:translate-x-0 md:opacity-100"
         :class="{ 'translate-x-64 opacity-0': !prop.show }">
         <div class="space-y-6">
             <!-- Post Button -->
