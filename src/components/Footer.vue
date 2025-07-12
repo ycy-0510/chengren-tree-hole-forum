@@ -11,9 +11,11 @@
                         <p class="text-emerald-300 text-sm">由成仁高中資訊社成立</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-4 text-emerald-200">
-                    <span class="text-sm">&COPY; 2017 成仁高中資訊社</span>
-                    <div class="w-1 h-1 bg-emerald-400 rounded-full"></div>
+                <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 text-emerald-200">
+                    <span class="text-sm">Made with ❤️ by 成仁高中資訊</span>
+                    <div class="hidden sm:block w-1 h-1 bg-emerald-400 rounded-full"></div>
+                    <span class="text-sm">Since 2017</span>
+                    <div class="hidden sm:block w-1 h-1 bg-emerald-400 rounded-full"></div>
                     <span class="text-sm">匿名分享平台</span>
                 </div>
             </div>

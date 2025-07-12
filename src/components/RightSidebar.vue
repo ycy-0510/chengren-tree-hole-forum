@@ -74,6 +74,10 @@ const post = () => {
                     今日統計
                 </h3>
                 <div class="space-y-3">
+                     <div class="flex justify-between items-center">
+                        <span class="text-gray-600 text-sm">瀏覽次數</span>
+                        <span class="text-emerald-600 font-semibold">562</span>
+                    </div>
                     <div class="flex justify-between items-center">
                         <span class="text-gray-600 text-sm">新增貼文</span>
                         <span class="text-emerald-600 font-semibold">22</span>
