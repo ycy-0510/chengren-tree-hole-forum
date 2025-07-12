@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成仁樹洞論壇 - 圖片上傳工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .post-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">成仁樹洞論壇</h1>
+            <p class="text-gray-600 text-lg">圖片上傳管理工具</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for post in posts %}
+            <div class="post-card bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                            {{ post.label }}
+                        </span>
+                        <span class="text-sm text-gray-500">{{ post.boardId }}</span>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2 line-clamp-2">
+                        {{ post.title }}
+                    </h3>
+                    
+                    <p class="text-gray-600 mb-4 line-clamp-3">
+                        {{ post.content }}
+                    </p>
+                    
+                    {% if post.image %}
+                    <div class="mb-4">
+                        <img src="{{ post.image }}" alt="貼文圖片" class="w-full h-48 object-cover rounded-lg">
+                    </div>
+                    {% endif %}
+                    
+                    <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                        <span>👤 {{ post.authorId }}</span>
+                        <span>{{ post.createdAt[:10] }}</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="flex items-center">
+                                ❤️ {{ post.likes }}
+                            </span>
+                            <span class="flex items-center">
+                                🔄 {{ post.shares }}
+                            </span>
+                        </div>
+                        <a href="/post/{{ post.id }}" 
+                           class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            管理圖片
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

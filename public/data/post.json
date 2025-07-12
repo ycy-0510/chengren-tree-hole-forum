@@ -54,7 +54,7 @@
         "authorId": "user_02",
         "title": "福利社新品開箱",
         "content": "福利社今天進了新的飲料，草莓奶昔超好喝！價格也很親民，一杯只要25元。推薦大家試試看，比外面手搖飲便宜很多，而且味道不輸外面的店家。",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_002.jpg",
         "tags": [
             "福利社",
             "飲料",
@@ -166,7 +166,7 @@
         "authorId": "user_04",
         "title": "籃球校隊招生中！",
         "content": "籃球校隊開始招收新血了！不管你是初學者還是有經驗的球員都歡迎來試試。每週二、四放學後練習，有興趣的同學可以直接到體育館找教練。一起為成仁爭光吧！",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_004.jpg",
         "tags": [
             "籃球",
             "校隊",
@@ -205,7 +205,7 @@
         "authorId": "user_05",
         "title": "學校附近美食推薦",
         "content": "推薦學校後門的那家早餐店，他們的蛋餅超讚！餅皮很Q彈，蛋也很嫩。老闆娘人很好，常常會多給一些配菜。價格也很實惠，大推薦給大家！",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_005.jpg",
         "tags": [
             "美食",
             "早餐",
@@ -361,7 +361,7 @@
         "authorId": "user_09",
         "title": "制服穿搭小技巧",
         "content": "分享一些制服穿搭的小巧思！可以用髮飾、手錶、或是不同款式的襪子來增加變化。記得要符合校規哦！簡單的配件就能讓制服看起來更有個人風格。",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_009.jpg",
         "tags": [
             "制服",
             "穿搭",
@@ -444,7 +444,7 @@
         "authorId": "user_11",
         "title": "物理實驗超有趣",
         "content": "今天做物理實驗，研究單擺運動，本來以為會很無聊，沒想到超有趣的！看著擺錘規律的擺動，突然覺得物理原來可以這麼生動。老師說下次要做電路實驗，好期待！",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_011.jpg",
         "tags": [
             "物理",
             "實驗",
@@ -900,7 +900,7 @@
         "authorId": "user_24",
         "title": "便當店新菜色",
         "content": "學校對面的便當店推出新菜色，泰式打拋豬超香的！辣度剛好，配菜也很豐富。價格70元算是合理，比營養午餐有變化多了。推薦給喜歡嘗試新口味的同學！",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_024.jpg",
         "tags": [
             "便當",
             "新菜色",
@@ -973,7 +973,7 @@
         "authorId": "user_26",
         "title": "冬天保暖小物分享",
         "content": "最近天氣變冷了，分享一些保暖小物！暖暖包、保溫杯、圍巾都很實用。特別推薦可愛的手套，既保暖又能增加造型感。大家都是怎麼在制服外搭配保暖衣物的？",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_026.jpg",
         "tags": [
             "保暖",
             "配件",
@@ -1085,7 +1085,7 @@
         "authorId": "user_29",
         "title": "校園貓咪又來了",
         "content": "學校那隻橘貓又出現了！今天在中庭曬太陽，看起來很悠閒。聽說是附近的流浪貓，常常來學校找食物。有同學偷偷餵牠，希望學校不要把牠趕走。",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_029.jpg",
         "tags": [
             "貓咪",
             "校園",
@@ -1124,7 +1124,7 @@
         "authorId": "user_30",
         "title": "自己做便當",
         "content": "最近開始自己做便當帶到學校，雖然賣相不太好但至少知道食材新鮮。昨天做了蛋炒飯配滷蛋，同學都說香味很誘人。準備明天挑戰做三明治！",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_030.jpg",
         "tags": [
             "便當",
             "自製",
@@ -1197,7 +1197,7 @@
         "authorId": "user_32",
         "title": "地理課戶外教學",
         "content": "今天地理課去河邊觀察地形，老師講解得很詳細，實地看到課本上的知識覺得很有趣。雖然走了很多路有點累，但這種實地教學比坐在教室有趣多了！",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_032.jpg",
         "tags": [
             "地理",
             "戶外教學",
@@ -1231,7 +1231,7 @@
         "authorId": "user_33",
         "title": "游泳課開始了",
         "content": "終於開始游泳課了！雖然水有點冷但游起來很舒服。我的自由式還需要練習，換氣總是抓不到節奏。看到游得好的同學真的很羨慕，希望這學期能進步一些。",
-        "image": null,
+        "image": "/assets/images/post_033.jpg",
         "tags": [
             "游泳",
             "體育課",
@@ -1382,7 +1382,7 @@
         "authorId": "user_37",
         "title": "飲水機壞了",
         "content": "三樓的飲水機壞了好幾天都沒修，每次要裝水都要跑到其他樓層。天氣這麼熱真的很不方便，希望總務處可以快點派人來修理。學校的設備維護真的需要加強。",
-        "image": null,
+        "image": "/assets/images/post_037.jpg",
         "tags": [
             "飲水機",
             "維修",
@@ -1557,7 +1557,7 @@
         "authorId": "user_42",
         "title": "課桌椅太舊了",
         "content": "我們班的課桌椅真的很舊，桌面都是刮痕和塗鴉，椅子也搖搖晃晃的。每次寫字都不太順，希望學校能換新的。聽說隔壁班已經換了，好羨慕啊！",
-        "image": null,
+        "image": "/assets/images/post_042.jpg",
         "tags": [
             "課桌椅",
             "老舊",
@@ -1810,7 +1810,7 @@
         "authorId": "user_49",
         "title": "中秋節月餅分享",
         "content": "中秋節快到了，同學帶了自家做的月餅來分享。蛋黃酥超好吃的，外皮酥脆內餡香甜。比市面上買的還要好吃，真的很有家的味道。感謝同學的分享！",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_049.jpg",
         "tags": [
             "中秋節",
             "月餅",
@@ -2073,7 +2073,7 @@
         "authorId": "user_26",
         "title": "校園咖啡店開張",
         "content": "學校新開了一間小咖啡店，在圖書館旁邊。咖啡香味很濃，價格也不貴。還有賣一些輕食和甜點，環境很舒適。適合讀書累了去放鬆一下！",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_056.jpg",
         "tags": [
             "咖啡",
             "新開",
@@ -2185,7 +2185,7 @@
         "authorId": "user_29",
         "title": "班級旅遊計畫",
         "content": "班上在討論畢業旅行的地點，有人建議去花蓮，有人想去台南。預算和時間都要考慮，還要配合大家的時間。希望能去個有意義又好玩的地方！",
-        "image": null,
+        "image": "/assets/images/post_059.jpg",
         "tags": [
             "班旅",
             "畢業",
@@ -2224,7 +2224,7 @@
         "authorId": "user_30",
         "title": "新設健身房器材",
         "content": "學校在體育館新設了一些健身器材，有跑步機和重量訓練設備。雖然不多，但對想要運動的同學來說很方便。放學後可以去運動一下，很不錯！",
-        "image": null,
+        "image": "/assets/images/post_060.jpg",
         "tags": [
             "健身",
             "器材",
@@ -2331,7 +2331,7 @@
         "authorId": "user_33",
         "title": "自助餐新菜色",
         "content": "學校自助餐推出新菜色，有泰式咖哩和韓式拌飯。咖哩有點辣但很香，拌飯的配菜也很豐富。比平常的菜色有變化，價格也合理，推薦大家試試看！",
-        "image": "https://picsum.photos/800/600",
+        "image": "/assets/images/post_063.jpg",
         "tags": [
             "自助餐",
             "新菜",

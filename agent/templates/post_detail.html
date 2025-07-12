@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - 圖片管理</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+        .upload-area.dragover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .loading {
+            display: none;
+        }
+        .loading.show {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- 返回按鈕 -->
+            <div class="mb-6">
+                <a href="/" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                    ← 返回首頁
+                </a>
+            </div>
+
+            <!-- 貼文資訊 -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                        {{ post.label }}
+                    </span>
+                    <span class="text-sm text-gray-500">{{ post.boardId }}</span>
+                </div>
+                
+                <h1 class="text-2xl font-bold text-gray-800 mb-4">{{ post.title }}</h1>
+                
+                <p class="text-gray-600 mb-4">{{ post.content }}</p>
+                
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                    <span>👤 {{ post.authorId }}</span>
+                    <span>{{ post.createdAt }}</span>
+                </div>
+            </div>
+
+            <!-- 現有圖片 -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-xl font-semibold mb-4">現有圖片</h2>
+                {% if post.image %}
+                <div class="relative group">
+                    <img src="{{ post.image }}" alt="貼文圖片" class="w-full max-w-md rounded-lg shadow-md">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button onclick="deleteImage()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+                            刪除圖片
+                        </button>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-gray-500">尚未上傳圖片</p>
+                {% endif %}
+            </div>
+
+            <!-- 圖片上傳區域 -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">上傳新圖片</h2>
+                
+                <div class="upload-area p-8 text-center rounded-lg" id="uploadArea">
+                    <div class="mb-4">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <p class="text-lg text-gray-600 mb-2">點擊或拖拽圖片到此處</p>
+                    <p class="text-sm text-gray-500">支援 JPG、PNG、GIF 格式</p>
+                    <input type="file" id="fileInput" class="hidden" accept="image/*">
+                </div>
+                
+                <div class="loading mt-4 text-center">
+                    <div class="inline-flex items-center">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        正在上傳...
+                    </div>
+                </div>
+            </div>
+
+            <!-- 成功/錯誤訊息 -->
+            <div id="message" class="hidden fixed top-4 right-4 px-4 py-2 rounded-lg text-white font-medium"></div>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const loading = document.querySelector('.loading');
+        const message = document.getElementById('message');
+
+        // 點擊上傳區域
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // 拖拽功能
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        // 文件選擇
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        // 處理文件上傳
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showMessage('請選擇圖片文件', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            loading.classList.add('show');
+
+            fetch(`/upload/{{ post.id }}`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.classList.remove('show');
+                if (data.message) {
+                    showMessage('圖片上傳成功！', 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showMessage('上傳失敗', 'error');
+                }
+            })
+            .catch(error => {
+                loading.classList.remove('show');
+                showMessage('上傳失敗: ' + error.message, 'error');
+            });
+        }
+
+        // 刪除圖片
+        function deleteImage() {
+            if (!confirm('確定要刪除這張圖片嗎？')) {
+                return;
+            }
+
+            fetch(`/image/{{ post.id }}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    showMessage('圖片刪除成功！', 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showMessage('刪除失敗', 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('刪除失敗: ' + error.message, 'error');
+            });
+        }
+
+        // 顯示訊息
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = `fixed top-4 right-4 px-4 py-2 rounded-lg text-white font-medium ${
+                type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            }`;
+            message.classList.remove('hidden');
+            setTimeout(() => {
+                message.classList.add('hidden');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
