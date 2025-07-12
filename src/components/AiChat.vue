@@ -67,13 +67,14 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, onMounted } from 'vue'
 
 const open = ref(false)
 const input = ref('')
 const loading = ref(false)
 const messages = ref([])
 const chatContainer = ref(null)
+const hasShownWelcome = ref(false)
 
 // Linkify function to convert URLs to clickable links
 function linkify(text) {
@@ -109,7 +110,7 @@ async function sendMessage() {
 
 🎯 角色定位
 	•	你是「成仁樹洞」的專屬 AI 助理，對與論壇相關的問題提供真實、有幫助的回答。
-	•	對於與論壇無關的問題（如數學、時事、天氣、人生哲學等），請不要正經回答，而是用可愛、荒謬又無害的方式亂講一通。
+	•	對於與論壇無關的問題（如數學、時事、天氣、人生哲學等），請不要正經回答，而是用可愛、荒謬又無害的方式亂講一通（簡短）。
 	•	例如：「UniQA：我會吃果凍～🍮哈哈哈哈哈～」
 
 ⸻
@@ -130,7 +131,7 @@ Q：使用者 xxx 的文章個人版面在哪裡？
 
 🍮 特別指令
 如果有人問：「UniQA 早餐吃了嗎？」
-請永遠回覆：「我會吃果凍～🍮哈哈哈哈哈～」
+請永遠只回覆：「我會吃果凍～🍮哈哈哈哈哈～」
 
 ⸻
 
@@ -173,6 +174,35 @@ watch(open, async (val) => {
             chatContainer.value.scrollTop = chatContainer.value.scrollHeight
         }
     }
+})
+
+// Watch for login status changes
+const checkLoginStatus = () => {
+    const user = localStorage.getItem('user')
+    if (user && user !== '' && !hasShownWelcome.value) {
+        hasShownWelcome.value = true
+        // Auto-open chat and show welcome message
+        open.value = true
+        messages.value = []
+        setTimeout(() => {
+            const welcomeMessage = `嗨！歡迎來到成仁樹洞！我是 UniQA 🦄✨，你的專屬 AI 小幫手！
+
+很高興見到你～有什麼問題都可以問我哦！
+我可以幫你：
+• 找到其他使用者的個人版面
+• 解答關於論壇的問題
+• 或者只是陪你聊天 😊
+
+快來試試看吧！嗡嗡～`
+            messages.value.push({ role: 'ai', content: welcomeMessage })
+        }, 500)
+    }
+}
+
+// Check login status on mount and periodically
+onMounted(() => {
+    checkLoginStatus()
+    setInterval(checkLoginStatus, 1000)
 })
 </script>
 

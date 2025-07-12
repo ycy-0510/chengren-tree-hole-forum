@@ -100,7 +100,7 @@ const login = () => {
     if (user) {
         localStorage.setItem('user', user.id)
         alert(`歡迎 ${user.name}!`)
-        router.push('/')
+        router.push('/profile')
     } else {
         error.value = '帳號或密碼錯誤.'
     }
