@@ -129,9 +129,6 @@ public/
 4. 推送到分支 (`git push origin feature/amazing-feature`)
 5. 開啟 Pull Request
 
-## 📄 授權
-
-此專案是開源的，並在 [MIT 授權](LICENSE) 下提供。
 
 ## 🎯 路線圖
 
