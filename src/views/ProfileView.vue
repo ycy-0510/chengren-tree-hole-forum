@@ -22,7 +22,7 @@
                 <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
                     <div class="flex flex-col sm:flex-row items-center gap-6">
                         <!-- 用戶頭像 -->
-                        <img :src="userProfile.avatar" alt="User Avatar"
+                        <img :src="userProfile.avatar" alt=""
                             class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white shadow-md" />
                         <div>
                             <div class="text-center sm:text-left">
@@ -197,37 +197,7 @@
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import Post from '../components/Post.vue'
-
-interface User {
-    id: string
-    name: string
-    avatar: string
-    password: string
-    gender?: string
-    birthday?: string
-    relationshipStatus?: string
-    favoriteBoard?: string,
-    postTrend?: string
-}
-
-interface PostData {
-    id: string
-    boardId: string
-    authorId: string
-    title: string
-    content: string
-    image: string | null
-    tags: string[]
-    label: string
-    createdAt: string
-    likes: number
-    shares: number
-    comments: Array<{
-        userId: string
-        time: string
-        content: string
-    }>
-}
+import type { User, PostData } from '../data'
 
 const route = useRoute()
 
@@ -319,14 +289,17 @@ const userPosts = computed(() => {
         content: postData.content,
         image: postData.image,
         author: getAuthorName(postData.authorId),
+        authorId: postData.authorId,
         avatar: getAuthorAvatar(postData.authorId),
         createdAt: formatDate(postData.createdAt),
         likes: postData.likes,
         comments: postData.comments.length,
         shares: postData.shares,
+        tags: postData.tags,
         commentsList: postData.comments.map(comment => ({
             id: `${postData.id}_comment_${comment.userId}_${comment.time}`,
             author: getAuthorName(comment.userId),
+            authorId: comment.userId,
             avatar: getAuthorAvatar(comment.userId),
             content: comment.content,
             createdAt: formatDate(comment.time)
@@ -430,6 +403,8 @@ watch(() => route.params.userId, async (newUserId, oldUserId) => {
         isLoading.value = true
         try {
             await loadUsersData()
+            // 模仿真實網站載入延遲
+            await new Promise(resolve => setTimeout(resolve, 500))
 
             // 更新頁面標題
             if (userProfile.value.name && userProfile.value.name !== '用戶不存在') {
@@ -460,6 +435,8 @@ onMounted(async () => {
             loadUsersData(),
             loadPostsData()
         ])
+        // 模仿真實網站載入延遲
+        await new Promise(resolve => setTimeout(resolve, 500))
 
         // 設定頁面標題
         if (userProfile.value.name && userProfile.value.name !== '用戶不存在') {

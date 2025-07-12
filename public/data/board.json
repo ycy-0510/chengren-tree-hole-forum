@@ -7,7 +7,7 @@
             "description": "學術討論、研究分享、課業問題",
             "icon": "fa-solid fa-graduation-cap",
             "color": "#3B82F6",
-            "createdAt": "2025-07-11T00:00:00.000Z"
+            "createdAt": "2017-07-11T00:00:00.000Z"
         },
         {
             "id": "food",
@@ -16,7 +16,7 @@
             "description": "美食推薦、料理分享、餐廳評價",
             "icon": "fa-solid fa-utensils",
             "color": "#F59E0B",
-            "createdAt": "2025-07-11T00:00:00.000Z"
+            "createdAt": "2017-07-11T00:00:00.000Z"
         },
         {
             "id": "fashion",
@@ -25,7 +25,7 @@
             "description": "時尚潮流、穿搭分享、美妝討論",
             "icon": "fa-solid fa-shirt",
             "color": "#EC4899",
-            "createdAt": "2025-07-11T00:00:00.000Z"
+            "createdAt": "2017-07-11T00:00:00.000Z"
         },
         {
             "id": "gossip",
@@ -34,7 +34,7 @@
             "description": "熱門話題、八卦討論、新聞分享",
             "icon": "fa-solid fa-comments",
             "color": "#EF4444",
-            "createdAt": "2025-07-11T00:00:00.000Z"
+            "createdAt": "2017-07-11T00:00:00.000Z"
         },
         {
             "id": "sports",
@@ -43,7 +43,7 @@
             "description": "運動討論、比賽分析、健身分享",
             "icon": "fa-solid fa-basketball",
             "color": "#10B981",
-            "createdAt": "2025-07-11T00:00:00.000Z"
+            "createdAt": "2017-07-11T00:00:00.000Z"
         },
         {
             "id": "life",
@@ -52,7 +52,7 @@
             "description": "生活分享、日常心得、生活小技巧",
             "icon": "fa-solid fa-leaf",
             "color": "#8B5CF6",
-            "createdAt": "2025-07-11T00:00:00.000Z"
+            "createdAt": "2017-07-11T00:00:00.000Z"
         }
     ],
     "categories": [

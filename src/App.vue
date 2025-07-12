@@ -1,5 +1,5 @@
 <template>
-  <LoginView v-if="user == '' && path != '/'" />
+  <LoginView v-if="user == '' && path != '/' &&!path.startsWith('/profile/')" />
   <div v-else class="min-h-screen flex flex-col bg-gradient-to-br from-emerald-50 via-white to-teal-50">
     <Header />
     <main class="flex-1 container p-6 lg:ps-72 md:pe-52">

@@ -30,7 +30,7 @@
                             <font-awesome-icon icon="fa-solid fa-user" class="absolute left-3 top-4 text-emerald-400" />
                             <input v-model="username" type="text"
                                 class="w-full pl-10 pr-4 py-3 border border-emerald-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white/50 transition-all"
-                                placeholder="輸入使用者名稱" required />
+                                placeholder="輸入使用者ID" required />
                         </div>
                     </div>
 
@@ -94,7 +94,7 @@ onMounted(() => {
 
 const login = () => {
     const user = users.value.find(
-        u => u.name === username.value && u.password === password.value
+        u => u.id === username.value && u.password === password.value
     )
 
     if (user) {

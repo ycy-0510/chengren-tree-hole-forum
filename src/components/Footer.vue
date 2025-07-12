@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4 text-emerald-200">
-                    <span class="text-sm">&COPY; 2025 成仁高中資訊社</span>
+                    <span class="text-sm">&COPY; 2017 成仁高中資訊社</span>
                     <div class="w-1 h-1 bg-emerald-400 rounded-full"></div>
                     <span class="text-sm">匿名分享平台</span>
                 </div>

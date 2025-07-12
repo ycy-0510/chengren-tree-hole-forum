@@ -54,7 +54,7 @@
 
                 <!-- Load More Button -->
                 <div class="text-center">
-                    <button class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                    <button class="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
                         載入更多文章
                     </button>
                 </div>
@@ -67,64 +67,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Post from '../components/Post.vue'
-
-interface Board {
-    id: string
-    name: string
-    path: string
-    description: string
-    icon: string
-    color: string
-    createdAt: string
-}
-
-interface PostData {
-    id: string
-    boardId: string
-    authorId: string
-    title: string
-    content: string
-    image: string | null
-    tags: string[]
-    label: string
-    createdAt: string
-    likes: number
-    shares: number
-    comments: Array<{
-        userId: string
-        time: string
-        content: string
-    }>
-}
-
-interface User {
-    id: string
-    name: string
-    avatar: string
-    password: string
-}
-
-interface Post {
-    id: number
-    title: string
-    content: string
-    image: string | null
-    author: string
-    avatar?: string
-    createdAt: string
-    likes: number
-    comments: number
-    shares: number
-    commentsList?: Comment[]
-}
-
-interface Comment {
-    id: string
-    author: string
-    avatar?: string
-    content: string
-    createdAt: string
-}
+import type { Board, PostData, User, Post as PostType } from '../data'
 
 const route = useRoute()
 const boardId = computed(() => route.params.boardId as string)
@@ -156,19 +99,22 @@ const boardPosts = computed(() => {
         content: postData.content,
         image: postData.image,
         author: getAuthorName(postData.authorId),
+        authorId: postData.authorId,
         avatar: getAuthorAvatar(postData.authorId),
         createdAt: formatDate(postData.createdAt),
         likes: postData.likes,
         comments: postData.comments.length,
         shares: postData.shares,
+        tags: postData.tags,
         commentsList: postData.comments.map(comment => ({
             id: `${postData.id}_comment_${comment.userId}_${comment.time}`,
             author: getAuthorName(comment.userId),
+            authorId: comment.userId,
             avatar: getAuthorAvatar(comment.userId),
             content: comment.content,
             createdAt: formatDate(comment.time)
         }))
-    }))
+    }) as PostType)
 })
 
 // Helper function to get author name from ID
@@ -239,6 +185,8 @@ onMounted(async () => {
             loadUsersData(),
             loadPostsData()
         ])
+        // 模仿真實網站載入延遲
+        await new Promise(resolve => setTimeout(resolve, 500))
         document.title = `${(currentBoard.value||{}).name??'找不到頁面'} | 成仁樹洞`
     } catch (error) {
         console.error('載入數據時發生錯誤:', error)

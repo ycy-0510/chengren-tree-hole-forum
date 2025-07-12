@@ -7,7 +7,13 @@
                 <font-awesome-icon v-else icon="fa-solid fa-user" class="text-gray-600" />
             </div>
             <div>
-                <p class="font-medium text-gray-900">{{ post.author }}</p>
+                <RouterLink :to="`/profile/${post.authorId}`">
+                    <div class="flex items-center space-x-1">
+                        <p class="font-medium text-gray-900 hover:text-green-600">{{ post.author }}</p>
+                        <font-awesome-icon v-if="post.authorId === 'admin'" icon="fa-solid fa-check-circle"
+                            class="text-blue-500 text-sm" title="管理員驗證" />
+                    </div>
+                </RouterLink>
                 <p class="text-sm text-gray-500">{{ post.createdAt }}</p>
             </div>
         </div>
@@ -23,21 +29,30 @@
                     class="w-full max-w-lg rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                     @click="openImageModal(post.image)">
             </div>
+
+            <!-- Tags -->
+            <div v-if="post.tags && post.tags.length > 0" class="mt-3">
+                <div class="flex flex-wrap gap-2">
+                    <span v-for="tag in post.tags" :key="tag"
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 hover:bg-amber-200 transition-colors">
+                        #{{ tag }}
+                    </span>
+                </div>
+            </div>
         </div>
 
         <!-- Post Actions -->
         <div class="flex items-center space-x-6 text-sm text-gray-500">
-            <button class="flex items-center space-x-1 hover:text-blue-600 transition-colors">
+            <button class="flex items-center space-x-1 hover:text-amber-600 transition-colors">
                 <font-awesome-icon icon="fa-solid fa-heart" />
                 <span>{{ post.likes }}</span>
             </button>
-            <button @click="toggleComments"
-                class="flex items-center space-x-1 hover:text-blue-600 transition-colors">
+            <button @click="toggleComments" class="flex items-center space-x-1 hover:text-amber-600 transition-colors">
                 <font-awesome-icon icon="fa-solid fa-comments" />
                 <span>{{ post.comments }}</span>
             </button>
             <button @click="share(post.title)"
-                class="flex items-center space-x-1 hover:text-blue-600 transition-colors">
+                class="flex items-center space-x-1 hover:text-amber-600 transition-colors">
                 <font-awesome-icon icon="fa-solid fa-share" />
                 <span>分享</span>
                 <span>{{ post.shares }}</span>
@@ -45,7 +60,8 @@
         </div>
 
         <!-- Comments Section -->
-        <div v-if="showComments && post.commentsList && post.commentsList.length > 0" class="mt-4 pt-4 border-t border-gray-200">
+        <div v-if="showComments && post.commentsList && post.commentsList.length > 0"
+            class="mt-4 pt-4 border-t border-gray-200">
             <div class="flex items-center justify-between mb-3">
                 <h4 class="text-sm font-medium text-gray-700">評論 ({{ post.commentsList.length }})</h4>
                 <button @click="toggleComments" class="text-sm text-gray-500 hover:text-gray-700">
@@ -53,15 +69,23 @@
                 </button>
             </div>
             <div class="space-y-3">
-                <div v-for="comment in post.commentsList" :key="comment.id" 
-                     class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
-                        <img v-if="comment.avatar" :src="comment.avatar" :alt="comment.author" class="w-full h-full object-cover">
+                <div v-for="comment in post.commentsList" :key="comment.id"
+                    class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <div
+                        class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                        <img v-if="comment.avatar" :src="comment.avatar" :alt="comment.author"
+                            class="w-full h-full object-cover">
                         <font-awesome-icon v-else icon="fa-solid fa-user" class="text-gray-600 text-sm" />
                     </div>
                     <div class="flex-1">
                         <div class="flex items-center space-x-2 mb-1">
-                            <span class="text-sm font-medium text-gray-900">{{ comment.author }}</span>
+                            <RouterLink :to="`/profile/${comment.authorId}`">
+                                <div class="flex items-center space-x-1">
+                                    <span class="text-sm font-medium text-gray-900 hover:text-green-600"> {{ comment.author }}</span>
+                                    <font-awesome-icon v-if="comment.authorId === 'admin'"
+                                        icon="fa-solid fa-check-circle" class="text-blue-500 text-xs" title="管理員驗證" />
+                                </div>
+                            </RouterLink>
                             <span class="text-xs text-gray-500">{{ comment.createdAt }}</span>
                         </div>
                         <p class="text-sm text-gray-700">{{ comment.content }}</p>
@@ -88,28 +112,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-
-interface Post {
-    id: number
-    title: string
-    content: string
-    image: string | null
-    author: string
-    avatar?: string
-    createdAt: string
-    likes: number
-    comments: number
-    shares: number
-    commentsList?: Comment[]
-}
-
-interface Comment {
-    id: string
-    author: string
-    avatar?: string
-    content: string
-    createdAt: string
-}
+import type { Post } from '../data'
 
 // Props
 defineProps<{

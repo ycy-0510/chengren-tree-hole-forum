@@ -1,0 +1,3 @@
+- [ ] AI agent hyperlink clickable
+- [ ] User Profile Hide Private Info (only show to user and admin)
+- [x] Avatar on post clickable to user profile

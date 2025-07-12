@@ -28,7 +28,8 @@ import {
     faSpinner,
     faSeedling,
     faPlus,
-    faChartLine
+    faChartLine,
+    faCheckCircle
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -53,7 +54,8 @@ library.add(
     faSpinner,
     faSeedling,
     faPlus,
-    faChartLine
+    faChartLine,
+    faCheckCircle
 )
 
 const app = createApp(App)

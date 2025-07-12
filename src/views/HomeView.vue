@@ -91,54 +91,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import Post from '../components/Post.vue'
-
-interface PostData {
-    id: string
-    boardId: string
-    authorId: string
-    title: string
-    content: string
-    image: string | null
-    tags: string[]
-    label: string
-    createdAt: string
-    likes: number
-    shares: number
-    comments: Array<{
-        userId: string
-        time: string
-        content: string
-    }>
-}
-
-interface User {
-    id: string
-    name: string
-    avatar: string
-    password: string
-}
-
-interface Post {
-    id: number
-    title: string
-    content: string
-    image: string | null
-    author: string
-    avatar?: string
-    createdAt: string
-    likes: number
-    comments: number
-    shares: number
-    commentsList?: Comment[]
-}
-
-interface Comment {
-    id: string
-    author: string
-    avatar?: string
-    content: string
-    createdAt: string
-}
+import type { User, PostData, Post as PostType } from '../data'
 
 // Users data
 const users = ref<User[]>([])
@@ -155,26 +108,29 @@ const allPosts = computed(() => {
   // Take only the latest 10 posts
   const latestPosts = sortedPosts.slice(0, 10)
 
-  // Convert PostData to Post format for the component
+// Convert PostData to Post format for the component
   return latestPosts.map(postData => ({
     id: parseInt(postData.id.replace('post_', '')),
     title: postData.title,
     content: postData.content,
     image: postData.image,
     author: getAuthorName(postData.authorId),
+    authorId: postData.authorId,
     avatar: getAuthorAvatar(postData.authorId),
     createdAt: formatDate(postData.createdAt),
     likes: postData.likes,
     comments: postData.comments.length,
     shares: postData.shares,
+    tags: postData.tags,
     commentsList: postData.comments.map(comment => ({
       id: `${postData.id}_comment_${comment.userId}_${comment.time}`,
       author: getAuthorName(comment.userId),
+      authorId: comment.userId,
       avatar: getAuthorAvatar(comment.userId),
       content: comment.content,
       createdAt: formatDate(comment.time)
     }))
-  }))
+  }) as PostType)
 })
 
 // Statistics
@@ -238,6 +194,8 @@ onMounted(async () => {
             loadUsersData(),
             loadPostsData()
         ])
+        // 模仿真實網站載入延遲
+        await new Promise(resolve => setTimeout(resolve, 500))
     } catch (error) {
         console.error('載入數據時發生錯誤:', error)
     } finally {
