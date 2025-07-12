@@ -50,7 +50,7 @@
                                 <div class="text-center">
                                     <p class="text-sm text-gray-500">常逛版面</p>
                                     <p class="text-lg font-semibold text-gray-700">{{ userProfile.favoriteBoard || '未設定'
-                                    }}
+                                        }}
                                     </p>
                                 </div>
                             </div>
@@ -58,8 +58,8 @@
                     </div>
                 </div>
 
-                <!-- 統計圖表區域 -->
-                <div class="grid grid-cols-9 gap-6 mb-6">
+                <!-- 統計圖表區域 - 只有查看自己的資料時才顯示 -->
+                <div v-if="isCurrentUser" class="grid grid-cols-9 gap-6 mb-6">
                     <!-- 發文趨勢圖 - 左側 4/9 -->
                     <div class="col-span-9 lg:col-span-4 bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">發文趨勢</h3>
@@ -255,7 +255,7 @@ const isLoading = ref(true)
 const isLoggedIn = computed(() => !!currentUserId.value)
 
 // 判斷是否是當前用戶
-const isCurrentUser = computed(() => displayUserId.value === currentUserId.value)
+const isCurrentUser = computed(() => displayUserId.value === currentUserId.value || currentUserId.value == 'admin')
 
 // 用戶統計數據
 const userStats = computed(() => {
