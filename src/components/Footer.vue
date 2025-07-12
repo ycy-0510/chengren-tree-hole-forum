@@ -1,5 +1,5 @@
 <template>
-    <footer class="bg-gradient-to-r from-emerald-800 to-teal-800 text-white py-8 md:ms-64">
+    <footer class="bg-gradient-to-r from-emerald-800 to-teal-800 text-white py-8 lg:ms-64">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="flex items-center gap-3 mb-4 md:mb-0">

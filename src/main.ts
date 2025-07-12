@@ -19,7 +19,16 @@ import {
     faLeaf ,
     faUsers,
     faHeart,
-    faShare
+    faShare,
+    faLock,
+    faUser,
+    faRightToBracket,
+    faFire,
+    faClock,
+    faSpinner,
+    faSeedling,
+    faPlus,
+    faChartLine
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -35,7 +44,16 @@ library.add(
     faLeaf,
     faUsers,
     faHeart,
-    faShare
+    faShare,
+    faLock,
+    faUser,
+    faRightToBracket,
+    faFire,
+    faClock,
+    faSpinner,
+    faSeedling,
+    faPlus,
+    faChartLine
 )
 
 const app = createApp(App)

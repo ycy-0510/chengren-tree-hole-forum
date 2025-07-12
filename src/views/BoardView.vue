@@ -145,7 +145,7 @@ const boardPosts = computed(() => {
     if (!currentBoard.value) return []
 
     // Filter posts by exact boardId match
-    const filteredPosts = postsData.value.filter(post => 
+    const filteredPosts = postsData.value.filter(post =>
         post.boardId === currentBoard.value!.id
     )
 
@@ -239,6 +239,7 @@ onMounted(async () => {
             loadUsersData(),
             loadPostsData()
         ])
+        document.title = `${(currentBoard.value||{}).name??'找不到頁面'} | 成仁樹洞`
     } catch (error) {
         console.error('載入數據時發生錯誤:', error)
     } finally {

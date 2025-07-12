@@ -147,31 +147,34 @@ const isLoading = ref(true)
 // Posts data
 const postsData = ref<PostData[]>([])
 const allPosts = computed(() => {
-    // Sort posts by creation time (newest first)
-    const sortedPosts = [...postsData.value].sort((a, b) => 
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
+  // Sort posts by creation time (newest first)
+  const sortedPosts = [...postsData.value].sort((a, b) => 
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  )
 
-    // Convert PostData to Post format for the component
-    return sortedPosts.map(postData => ({
-        id: parseInt(postData.id.replace('post_', '')),
-        title: postData.title,
-        content: postData.content,
-        image: postData.image,
-        author: getAuthorName(postData.authorId),
-        avatar: getAuthorAvatar(postData.authorId),
-        createdAt: formatDate(postData.createdAt),
-        likes: postData.likes,
-        comments: postData.comments.length,
-        shares: postData.shares,
-        commentsList: postData.comments.map(comment => ({
-            id: `${postData.id}_comment_${comment.userId}_${comment.time}`,
-            author: getAuthorName(comment.userId),
-            avatar: getAuthorAvatar(comment.userId),
-            content: comment.content,
-            createdAt: formatDate(comment.time)
-        }))
+  // Take only the latest 10 posts
+  const latestPosts = sortedPosts.slice(0, 10)
+
+  // Convert PostData to Post format for the component
+  return latestPosts.map(postData => ({
+    id: parseInt(postData.id.replace('post_', '')),
+    title: postData.title,
+    content: postData.content,
+    image: postData.image,
+    author: getAuthorName(postData.authorId),
+    avatar: getAuthorAvatar(postData.authorId),
+    createdAt: formatDate(postData.createdAt),
+    likes: postData.likes,
+    comments: postData.comments.length,
+    shares: postData.shares,
+    commentsList: postData.comments.map(comment => ({
+      id: `${postData.id}_comment_${comment.userId}_${comment.time}`,
+      author: getAuthorName(comment.userId),
+      avatar: getAuthorAvatar(comment.userId),
+      content: comment.content,
+      createdAt: formatDate(comment.time)
     }))
+  }))
 })
 
 // Statistics

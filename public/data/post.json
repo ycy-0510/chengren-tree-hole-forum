@@ -44,5 +44,467 @@
         "likes": 51,
         "shares": 11,
         "comments": []
+    },{
+        "id": "post_003",
+        "boardId": "fashion",
+        "authorId": "microlin",
+        "title": "時尚穿搭分享",
+        "content": "今天的穿搭是：白色襯衫配牛仔褲，簡單又舒適！",
+        "image": null,
+        "tags": [
+            "穿搭",
+            "日常"
+        ],
+        "label": "分享",
+        "createdAt": "2025-07-01T12:30:00",
+        "likes": 15,
+        "shares": 5,
+        "comments": []
+    },
+    {
+        "id": "post_004",
+        "boardId": "food",
+        "authorId": "0x0x0x",
+        "title": "今天吃到超好吃的日式拉麵",
+        "content": "在東區發現一家隱藏版拉麵店，湯頭超濃郁，叉燒也很嫩！推薦給大家～",
+        "image": "https://placehold.co/600x400",
+        "tags": [
+            "美食",
+            "推薦",
+            "日式"
+        ],
+        "label": "推薦",
+        "createdAt": "2025-07-02T19:15:00",
+        "likes": 42,
+        "shares": 18,
+        "comments": [
+            {
+                "userId": "penlee",
+                "time": "2025-07-02T20:30:00",
+                "content": "這家我也去過！真的很好吃～"
+            }
+        ]
+    },
+    {
+        "id": "post_005",
+        "boardId": "academic",
+        "authorId": "penlee",
+        "title": "關於機器學習的一些心得",
+        "content": "最近在學習深度學習，發現數學基礎真的很重要。想請教大家都是怎麼加強線性代數的？",
+        "image": null,
+        "tags": [
+            "機器學習",
+            "程式設計",
+            "數學"
+        ],
+        "label": "問題",
+        "createdAt": "2025-07-03T14:22:00",
+        "likes": 23,
+        "shares": 8,
+        "comments": []
+    },
+    {
+        "id": "post_006",
+        "boardId": "gossip",
+        "authorId": "wuluviol",
+        "title": "最近的電影推薦",
+        "content": "剛看完最新的科幻電影，特效超棒！劇情也很緊湊，值得一看～",
+        "image": "https://placehold.co/600x400",
+        "tags": [
+            "電影",
+            "娛樂",
+            "推薦"
+        ],
+        "label": "分享",
+        "createdAt": "2025-07-04T21:45:00",
+        "likes": 35,
+        "shares": 12,
+        "comments": [
+            {
+                "userId": "user_alice_01",
+                "time": "2025-07-04T22:10:00",
+                "content": "我也想去看！"
+            },
+            {
+                "userId": "microlin",
+                "time": "2025-07-05T09:15:00",
+                "content": "感謝推薦～"
+            }
+        ]
+    },
+    {
+        "id": "post_007",
+        "boardId": "sports",
+        "authorId": "h.v.t.photo",
+        "title": "晨跑的好處分享",
+        "content": "開始晨跑一個月了，發現精神狀態變好很多！推薦大家也可以試試看～",
+        "image": null,
+        "tags": [
+            "運動",
+            "健康",
+            "晨跑"
+        ],
+        "label": "分享",
+        "createdAt": "2025-07-05T06:30:00",
+        "likes": 29,
+        "shares": 15,
+        "comments": []
+    },
+    {
+        "id": "post_008",
+        "boardId": "life",
+        "authorId": "admin",
+        "title": "咖啡廳工作心得",
+        "content": "最近都在咖啡廳工作，發現換個環境真的很有助於專注力！",
+        "image": "https://placehold.co/600x400",
+        "tags": [
+            "工作",
+            "效率",
+            "咖啡"
+        ],
+        "label": "閒聊",
+        "createdAt": "2025-07-06T15:20:00",
+        "likes": 18,
+        "shares": 6,
+        "comments": [
+            {
+                "userId": "user_bob_02",
+                "time": "2025-07-06T16:45:00",
+                "content": "我也喜歡在咖啡廳工作！"
+            }
+        ]
+    },
+    {
+        "id": "post_009",
+        "boardId": "fashion",
+        "authorId": "user_alice_01",
+        "title": "秋冬穿搭靈感",
+        "content": "分享一些秋冬穿搭的想法，層次感很重要！毛衣配長裙真的很好看～",
+        "image": "https://placehold.co/600x400",
+        "tags": [
+            "穿搭",
+            "秋冬",
+            "時尚"
+        ],
+        "label": "分享",
+        "createdAt": "2025-07-07T13:10:00",
+        "likes": 31,
+        "shares": 9,
+        "comments": []
+    },
+    {
+        "id": "post_010",
+        "boardId": "food",
+        "authorId": "user_bob_02",
+        "title": "手作甜點分享",
+        "content": "今天做了檸檬塔，酸甜的味道超棒！附上食譜給大家參考～",
+        "image": "https://placehold.co/600x400",
+        "tags": [
+            "甜點",
+            "手作",
+            "食譜"
+        ],
+        "label": "分享",
+        "createdAt": "2025-07-08T16:35:00",
+        "likes": 45,
+        "shares": 22,
+        "comments": [
+            {
+                "userId": "microlin",
+                "time": "2025-07-08T17:20:00",
+                "content": "看起來好好吃！"
+            },
+            {
+                "userId": "penlee",
+                "time": "2025-07-08T18:30:00",
+                "content": "謝謝分享食譜～"
+            }
+        ]
+    },
+    {
+        "id": "post_011",
+        "boardId": "academic",
+        "authorId": "microlin",
+        "title": "程式設計學習資源推薦",
+        "content": "整理了一些很棒的程式設計學習資源，包含免費的線上課程和練習網站！",
+        "image": null,
+        "tags": [
+            "程式設計",
+            "學習",
+            "資源"
+        ],
+        "label": "推薦",
+        "createdAt": "2025-07-09T10:45:00",
+        "likes": 67,
+        "shares": 34,
+        "comments": [
+            {
+                "userId": "0x0x0x",
+                "time": "2025-07-09T11:15:00",
+                "content": "超實用！感謝分享～"
+            }
+        ]
+    },
+    {
+        "id": "post_012",
+        "boardId": "gossip",
+        "authorId": "penlee",
+        "title": "最近很紅的韓劇推薦",
+        "content": "最近在追一部韓劇，劇情超精彩！男女主角的演技也很棒～",
+        "image": "https://placehold.co/600x400",
+        "tags": [
+            "韓劇",
+            "娛樂",
+            "推薦"
+        ],
+        "label": "推薦",
+        "createdAt": "2025-07-10T20:15:00",
+        "likes": 28,
+        "shares": 11,
+        "comments": []
+    },
+    {
+        "id": "post_013",
+        "boardId": "sports",
+        "authorId": "wuluviol",
+        "title": "健身房初體驗",
+        "content": "第一次去健身房，教練很耐心地教我使用器材。雖然累但很有成就感！",
+        "image": null,
+        "tags": [
+            "健身",
+            "運動",
+            "初體驗"
+        ],
+        "label": "分享",
+        "createdAt": "2025-07-11T18:20:00",
+        "likes": 22,
+        "shares": 7,
+        "comments": [
+            {
+                "userId": "h.v.t.photo",
+                "time": "2025-07-11T19:30:00",
+                "content": "加油！運動真的很棒～"
+            }
+        ]
+    },
+    {
+        "id": "post_014",
+        "boardId": "life",
+        "authorId": "h.v.t.photo",
+        "title": "週末小旅行分享",
+        "content": "去了趟陽明山，看到美麗的夕陽和雲海！心情整個都放鬆了～",
+        "image": "https://placehold.co/600x400",
+        "tags": [
+            "旅行",
+            "陽明山",
+            "風景"
+        ],
+        "label": "分享",
+        "createdAt": "2025-07-12T09:30:00",
+        "likes": 38,
+        "shares": 16,
+        "comments": []
+    },
+    {
+        "id": "post_015",
+        "boardId": "fashion",
+        "authorId": "admin",
+        "title": "配件搭配技巧",
+        "content": "分享一些配件搭配的小技巧，簡單的配件就能讓整體造型更有層次！",
+        "image": "https://placehold.co/600x400",
+        "tags": [
+            "配件",
+            "搭配",
+            "技巧"
+        ],
+        "label": "教學",
+        "createdAt": "2025-07-12T11:45:00",
+        "likes": 26,
+        "shares": 8,
+        "comments": [
+            {
+                "userId": "user_alice_01",
+                "time": "2025-07-12T12:15:00",
+                "content": "很實用的技巧！"
+            }
+        ]
+    },
+    {
+        "id": "post_016",
+        "boardId": "food",
+        "authorId": "user_alice_01",
+        "title": "夏日消暑飲品推薦",
+        "content": "炎熱的夏天就是要喝冰涼的飲品！推薦幾款簡單易做的消暑飲品～",
+        "image": null,
+        "tags": [
+            "飲品",
+            "夏日",
+            "消暑"
+        ],
+        "label": "推薦",
+        "createdAt": "2025-07-12T14:20:00",
+        "likes": 33,
+        "shares": 14,
+        "comments": []
+    },
+    {
+        "id": "post_017",
+        "boardId": "academic",
+        "authorId": "user_bob_02",
+        "title": "讀書方法分享",
+        "content": "分享一些有效的讀書方法，包括番茄工作法和心智圖技巧！",
+        "image": null,
+        "tags": [
+            "讀書",
+            "方法",
+            "效率"
+        ],
+        "label": "教學",
+        "createdAt": "2025-07-12T16:10:00",
+        "likes": 41,
+        "shares": 19,
+        "comments": [
+            {
+                "userId": "microlin",
+                "time": "2025-07-12T17:00:00",
+                "content": "番茄工作法真的很有用！"
+            },
+            {
+                "userId": "penlee",
+                "time": "2025-07-12T17:30:00",
+                "content": "謝謝分享～"
+            }
+        ]
+    },
+    {
+        "id": "post_018",
+        "boardId": "gossip",
+        "authorId": "microlin",
+        "title": "最近的音樂推薦",
+        "content": "發現一些很棒的新歌，各種風格都有！分享給大家聽聽看～",
+        "image": "https://placehold.co/600x400",
+        "tags": [
+            "音樂",
+            "推薦",
+            "新歌"
+        ],
+        "label": "推薦",
+        "createdAt": "2025-07-12T19:25:00",
+        "likes": 24,
+        "shares": 10,
+        "comments": []
+    },
+    {
+        "id": "post_019",
+        "boardId": "sports",
+        "authorId": "0x0x0x",
+        "title": "游泳的好處與技巧",
+        "content": "游泳是很棒的全身運動！分享一些游泳的技巧和注意事項～",
+        "image": null,
+        "tags": [
+            "游泳",
+            "運動",
+            "技巧"
+        ],
+        "label": "教學",
+        "createdAt": "2025-07-12T21:00:00",
+        "likes": 30,
+        "shares": 12,
+        "comments": [
+            {
+                "userId": "wuluviol",
+                "time": "2025-07-12T21:45:00",
+                "content": "我也想學游泳！"
+            }
+        ]
+    },
+    {
+        "id": "post_020",
+        "boardId": "life",
+        "authorId": "penlee",
+        "title": "居家佈置小心得",
+        "content": "最近重新佈置了房間，分享一些居家佈置的小技巧和心得！",
+        "image": "https://placehold.co/600x400",
+        "tags": [
+            "居家",
+            "佈置",
+            "裝潢"
+        ],
+        "label": "分享",
+        "createdAt": "2025-07-12T22:30:00",
+        "likes": 27,
+        "shares": 9,
+        "comments": []
+    },
+    {
+        "id": "post_021",
+        "boardId": "fashion",
+        "authorId": "wuluviol",
+        "title": "彩妝新手教學",
+        "content": "整理了一些彩妝新手必知的技巧，從基礎保養到簡單妝容都有！",
+        "image": "https://placehold.co/600x400",
+        "tags": [
+            "彩妝",
+            "教學",
+            "新手"
+        ],
+        "label": "教學",
+        "createdAt": "2025-07-12T23:15:00",
+        "likes": 39,
+        "shares": 17,
+        "comments": [
+            {
+                "userId": "user_alice_01",
+                "time": "2025-07-12T23:45:00",
+                "content": "超詳細的教學！"
+            }
+        ]
+    },
+    {
+        "id": "post_022",
+        "boardId": "food",
+        "authorId": "h.v.t.photo",
+        "title": "家常菜食譜分享",
+        "content": "分享媽媽的拿手菜食譜，簡單易做又美味！適合料理新手～",
+        "image": null,
+        "tags": [
+            "家常菜",
+            "食譜",
+            "料理"
+        ],
+        "label": "分享",
+        "createdAt": "2025-07-13T08:00:00",
+        "likes": 44,
+        "shares": 21,
+        "comments": []
+    },
+    {
+        "id": "post_023",
+        "boardId": "academic",
+        "authorId": "admin",
+        "title": "時間管理的重要性",
+        "content": "分享一些時間管理的技巧，幫助大家更有效率地完成任務！",
+        "image": null,
+        "tags": [
+            "時間管理",
+            "效率",
+            "技巧"
+        ],
+        "label": "教學",
+        "createdAt": "2025-07-13T10:30:00",
+        "likes": 52,
+        "shares": 25,
+        "comments": [
+            {
+                "userId": "user_bob_02",
+                "time": "2025-07-13T11:00:00",
+                "content": "很實用的建議！"
+            },
+            {
+                "userId": "microlin",
+                "time": "2025-07-13T11:30:00",
+                "content": "時間管理真的很重要～"
+            }
+        ]
     }
 ]

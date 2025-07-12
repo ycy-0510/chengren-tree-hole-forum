@@ -4,6 +4,8 @@
 const prop = defineProps({
     show: Boolean
 })
+
+const emit = defineEmits(['click'])
 const boards = [
     {
         name: "首頁",
@@ -45,7 +47,7 @@ const boards = [
 
 <template>
     <aside
-        class="fixed top-0 left-0 z-30 w-64 h-screen bg-gradient-to-b from-emerald-900 via-green-900 to-teal-900 text-white shadow-2xl transition-all duration-300 md:translate-x-0 md:opacity-100"
+        class="fixed top-0 left-0 z-30 w-64 h-screen bg-gradient-to-b from-emerald-900 via-green-900 to-teal-900 text-white shadow-2xl transition-all duration-300 lg:translate-x-0 lg:opacity-100"
         :class="{ '-translate-x-64 opacity-0': !prop.show }">
         
         <!-- Logo Section -->
@@ -61,7 +63,7 @@ const boards = [
         <nav class="pt-4">
             <ul class="list-none p-0 m-0 space-y-1">
                 <li v-for="board in boards" :key="board.path" class="px-3">
-                    <RouterLink :to="board.path"
+                    <RouterLink :to="board.path" @click="emit('click')"
                         class="group flex items-center gap-3 px-4 py-3 rounded-xl text-emerald-100 hover:bg-emerald-800/50 hover:text-emerald-200 transition-all duration-200 no-underline"
                         active-class="bg-emerald-700/70 text-emerald-200 font-semibold shadow-lg">
                         <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-700/30 group-hover:bg-emerald-600/50 transition-colors">
