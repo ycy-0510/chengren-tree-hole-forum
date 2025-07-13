@@ -36,8 +36,8 @@
                         class="w-full text-left px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                         <div class="flex items-center space-x-3">
                             <div v-if="currentUser && currentUser.avatar" class="w-8 h-8">
-                                <img :src="currentUser.avatar" :alt="currentUser.name" 
-                                     class="w-8 h-8 rounded-full object-cover border-2 border-emerald-200" />
+                                <img :src="currentUser.avatar" :alt="currentUser.name"
+                                    class="w-8 h-8 rounded-full object-cover border-2 border-emerald-200" />
                             </div>
                             <div v-else class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                                 <font-awesome-icon icon="fa-solid fa-user" class="text-gray-600" />
@@ -152,17 +152,7 @@ const getAuthorAvatar = (authorId: string) => {
 // Helper function to format date
 const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    const now = new Date()
-    const diffTime = Math.abs(now.getTime() - date.getTime())
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-
-    if (diffDays === 1) {
-        return '1 天前'
-    } else if (diffDays < 7) {
-        return `${diffDays} 天前`
-    } else {
-        return date.toLocaleDateString('zh-TW')
-    }
+    return date.toLocaleString('zh-TW')
 }
 
 // Load board data
@@ -182,7 +172,7 @@ const loadUsersData = async () => {
         const response = await fetch('/data/user.json')
         const data = await response.json()
         users.value = data
-        
+
         // 載入當前用戶
         const currentUserId = localStorage.getItem('user')
         if (currentUserId) {

@@ -20,7 +20,7 @@
             <div v-else>
                 <!-- 用戶資料卡片 -->
                 <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-                    <div class="flex flex-col sm:flex-row items-center gap-6">
+                    <div class="flex flex-col sm:flex-row items-center gap-2">
                         <!-- 用戶頭像 -->
                         <img :src="userProfile.avatar" alt=""
                             class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white shadow-md" />
@@ -32,7 +32,7 @@
                         </div>
                         <!-- 用戶資訊 -->
                         <div class="flex-1 text-center sm:text-left">
-                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-1 items-center">
+                            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-1 items-center">
                                 <div class="text-center">
                                     <p class="text-sm text-gray-500">性別</p>
                                     <p class="text-lg font-semibold text-gray-700">{{ userProfile.gender || '未設定' }}</p>
@@ -47,111 +47,140 @@
                                     <p class="text-lg font-semibold text-gray-700">{{ userProfile.relationshipStatus ||
                                         '未設定' }}</p>
                                 </div>
-                                <div class="text-center">
-                                    <p class="text-sm text-gray-500">常逛版面</p>
-                                    <p class="text-lg font-semibold text-gray-700">{{ userProfile.favoriteBoard || '未設定'
-                                        }}
-                                    </p>
-                                </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-500">自我介紹</p>
+                        <p class="text-md font-semibold text-gray-700 text-start">Lorem ipsum dolor sit amet consectetur
+                            adipiscing
+                            elit quisque faucibus ex sapien vitae pellentesque sem placerat in id cursus mi pretium
+                            tellus duis convallis tempus leo eu aenean sed diam.
+                        </p>
                     </div>
                 </div>
 
                 <!-- 統計圖表區域 - 只有查看自己的資料時才顯示 -->
-                <div v-if="isCurrentUser" class="grid grid-cols-9 gap-6 mb-6">
-                    <!-- 發文趨勢圖 - 左側 4/9 -->
-                    <div class="col-span-9 lg:col-span-4 bg-white rounded-lg shadow-lg p-6">
+                <div v-if="isCurrentUser" class="grid grid-cols-2 gap-6 mb-6">
+                    <!-- 發文趨勢圖 - 左側 1/2 -->
+                    <div class="col-span-2 lg:col-span-1 bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">發文趨勢</h3>
                         <div class="h-64 flex items-end justify-between gap-1 overflow-x-auto">
                             <img :src="userProfile.postTrend" alt="發文趨勢圖" class="w-full rounded-lg shadow" />
                         </div>
                     </div>
 
-                    <!-- 社群活躍度 - 中間 3/9 -->
-                    <div class="col-span-9 lg:col-span-3 bg-white rounded-lg shadow-lg p-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">社群活躍度</h3>
-                        <div class="h-64 flex items-center justify-center">
-                            <div class="relative">
-                                <div class="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center">
-                                    <div
-                                        class="w-20 h-20 bg-amber-800 rounded-full flex items-center justify-center text-white font-bold">
-                                        {{ userStats.postCount }}
-                                    </div>
-                                </div>
-                                <div class="absolute -bottom-6 left-0 right-0 text-center">
-                                    <p class="text-sm font-medium text-gray-700">發文活躍度</p>
-                                    <p class="text-xs text-gray-500">過去 30 天</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- 右側圖表區域 - 2/9 -->
-                    <div class="col-span-9 lg:col-span-2 flex flex-col gap-6">
-                        <!-- 發文時間分佈 - 右上 -->
-                        <div class="bg-white rounded-lg shadow-lg p-4 flex-1">
-                            <h3 class="text-base font-semibold text-gray-800 mb-3">發文時間</h3>
-                            <div class="space-y-3">
-                                <div class="flex flex-col space-y-1">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-xs text-gray-600">正午</span>
-                                        <span class="text-xs font-medium text-gray-700">44.7%</span>
-                                    </div>
-                                    <div class="bg-gray-200 rounded-full h-2">
-                                        <div class="bg-amber-800 h-2 rounded-full" :style="{ width: '44.7%' }"></div>
-                                    </div>
+                    <!-- 右側圖表區域 - 1/2 -->
+                    <div class="col-span-2 lg:col-span-1 flex flex-col gap-6">
+                        <!-- 常逛版面 - 右上 2/7 -->
+                        <div class="bg-white rounded-lg shadow-lg p-4">
+                            <h3 class="text-base font-semibold text-gray-800 mb-3">常逛版面</h3>
+                            <div class="flex items-center justify-center">
+                                <div v-if="userProfile.favoriteBoard && userProfile.favoriteBoard !== '未設定'"
+                                    class="bg-green-100 text-green-800 px-4 py-2 rounded-lg text-lg font-medium">
+                                    {{ userProfile.favoriteBoard }}
                                 </div>
-                                <div class="flex flex-col space-y-1">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-xs text-gray-600">晚上</span>
-                                        <span class="text-xs font-medium text-gray-700">41.2%</span>
-                                    </div>
-                                    <div class="bg-gray-200 rounded-full h-2">
-                                        <div class="bg-gray-400 h-2 rounded-full" :style="{ width: '41.2%' }"></div>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col space-y-1">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-xs text-gray-600">早上</span>
-                                        <span class="text-xs font-medium text-gray-700">14.1%</span>
-                                    </div>
-                                    <div class="bg-gray-200 rounded-full h-2">
-                                        <div class="bg-gray-400 h-2 rounded-full" :style="{ width: '14.1%' }"></div>
-                                    </div>
+                                <div v-else class="text-center text-gray-500 text-base">
+                                    未設定常逛版面
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 發文習慣 - 右下 -->
-                        <div class="bg-white rounded-lg shadow-lg p-4 flex-1">
-                            <h3 class="text-base font-semibold text-gray-800 mb-3">發文習慣</h3>
-                            <div class="space-y-3">
-                                <div class="flex flex-col space-y-1">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-xs text-gray-600">正午</span>
-                                        <span class="text-xs font-medium text-gray-700">44.7%</span>
-                                    </div>
-                                    <div class="bg-gray-200 rounded-full h-2">
-                                        <div class="bg-amber-800 h-2 rounded-full" :style="{ width: '44.7%' }"></div>
+                        <!-- 下方圖表區域 - 5/7 -->
+                        <div class="flex gap-4">
+                            <!-- 發文時間分佈 - 左側 -->
+                            <div class="bg-white rounded-lg shadow-lg p-4 flex-1">
+                                <h3 class="text-base font-semibold text-gray-800 mb-3">發文時間</h3>
+                                <div class="flex items-center justify-center h-32">
+                                    <div class="relative w-28 h-28">
+                                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                                            <!-- 背景圓 -->
+                                            <path class="text-gray-200" d="M18 2.0845
+                                                     a 15.9155 15.9155 0 0 1 0 31.831
+                                                     a 15.9155 15.9155 0 0 1 0 -31.831" fill="none"
+                                                stroke="currentColor" stroke-width="2" />
+                                            <!-- 白天 -->
+                                            <path class="text-yellow-400" :d="`M18 2.0845
+                                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                                      a 15.9155 15.9155 0 0 1 0 -31.831`" fill="none"
+                                                stroke="currentColor" stroke-width="2"
+                                                :stroke-dasharray="`${postTimeData.day}, 100`" />
+                                            <!-- 晚上 -->
+                                            <path class="text-blue-600" :d="`M18 2.0845
+                                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                                      a 15.9155 15.9155 0 0 1 0 -31.831`" fill="none"
+                                                stroke="currentColor" stroke-width="2"
+                                                :stroke-dasharray="`${postTimeData.night}, 100`"
+                                                :stroke-dashoffset="`${-postTimeData.day}`" />
+                                        </svg>
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <div class="text-center">
+                                                <div class="text-xs font-medium text-gray-700">時間</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="flex flex-col space-y-1">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-xs text-gray-600">晚上</span>
-                                        <span class="text-xs font-medium text-gray-700">41.2%</span>
+                                <div class="mt-3 space-y-1">
+                                    <div class="flex items-center text-xs">
+                                        <div class="w-2 h-2 rounded-full bg-yellow-400 mr-2"></div>
+                                        <span class="text-gray-600">白天</span>
+                                        <span class="ml-auto font-medium text-gray-700">{{ postTimeData.dayPercent
+                                            }}%</span>
                                     </div>
-                                    <div class="bg-gray-200 rounded-full h-2">
-                                        <div class="bg-gray-400 h-2 rounded-full" :style="{ width: '41.2%' }"></div>
+                                    <div class="flex items-center text-xs">
+                                        <div class="w-2 h-2 rounded-full bg-blue-600 mr-2"></div>
+                                        <span class="text-gray-600">晚上</span>
+                                        <span class="ml-auto font-medium text-gray-700">{{ postTimeData.nightPercent
+                                            }}%</span>
                                     </div>
                                 </div>
-                                <div class="flex flex-col space-y-1">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-xs text-gray-600">早上</span>
-                                        <span class="text-xs font-medium text-gray-700">14.1%</span>
+                            </div>
+
+                            <!-- 發文習慣 - 右側 -->
+                            <div class="bg-white rounded-lg shadow-lg p-4 flex-1">
+                                <h3 class="text-base font-semibold text-gray-800 mb-3">發文習慣</h3>
+                                <div class="flex items-center justify-center h-32">
+                                    <div class="relative w-28 h-28">
+                                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                                            <!-- 背景圓 -->
+                                            <path class="text-gray-200" d="M18 2.0845
+                                                     a 15.9155 15.9155 0 0 1 0 31.831
+                                                     a 15.9155 15.9155 0 0 1 0 -31.831" fill="none"
+                                                stroke="currentColor" stroke-width="2" />
+                                            <!-- 有圖 -->
+                                            <path class="text-green-500" :d="`M18 2.0845
+                                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                                      a 15.9155 15.9155 0 0 1 0 -31.831`" fill="none"
+                                                stroke="currentColor" stroke-width="2"
+                                                :stroke-dasharray="`${postImageData.withImage}, 100`" />
+                                            <!-- 沒圖 -->
+                                            <path class="text-gray-400" :d="`M18 2.0845
+                                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                                      a 15.9155 15.9155 0 0 1 0 -31.831`" fill="none"
+                                                stroke="currentColor" stroke-width="2"
+                                                :stroke-dasharray="`${postImageData.withoutImage}, 100`"
+                                                :stroke-dashoffset="`${-postImageData.withImage}`" />
+                                        </svg>
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <div class="text-center">
+                                                <div class="text-xs font-medium text-gray-700">習慣</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="bg-gray-200 rounded-full h-2">
-                                        <div class="bg-gray-400 h-2 rounded-full" :style="{ width: '14.1%' }"></div>
+                                </div>
+                                <div class="mt-3 space-y-1">
+                                    <div class="flex items-center text-xs">
+                                        <div class="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
+                                        <span class="text-gray-600">文圖並茂</span>
+                                        <span class="ml-auto font-medium text-gray-700">{{
+                                            postImageData.withImagePercent }}%</span>
+                                    </div>
+                                    <div class="flex items-center text-xs">
+                                        <div class="w-2 h-2 rounded-full bg-gray-400 mr-2"></div>
+                                        <span class="text-gray-600">純文字</span>
+                                        <span class="ml-auto font-medium text-gray-700">{{
+                                            postImageData.withoutImagePercent }}%</span>
                                     </div>
                                 </div>
                             </div>
@@ -257,20 +286,92 @@ const isLoggedIn = computed(() => !!currentUserId.value)
 // 判斷是否是當前用戶
 const isCurrentUser = computed(() => displayUserId.value === currentUserId.value || currentUserId.value == 'admin')
 
-// 用戶統計數據
-const userStats = computed(() => {
-    const userPostsCount = postsData.value.filter(post => post.authorId === displayUserId.value).length
-    const userLikesCount = postsData.value
-        .filter(post => post.authorId === displayUserId.value)
-        .reduce((sum, post) => sum + post.likes, 0)
-    const userCommentsCount = postsData.value
-        .filter(post => post.authorId === displayUserId.value)
-        .reduce((sum, post) => sum + post.comments.length, 0)
+// 版面資料
+const boardsData = ref<any[]>([])
+
+// 獲取作者名稱
+const getAuthorName = (authorId: string) => {
+    const user = users.value.find(u => u.id === authorId)
+    return user ? user.name : '匿名用戶'
+}
+
+// 獲取作者頭像
+const getAuthorAvatar = (authorId: string) => {
+    const user = users.value.find(u => u.id === authorId)
+    return user?.avatar
+}
+
+// 格式化日期
+const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleString('zh-TW')
+}
+
+// 發文時間統計（白天/晚上，以下午6點為界）
+const postTimeData = computed(() => {
+    const userPostsData = postsData.value.filter(post => post.authorId === displayUserId.value)
+
+    if (userPostsData.length === 0) {
+        return { day: 0, night: 0, dayPercent: 0, nightPercent: 0 }
+    }
+
+    let dayCount = 0
+    let nightCount = 0
+
+    userPostsData.forEach(post => {
+        const date = new Date(post.createdAt)
+        const hour = date.getHours()
+
+        if (hour >= 6 && hour < 18) {
+            dayCount++
+        } else {
+            nightCount++
+        }
+    })
+
+    const dayPercent = Math.round((dayCount / userPostsData.length) * 100)
+    const nightPercent = Math.round((nightCount / userPostsData.length) * 100)
 
     return {
-        postCount: userPostsCount,
-        likesCount: userLikesCount,
-        commentsCount: userCommentsCount
+        day: dayPercent,
+        night: nightPercent,
+        dayPercent,
+        nightPercent
+    }
+})
+
+// 發文習慣統計（有圖/沒圖）
+const postImageData = computed(() => {
+    const userPostsData = postsData.value.filter(post => post.authorId === displayUserId.value)
+
+    if (userPostsData.length === 0) {
+        return { withImage: 0, withoutImage: 0, withImagePercent: 0, withoutImagePercent: 0 }
+    }
+
+    let withImageCount = 0
+    let withoutImageCount = 0
+
+    userPostsData.forEach(post => {
+        if (post.image) {
+            withImageCount++
+        } else {
+            withoutImageCount++
+        }
+    })
+
+    const withImagePercent = Math.round((withImageCount / userPostsData.length) * 100)
+    const withoutImagePercent = Math.round((withoutImageCount / userPostsData.length) * 100)
+    console.log({
+        withImage: withImagePercent,
+        withoutImage: withoutImagePercent,
+        withImagePercent,
+        withoutImagePercent
+    })
+    return {
+        withImage: withImagePercent,
+        withoutImage: withoutImagePercent,
+        withImagePercent,
+        withoutImagePercent
     }
 })
 
@@ -307,31 +408,14 @@ const userPosts = computed(() => {
     }))
 })
 
-// 獲取作者名稱
-const getAuthorName = (authorId: string) => {
-    const user = users.value.find(u => u.id === authorId)
-    return user ? user.name : '匿名用戶'
-}
-
-// 獲取作者頭像
-const getAuthorAvatar = (authorId: string) => {
-    const user = users.value.find(u => u.id === authorId)
-    return user?.avatar
-}
-
-// 格式化日期
-const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diffTime = Math.abs(now.getTime() - date.getTime())
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-
-    if (diffDays === 1) {
-        return '1 天前'
-    } else if (diffDays < 7) {
-        return `${diffDays} 天前`
-    } else {
-        return date.toLocaleDateString('zh-TW')
+// 載入版面資料
+const loadBoardsData = async () => {
+    try {
+        const response = await fetch('/data/board.json')
+        const data = await response.json()
+        boardsData.value = data.boards
+    } catch (error) {
+        console.error('載入版面數據失敗:', error)
     }
 }
 
@@ -403,6 +487,7 @@ watch(() => route.params.userId, async (newUserId, oldUserId) => {
         isLoading.value = true
         try {
             await loadUsersData()
+            await loadBoardsData()
             // 模仿真實網站載入延遲
             await new Promise(resolve => setTimeout(resolve, 500))
 
@@ -433,7 +518,8 @@ onMounted(async () => {
     try {
         await Promise.all([
             loadUsersData(),
-            loadPostsData()
+            loadPostsData(),
+            loadBoardsData()
         ])
         // 模仿真實網站載入延遲
         await new Promise(resolve => setTimeout(resolve, 500))

@@ -11,7 +11,8 @@
           <p class="text-emerald-100 mt-1 sm:mt-2 text-sm sm:text-base">一個安全、匿名的分享空間</p>
         </div>
       </div>
-      <p class="text-base sm:text-lg md:text-xl text-emerald-100 mb-6 max-w-2xl text-center sm:text-left mx-auto sm:mx-0">
+      <p
+        class="text-base sm:text-lg md:text-xl text-emerald-100 mb-6 max-w-2xl text-center sm:text-left mx-auto sm:mx-0">
         在這裡，你可以自由地分享想法、尋求建議，或者只是找個地方傾訴。每個聲音都值得被聽見，每個故事都值得被分享。
       </p>
       <div class="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-3">
@@ -32,7 +33,7 @@
         </div>
         <p class="text-gray-600 text-sm">共有 {{ totalPosts }} 篇文章</p>
       </div>
-      
+
       <div class="bg-white rounded-xl p-4 sm:p-6 shadow-lg border border-emerald-100">
         <div class="flex items-center gap-3 mb-3">
           <div class="w-8 h-8 sm:w-10 sm:h-10 bg-teal-100 rounded-lg flex items-center justify-center">
@@ -42,7 +43,7 @@
         </div>
         <p class="text-gray-600 text-sm">累計獲得 {{ totalLikes }} 個讚</p>
       </div>
-      
+
       <div class="bg-white rounded-xl p-4 sm:p-6 shadow-lg border border-emerald-100 sm:col-span-2 lg:col-span-1">
         <div class="flex items-center gap-3 mb-3">
           <div class="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 rounded-lg flex items-center justify-center">
@@ -101,14 +102,14 @@ const isLoading = ref(true)
 const postsData = ref<PostData[]>([])
 const allPosts = computed(() => {
   // Sort posts by creation time (newest first)
-  const sortedPosts = [...postsData.value].sort((a, b) => 
+  const sortedPosts = [...postsData.value].sort((a, b) =>
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   )
 
   // Take only the latest 10 posts
   const latestPosts = sortedPosts.slice(0, 10)
 
-// Convert PostData to Post format for the component
+  // Convert PostData to Post format for the component
   return latestPosts.map(postData => ({
     id: parseInt(postData.id.replace('post_', '')),
     title: postData.title,
@@ -140,66 +141,56 @@ const totalComments = computed(() => postsData.value.reduce((sum, post) => sum +
 
 // Helper function to get author name from ID
 const getAuthorName = (authorId: string) => {
-    const user = users.value.find(u => u.id === authorId)
-    return user ? user.name : '匿名用戶'
+  const user = users.value.find(u => u.id === authorId)
+  return user ? user.name : '匿名用戶'
 }
 
 // Helper function to get author avatar from ID
 const getAuthorAvatar = (authorId: string) => {
-    const user = users.value.find(u => u.id === authorId)
-    return user?.avatar
+  const user = users.value.find(u => u.id === authorId)
+  return user?.avatar
 }
 
 // Helper function to format date
 const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diffTime = Math.abs(now.getTime() - date.getTime())
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-
-    if (diffDays === 1) {
-        return '1 天前'
-    } else if (diffDays < 7) {
-        return `${diffDays} 天前`
-    } else {
-        return date.toLocaleDateString('zh-TW')
-    }
+  const date = new Date(dateString)
+  return date.toLocaleString('zh-TW')
 }
 
 // Load users data
 const loadUsersData = async () => {
-    try {
-        const response = await fetch('/data/user.json')
-        const data = await response.json()
-        users.value = data
-    } catch (error) {
-        console.error('載入用戶數據失敗:', error)
-    }
+  try {
+    const response = await fetch('/data/user.json')
+    const data = await response.json()
+    users.value = data
+  } catch (error) {
+    console.error('載入用戶數據失敗:', error)
+  }
 }
 
 // Load posts data
 const loadPostsData = async () => {
-    try {
-        const response = await fetch('/data/post.json')
-        const data = await response.json()
-        postsData.value = data
-    } catch (error) {
-        console.error('載入文章數據失敗:', error)
-    }
+  try {
+    const response = await fetch('/data/post.json')
+    const data = await response.json()
+    postsData.value = data
+  } catch (error) {
+    console.error('載入文章數據失敗:', error)
+  }
 }
 
 onMounted(async () => {
-    try {
-        await Promise.all([
-            loadUsersData(),
-            loadPostsData()
-        ])
-        // 模仿真實網站載入延遲
-        await new Promise(resolve => setTimeout(resolve, 500))
-    } catch (error) {
-        console.error('載入數據時發生錯誤:', error)
-    } finally {
-        isLoading.value = false
-    }
+  try {
+    await Promise.all([
+      loadUsersData(),
+      loadPostsData()
+    ])
+    // 模仿真實網站載入延遲
+    await new Promise(resolve => setTimeout(resolve, 500))
+  } catch (error) {
+    console.error('載入數據時發生錯誤:', error)
+  } finally {
+    isLoading.value = false
+  }
 })
 </script>
