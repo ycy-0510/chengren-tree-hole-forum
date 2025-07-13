@@ -4,3 +4,4 @@ python-multipart
 Pillow
 Jinja2
 aiofiles
+pydantic
