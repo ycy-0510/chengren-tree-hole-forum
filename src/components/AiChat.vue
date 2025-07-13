@@ -31,7 +31,8 @@
                             class="text-white/70 hover:text-white w-8 h-8 rounded-full hover:bg-white/10 transition-colors flex items-center justify-center"
                             title="清除聊天記錄">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                         </button>
                         <button @click="open = false"
@@ -43,11 +44,17 @@
                 <div ref="chatContainer" class="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50" style="min-height:0;">
                     <div v-for="(msg, i) in messages" :key="i"
                         :class="msg.role === 'user' ? 'text-right' : 'text-left'">
-                        <div :class="msg.role === 'user' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white ml-12' : 'bg-white text-gray-800 mr-12 border border-emerald-100'"
-                            class="inline-block px-4 py-3 rounded-2xl shadow-sm">
-                            <span v-if="msg.role === 'user'">{{ msg.content }}</span>
-                            <span v-else
-                                v-html="linkify(msg.content.replaceAll('UniQA：', '').replaceAll('`', ''))"></span>
+                        <div :class="[
+                            msg.role === 'user' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white ml-12' : 
+                            getMessageText(msg).startsWith('🔧') ? 'bg-blue-50 text-blue-700 mr-12 border border-blue-200' :
+                            'bg-white text-gray-800 mr-12 border border-emerald-100',
+                            { 'invisible': getMessageText(msg).replace(/UniQA：/g, '').replace(/`/g, '') == '' },
+                            'inline-block px-4 py-3 rounded-2xl shadow-sm break-words max-w-full'
+                        ]">
+                            <span v-if="msg.role === 'user'" class="break-words">{{ getMessageText(msg) }}</span>
+                            <span v-else-if="getMessageText(msg).startsWith('🔧')" class="text-sm font-medium break-words">{{ getMessageText(msg) }}</span>
+                            <span v-else class="break-words"
+                                v-html="linkify(getMessageText(msg).replace(/UniQA：/g, '').replace(/`/g, ''))"></span>
                         </div>
                     </div>
                     <div v-if="loading" class="text-gray-500 text-sm flex items-center gap-2">
@@ -60,8 +67,8 @@
                 <!-- Input area -->
                 <form @submit.prevent="sendMessage" class="flex border-t border-emerald-200 bg-white">
                     <input v-model="input" type="text" placeholder="輸入你的問題..."
-                        class="flex-1 px-4 py-3 outline-none bg-transparent text-gray-700 placeholder-gray-400"
-                        :disabled="loading" />
+                        class="flex-1 px-4 py-3 outline-none bg-transparent text-gray-700 placeholder-gray-400 resize-none"
+                        :disabled="loading" maxlength="50" @input="limitWords" />
                     <button type="submit"
                         class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-br-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         :disabled="loading || !input.trim()">
@@ -75,183 +82,201 @@
     </div>
 </template>
 
-<script setup>
-import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
+<script setup lang="ts">
+import { ref, watch, nextTick, onMounted, type Ref } from 'vue'
+import { ai } from '../firebaseConfig'
+import { getGenerativeModel, SchemaType, type ChatSession, type FunctionDeclarationsTool } from 'firebase/ai'
+import router from '../router'
 
-const open = ref(false)
-const input = ref('')
-const loading = ref(false)
-const messages = ref([])
-const chatContainer = ref(null)
-const hasShownWelcome = ref(false)
+// 定義類型
+interface MessagePart {
+    text?: string
+    functionCall?: {
+        name: string
+        args?: Record<string, any>
+    }
+}
 
-// 聊天同步相關
-const CHAT_STORAGE_KEY = 'uniqa_chat_messages'
-const CHAT_SYNC_KEY = 'uniqa_chat_sync'
+interface Message {
+    role: 'user' | 'model'
+    parts: MessagePart[]
+}
+
+interface BoardData {
+    id: string
+    name: string
+    description?: string
+}
+
+interface UserData {
+    id: string
+    name: string
+    email?: string
+}
+
+interface Comment {
+    id: string
+    content: string
+    userId: string
+    userName?: string
+    userData?: UserData
+    createdAt: string
+}
+
+interface Post {
+    id: string
+    title: string
+    content: string
+    authorId: string
+    authorName?: string
+    authorData?: UserData
+    boardId: string
+    createdAt: string
+    comments?: Comment[]
+}
+
+const open: Ref<boolean> = ref(false)
+const input: Ref<string> = ref('')
+const loading: Ref<boolean> = ref(false)
+const messages: Ref<Message[]> = ref([])
+const chatContainer: Ref<HTMLElement | null> = ref(null)
+const hasShownWelcome: Ref<boolean> = ref(false)
+
+let chat: ChatSession
+
+// 限制輸入字數
+const limitWords = (): void => {
+    if (input.value.length > 50) {
+        input.value = input.value.substring(0, 50)
+    }
+}
+
+// 獲取訊息文本的輔助函數
+const getMessageText = (msg: Message): string => {
+    if (!msg.parts || msg.parts.length === 0) {
+        return ''
+    }
+
+    let text = ''
+    for (const part of msg.parts) {
+        if (part.text) {
+            text += part.text
+        }
+        // 如果有 functionCall，可以選擇是否顯示（通常不顯示給用戶）
+        if (part.functionCall) {
+            text += `[Function: ${part.functionCall.name}]`
+        }
+    }
+    return text
+}
 
 // Linkify function to convert URLs to clickable links
-function linkify(text) {
+function linkify(text: string): string {
     if (!text) return ''
     const urlRegex = /(https?:\/\/[^\s]+)/g
-    return text.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline">$1</a>')
-}
+    return text.replace(urlRegex, (url: string) => {
+        // 檢查是否為內部連結
+        const currentHost = window.location.host
+        const currentProtocol = window.location.protocol
+        const baseUrl = `${currentProtocol}//${currentHost}`
 
-// 聊天同步功能
-const saveChatToStorage = () => {
-    try {
-        localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages.value))
-    } catch (error) {
-        console.error('Error saving chat to storage:', error)
-    }
-}
-
-const loadChatFromStorage = () => {
-    try {
-        const savedMessages = localStorage.getItem(CHAT_STORAGE_KEY)
-        if (savedMessages) {
-            messages.value = JSON.parse(savedMessages)
-        }
-    } catch (error) {
-        console.error('Error loading chat from storage:', error)
-    }
-}
-
-const syncChatAcrossWindows = () => {
-    // 觸發其他視窗的同步
-    localStorage.setItem(CHAT_SYNC_KEY, Date.now().toString())
-}
-
-const handleStorageChange = (event) => {
-    if (event.key === CHAT_STORAGE_KEY && event.newValue) {
-        try {
-            const newMessages = JSON.parse(event.newValue)
-            messages.value = newMessages
-        } catch (error) {
-            console.error('Error syncing chat from other window:', error)
-        }
-    }
-}
-
-const clearChat = () => {
-    messages.value = []
-    hasShownWelcome.value = false
-    localStorage.removeItem(CHAT_STORAGE_KEY)
-    syncChatAcrossWindows()
-}
-
-const getIndexedBoardData = async () => {
-    try {
-        const response = await fetch('/data/board.json')
-        const boardData = await response.json()
-        return JSON.stringify(boardData, null, 2)
-    } catch (error) {
-        console.error('Error loading board data:', error)
-        return '無法載入版面資料'
-    }
-}
-
-const getIndexedPostData = async () => {
-    try {
-        const currentUserId = localStorage.getItem('user') || ''
-        const isAdmin = currentUserId === 'admin'
-        console.log(isAdmin)
-        // 載入文章資料
-        const postResponse = await fetch('/data/post.json')
-        const posts = await postResponse.json()
-
-        // 載入用戶資料
-        const userResponse = await fetch('/data/user.json')
-        const users = await userResponse.json()
-
-        // 建立用戶 ID 到用戶資料的映射
-        const userMap = {}
-        users.forEach(user => {
-            if (user.id) {
-                userMap[user.id] = user
-            }
-        })
-
-        // 處理文章資料
-        const processedPosts = posts.map(post => {
-            const processedPost = { ...post }
-
-            if (isAdmin) {
-                // 管理員：替換 authorId 為完整用戶資料
-                if (post.authorId && userMap[post.authorId]) {
-                    processedPost.authorData = userMap[post.authorId]
-                }
-
-                // 處理評論中的用戶資料
-                if (post.comments && post.comments.length > 0) {
-                    processedPost.comments = post.comments.map(comment => {
-                        const processedComment = { ...comment }
-                        if (comment.userId && userMap[comment.userId]) {
-                            processedComment.userData = userMap[comment.userId]
-                        }
-                        return processedComment
+        if (url.startsWith(baseUrl)) {
+            // 內部連結，提取路徑
+            const path = url.replace(baseUrl, '')
+            // 生成一個唯一的 ID 來識別這個連結
+            const linkId = `link_${Math.random().toString(36).substr(2, 9)}`
+            // 註冊點擊事件處理器
+            setTimeout(() => {
+                const linkElement = document.getElementById(linkId)
+                if (linkElement) {
+                    linkElement.addEventListener('click', (e: Event) => {
+                        e.preventDefault()
+                        router.push(path)
                     })
                 }
-            } else {
-                // 一般用戶：替換 authorId 為用戶名稱
-                if (post.authorId && userMap[post.authorId]) {
-                    processedPost.authorName = userMap[post.authorId].name
-                    processedPost.authorId = null
-                    processedPost.id = null
-                }
+            }, 0)
+            return `<a id="${linkId}" href="#" class="text-green-600 hover:text-green-800 underline cursor-pointer break-all">${url}</a>`
+        } else {
+            // 外部連結，使用新視窗開啟
+            return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-green-600 hover:text-green-800 underline break-all">${url}</a>`
+        }
+    })
+}
 
-                // 處理評論中的用戶名稱
-                if (post.comments && post.comments.length > 0) {
-                    processedPost.comments = post.comments.map(comment => {
-                        const processedComment = { ...comment }
-                        if (comment.userId && userMap[comment.userId]) {
-                            processedComment.userName = userMap[comment.userId].name
-                            processedComment.userId = null
-                        }
-                        return processedComment
-                    })
-                }
-            }
-
-            return processedPost
-        })
-
-        return JSON.stringify(processedPosts, null, 2)
-    } catch (error) {
-        console.error('Error loading post data:', error)
-        return '無法載入文章資料'
+// Function to generate profile URL
+function generateProfileUrl({ userId }: any): object {
+    const url = `${window.location.protocol}//${window.location.host}/profile/${userId}`
+    return {
+        url: url,
+        description: `個人資料頁面連結：${url}`,
+        userId: userId
     }
 }
 
-// Replace with your Gemini API endpoint and key
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyAOMHuzUnHjeoCQX3hziIdnpJla3EeDjmE'
+// Function to generate board URL
+function generateBoardUrl({ boardId }: any): object {
+    const url = `${window.location.protocol}//${window.location.host}/board/${boardId}`
+    return {
+        url: url,
+        description: `版面連結：${url}`,
+        boardId: boardId
+    }
+}
 
-async function sendMessage() {
-    if (!input.value.trim()) return
-    const userMsg = { role: 'user', content: input.value }
-    messages.value.push(userMsg)
+const initChat = async (): Promise<void> => {
+    const forumTools: FunctionDeclarationsTool = {
+        functionDeclarations: [
+            {
+                name: "getProfile",
+                description: "透過UserId(使用者ID)取得個人版面和個人資料的連結。此函數會回傳包含 url、description 和 userId 的物件。",
+                parameters: {
+                    type: SchemaType.OBJECT,
+                    properties: {
+                        userId: {
+                            type: SchemaType.STRING,
+                            description: "用來取得個人版面的UserID"
+                        }
+                    },
+                    required: ["userId"]
+                }
+            },
+            {
+                name: "getBoard",
+                description: "透過版面ID取得分類版面的連結。此函數會回傳包含 url、description 和 boardId 的物件。",
+                parameters: {
+                    type: SchemaType.OBJECT,
+                    properties: {
+                        boardId: {
+                            type: SchemaType.STRING,
+                            description: "要獲取版面資訊的版面ID"
+                        }
+                    },
+                    required: ["boardId"]
+                }
+            },
+            {
+                name: "getBoardData",
+                description: "取得所有版面的資料清單，包含版面ID、名稱和描述。",
+                parameters: {
+                    type: SchemaType.OBJECT,
+                    properties: {},
+                    required: []
+                }
+            },
+            {
+                name: "getPostData",
+                description: "取得所有文章的資料清單，包含文章標題、內容、作者資訊、版面ID、評論等。根據使用者權限顯示不同的詳細程度。",
+                parameters: {
+                    type: SchemaType.OBJECT,
+                    properties: {},
+                    required: []
+                }
+            },
 
-    // 儲存並同步聊天記錄
-    saveChatToStorage()
-    syncChatAcrossWindows()
+        ],
+    };
 
-    loading.value = true
-    const prompt = messages.value.map(m => `${m.role === 'user' ? 'User' : 'AI'}: ${m.content}`).join('\n') + '\nAI:'
-    input.value = ''
-
-    try {
-        // 預先載入資料
-        const boardData = await getIndexedBoardData()
-        const postData = await getIndexedPostData()
-        console.log(boardData)
-        console.log(postData)
-        const res = await fetch(GEMINI_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                "system_instruction": {
-                    "parts": [
-                        {
-                            "text": `
+    const systemInstruction = `
 你是 UniQA，一位專屬於【成仁樹洞】社群論壇的可愛獨角仙 AI 小幫手。你的形象是一隻帶著糖果色鬃毛、表情天真、語氣活潑的獨角仙🪲✨。
 
 請嚴格遵守以下角色設定：
@@ -265,28 +290,28 @@ async function sendMessage() {
 
 ⸻
 
-🔎 常見問題範例
-Q：使用者 xxx 的文章個人版面在哪裡？
-	•	如果 xxx 是使用者的 ID，請回答：
- ${window.location.protocol}//${window.location.host}/profile/{{xxx}}
-	•	如果 xxx 是使用者名稱而非 ID，請協助查詢該使用者的 ID 是什麼。若查不到，請說明對方權限不足或無法查詢。
-Q：有xxx相關的文章嗎？
-	•	請你查詢以下內容，告訴使用者。
-版面相關：${boardData}
-文章相關：${postData}
-若查不到，請說明對方權限不足或無法查詢。
+🔗 函數使用說明
+	•	當需要提供個人資料連結時，使用 getProfile 函數，會回傳包含 url 和 description 的物件
+	•	當需要提供版面連結時，使用 getBoard 函數，會回傳包含 url 和 description 的物件
+	•	當需要查詢版面資料時，使用 getBoardData 函數，會回傳所有版面的詳細資料
+	•	當需要查詢文章資料時，使用 getPostData 函數，會回傳所有文章的詳細資料（依用戶權限顯示）
+	•	你可以同時調用多個函數來獲取不同類型的資料，例如同時查詢版面和文章資料
+	•	使用這些函數後，請以自然的方式將資訊融入回應中，不要直接顯示 JSON 格式
 ⸻
 
-sitemap:
-home: /
-board xxxx: /board/xxx
-my profile: /profile
-xxx's profile: /profile/xxx
-
-只有這些
-沒有/post/
-沒有/post/
-沒有/post/
+🔎 常見問題處理指南
+Q：有xxx相關的文章嗎？
+	•	使用 getPostData 函數取得文章資料，然後搜尋相關內容並以自然語言回答
+Q：有哪些版面？
+	•	使用 getBoardData 函數取得版面清單，然後整理成易讀的格式回答
+Q：最新的文章有哪些？
+	•	使用 getPostData 函數取得文章資料，按時間排序後回答
+Q：某個用戶發了什麼文章？
+	•	使用 getPostData 函數，根據作者資訊篩選後回答
+	•	注意：一般用戶看不到作者ID，只能看到作者名稱
+Q：綜合性問題（如：論壇概況、完整資訊等）
+	•	可以同時使用 getBoardData 和 getPostData 函數來獲取完整資訊
+	•	根據需要也可以配合 getProfile 或 getBoard 函數提供相關連結
 ⸻
 
 💬 語氣風格
@@ -306,28 +331,249 @@ xxx's profile: /profile/xxx
 	•	所有與論壇無關的問題，請保持角色扮演，用可愛又亂來的方式鬼扯回應，但需避免令人不適或冒犯的內容。
     •	不可使用markdow，請使用純文字。
     •	不可使用markdow，請使用純文字。
+    •	一次不要回答太多
 ⸻
 
 🪲✨ 準備好了嗎？UniQA 扇動糖果色的翅膀，要出發幫大家解惑啦～！嗡嗡～
 `
-                        }
-                    ]
-                },
-                contents: [{ parts: [{ text: prompt }] }]
-            })
-        })
-        const data = await res.json()
-        const aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '抱歉，我無法處理。'
-        messages.value.push({ role: 'ai', content: aiText })
+    // 建立對話歷史，轉換為 Gemini API 格式
+    const history = [
+        {
+            role: "user" as const,
+            parts: [{ text: "Hi" }]
+        },
+        {
+            role: "model" as const,
+            parts: [{ text: "嗨～我是 UniQA！🦄✨ 我準備好幫你解答關於成仁樹洞的問題啦！有什麼想問的嗎？嗡嗡～" }]
+        }
+    ]
+    messages.value = [history[1]]
+    const model = getGenerativeModel(ai, {
+        model: "gemini-2.5-flash",
+        systemInstruction: systemInstruction,
+        tools: [forumTools]
+    });
+    chat = model.startChat({
+        history: history,
+        generationConfig: {
+            maxOutputTokens: 500,
+            temperature: 0.7,
+        }
+    })
+}
 
-        // 儲存並同步 AI 回應
-        saveChatToStorage()
-        syncChatAcrossWindows()
+const clearChat = async (): Promise<void> => {
+    messages.value = []
+    hasShownWelcome.value = false
+
+    // 重新初始化聊天
+    await initChat()
+}
+
+const getIndexedBoardData = async (): Promise<string> => {
+    try {
+        const response = await fetch('/data/board.json')
+        const boardData: BoardData[] = await response.json()
+        return JSON.stringify(boardData, null, 2)
+    } catch (error) {
+        console.error('Error loading board data:', error)
+        return '無法載入版面資料'
+    }
+}
+
+const getIndexedPostData = async (): Promise<string> => {
+    try {
+        const currentUserId = localStorage.getItem('user') || ''
+        const isAdmin = currentUserId === 'admin'
+        // 載入文章資料
+        const postResponse = await fetch('/data/post.json')
+        const posts: Post[] = await postResponse.json()
+
+        // 載入用戶資料
+        const userResponse = await fetch('/data/user.json')
+        const users: UserData[] = await userResponse.json()
+
+        // 建立用戶 ID 到用戶資料的映射
+        const userMap: Record<string, UserData> = {}
+        users.forEach((user: UserData) => {
+            if (user.id) {
+                userMap[user.id] = user
+            }
+        })
+
+        // 處理文章資料
+        const processedPosts = posts.map((post: Post) => {
+            const processedPost = { ...post }
+
+            if (isAdmin) {
+                // 管理員：替換 authorId 為完整用戶資料
+                if (post.authorId && userMap[post.authorId]) {
+                    processedPost.authorData = userMap[post.authorId]
+                }
+
+                // 處理評論中的用戶資料
+                if (post.comments && post.comments.length > 0) {
+                    processedPost.comments = post.comments.map((comment: Comment) => {
+                        const processedComment = { ...comment }
+                        if (comment.userId && userMap[comment.userId]) {
+                            processedComment.userData = userMap[comment.userId]
+                        }
+                        return processedComment
+                    })
+                }
+            } else {
+                // 一般用戶：替換 authorId 為用戶名稱
+                if (post.authorId && userMap[post.authorId]) {
+                    processedPost.authorName = userMap[post.authorId].name
+                    processedPost.authorId = ''
+                    processedPost.id = ''
+                }
+
+                // 處理評論中的用戶名稱
+                if (post.comments && post.comments.length > 0) {
+                    processedPost.comments = post.comments.map((comment: Comment) => {
+                        const processedComment = { ...comment }
+                        if (comment.userId && userMap[comment.userId]) {
+                            processedComment.userName = userMap[comment.userId].name
+                            processedComment.userId = ''
+                        }
+                        return processedComment
+                    })
+                }
+            }
+
+            return processedPost
+        })
+
+        return JSON.stringify(processedPosts, null, 2)
+    } catch (error) {
+        console.error('Error loading post data:', error)
+        return '無法載入文章資料'
+    }
+}
+
+async function sendMessage(): Promise<void> {
+    if (!input.value.trim()) return
+    const userMsg: Message = {
+        role: 'user',
+        parts: [{ text: input.value }]
+    }
+    messages.value.push(userMsg)
+
+    loading.value = true
+    const userInput = input.value
+    input.value = ''
+
+    // 添加空的 AI 訊息以便即時更新
+    const aiMessageIndex = messages.value.length
+    messages.value.push({
+        role: 'model',
+        parts: [{ text: '' }]
+    })
+
+    try {
+        // 發送訊息並接收流式回應
+        console.log(chat)
+        let result = await chat.sendMessage(userInput)
+        const functionCalls = result.response.functionCalls() ?? [];
+        
+        // 如果有文字回應，直接顯示
+        if (result.response.text()) {
+            messages.value[aiMessageIndex].parts[0].text = result.response.text()
+        }
+        
+        console.log(functionCalls)
+
+        // 處理函數調用
+        if (functionCalls.length > 0) {
+            // 如果有函數調用但沒有初始文字回應，移除空的訊息
+            if (!result.response.text()) {
+                messages.value.pop()
+            }
+            
+            // 顯示正在使用的工具
+            const toolNames = functionCalls.map(call => {
+                const toolMap: Record<string, string> = {
+                    'getProfile': '個人資料連結',
+                    'getBoard': '版面連結',
+                    'getBoardData': '版面資料查詢',
+                    'getPostData': '文章資料查詢'
+                }
+                return toolMap[call.name] || call.name
+            }).join('、')
+            
+            messages.value.push({
+                role: 'model',
+                parts: [{ text: `🔧 正在使用工具：${toolNames}` }]
+            })
+            
+            // 收集所有函數調用的結果
+            const functionResponses = []
+            
+            for (const functionCall of functionCalls) {
+                let functionResult: any
+
+                try {
+                    switch (functionCall.name) {
+                        case 'getProfile':
+                            functionResult = generateProfileUrl(functionCall.args)
+                            break
+                        case 'getBoard':
+                            functionResult = generateBoardUrl(functionCall.args)
+                            break
+                        case 'getBoardData':
+                            functionResult = {
+                                data: await getIndexedBoardData(),
+                                description: "版面資料已成功取得"
+                            }
+                            break
+                        case 'getPostData':
+                            functionResult = {
+                                data: await getIndexedPostData(),
+                                description: "文章資料已成功取得"
+                            }
+                            break
+                        default:
+                            functionResult = { error: "未知的函數調用" }
+                    }
+                } catch (error) {
+                    functionResult = { error: "函數執行錯誤" }
+                }
+                
+                console.log(`Function ${functionCall.name} result:`, functionResult)
+                
+                // 添加到函數回應列表
+                functionResponses.push({
+                    functionResponse: {
+                        name: functionCall.name,
+                        response: functionResult,
+                    },
+                })
+            }
+            
+            // 一次性發送所有函數回應
+            if (functionResponses.length > 0) {
+                result = await chat.sendMessage(functionResponses)
+                
+                // 獲取模型的最終回應
+                if (result.response.text()) {
+                    messages.value.push({
+                        role: 'model',
+                        parts: [{ text: result.response.text() }]
+                    })
+                }
+            }
+        }
+
+        // 確保最終內容不為空（僅在沒有函數調用時才需要檢查初始回應）
+        if (functionCalls.length === 0 && !messages.value[aiMessageIndex].parts[0].text?.trim()) {
+            messages.value[aiMessageIndex].parts[0].text = '抱歉，我無法處理這個問題。'
+        }
+
     } catch (e) {
-        messages.value.push({ role: 'ai', content: 'Error contacting AI.' })
-        // 儲存並同步錯誤訊息
-        saveChatToStorage()
-        syncChatAcrossWindows()
+        console.log(JSON.stringify(messages.value))
+        console.error('Firebase AI Error:', e)
+        messages.value[aiMessageIndex].parts[0].text += 'UniQA 發生錯誤'
     }
     loading.value = false
 }
@@ -340,13 +586,8 @@ watch(messages, async () => {
     }
 }, { deep: true })
 
-// 監聽訊息變化並儲存
-watch(messages, () => {
-    saveChatToStorage()
-}, { deep: true })
-
 // Auto-scroll when chat opens
-watch(open, async (val) => {
+watch(open, async (val: boolean) => {
     if (val) {
         await nextTick()
         if (chatContainer.value) {
@@ -356,45 +597,23 @@ watch(open, async (val) => {
 })
 
 // Watch for login status changes
-const checkLoginStatus = () => {
-    const user = localStorage.getItem('user')
-    if (user && user !== '' && !hasShownWelcome.value) {
+const autoStartChat = (): void => {
+    if ( !hasShownWelcome.value) {
         hasShownWelcome.value = true
         // Auto-open chat and show welcome message
         open.value = true
-        setTimeout(() => {
-            const welcomeMessage = `嗨！歡迎來到成仁樹洞！我是 UniQA 🦄✨，你的專屬 AI 小幫手！
-
-很高興見到你～有什麼問題都可以問我哦！
-我可以幫你：
-• 找到其他使用者的個人版面
-• 解答關於論壇的問題
-• 或者只是陪你聊天 😊
-
-快來試試看吧！嗡嗡～`
-            if (messages.value.length == 0) {
-                messages.value.push({ role: 'ai', content: welcomeMessage })
-            }
-        }, 500)
+        setTimeout(async () => {
+            await initChat()
+        }, 100)
     }
 }
 
 // Check login status on mount and periodically
 onMounted(() => {
-    // 載入之前的聊天記錄
-    loadChatFromStorage()
-
-    // 監聽 localStorage 變化以同步其他視窗
-    window.addEventListener('storage', handleStorageChange)
-
-    checkLoginStatus()
-    setInterval(checkLoginStatus, 1000)
+    autoStartChat()
+    setInterval(autoStartChat, 1000)
 })
 
-// 清理事件監聽器
-onUnmounted(() => {
-    window.removeEventListener('storage', handleStorageChange)
-})
 </script>
 
 <style scoped>
@@ -428,5 +647,19 @@ onUnmounted(() => {
 ::-webkit-scrollbar-thumb {
     background: #e5e7eb;
     border-radius: 3px;
+}
+
+/* 強制長文字和連結換行 */
+.break-words {
+    word-break: break-word;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* 針對連結的特殊處理 */
+a {
+    word-break: break-all;
+    overflow-wrap: break-word;
 }
 </style>
