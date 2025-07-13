@@ -21,7 +21,7 @@
         <!-- Post Content -->
         <div class="mb-4">
             <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ post.title }}</h3>
-            <p class="text-gray-700 leading-relaxed mb-3">{{ post.content }}</p>
+            <p class="text-gray-700 leading-relaxed mb-3 whitespace-pre-wrap">{{ post.content }}</p>
 
             <!-- Post Image -->
             <div v-if="post.image" class="mt-3">
@@ -88,7 +88,7 @@
                             </RouterLink>
                             <span class="text-xs text-gray-500">{{ comment.createdAt }}</span>
                         </div>
-                        <p class="text-sm text-gray-700">{{ comment.content }}</p>
+                        <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ comment.content }}</p>
                     </div>
                 </div>
             </div>

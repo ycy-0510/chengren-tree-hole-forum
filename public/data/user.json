@@ -1,11 +1,11 @@
 [
-     {
+    {
         "id": "admin",
         "name": "管理員",
         "avatar": "https://www.tapback.co/api/avatar/admin.webp",
         "password": "adminpassword",
-        "gender": "不透露",
-        "birthday": "1999/01/01",
+        "gender": "不告訴你",
+        "birthday": "不告訴你",
         "relationshipStatus": "保密",
         "favoriteBoard": "八卦",
         "postTrend": "https://placehold.co/1200x1000"
