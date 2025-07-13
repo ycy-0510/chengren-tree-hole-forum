@@ -32,9 +32,18 @@
             <div v-else-if="currentBoard" class="space-y-6">
                 <!-- Post Creation Button -->
                 <div class="bg-white rounded-lg shadow-sm p-4">
-                    <button
+                    <button @click="openCreatePostModal"
                         class="w-full text-left px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                        <span class="text-gray-500">分享你的想法...</span>
+                        <div class="flex items-center space-x-3">
+                            <div v-if="currentUser && currentUser.avatar" class="w-8 h-8">
+                                <img :src="currentUser.avatar" :alt="currentUser.name" 
+                                     class="w-8 h-8 rounded-full object-cover border-2 border-emerald-200" />
+                            </div>
+                            <div v-else class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                                <font-awesome-icon icon="fa-solid fa-user" class="text-gray-600" />
+                            </div>
+                            <span class="text-gray-500">分享你的想法...</span>
+                        </div>
                     </button>
                 </div>
 
@@ -60,6 +69,10 @@
                 </div>
             </div>
         </div>
+
+        <!-- Create Post Modal -->
+        <CreatePostModal :is-visible="showCreatePostModal" :board-name="currentBoard?.name"
+            @close="closeCreatePostModal" @submit="handlePostSubmit" />
     </div>
 </template>
 
@@ -67,6 +80,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Post from '../components/Post.vue'
+import CreatePostModal from '../components/CreatePostModal.vue'
 import type { Board, PostData, User, Post as PostType } from '../data'
 
 const route = useRoute()
@@ -81,6 +95,12 @@ const currentBoard = computed(() => {
 // Users data
 const users = ref<User[]>([])
 const isLoading = ref(true)
+
+// Current user data
+const currentUser = ref<User | null>(null)
+
+// Modal state
+const showCreatePostModal = ref(false)
 
 // Posts data
 const postsData = ref<PostData[]>([])
@@ -162,6 +182,12 @@ const loadUsersData = async () => {
         const response = await fetch('/data/user.json')
         const data = await response.json()
         users.value = data
+        
+        // 載入當前用戶
+        const currentUserId = localStorage.getItem('user')
+        if (currentUserId) {
+            currentUser.value = users.value.find(u => u.id === currentUserId) || null
+        }
     } catch (error) {
         console.error('載入用戶數據失敗:', error)
     }
@@ -178,6 +204,23 @@ const loadPostsData = async () => {
     }
 }
 
+// Modal methods
+const openCreatePostModal = () => {
+    showCreatePostModal.value = true
+}
+
+const closeCreatePostModal = () => {
+    showCreatePostModal.value = false
+}
+
+const handlePostSubmit = (formData: { title: string; content: string; tags: string[] }) => {
+    // 模擬發文成功的提示
+    console.log('發文成功！', formData)
+    setTimeout(() => {
+        alert(`發文成功！`)
+    }, 0);
+}
+
 onMounted(async () => {
     try {
         await Promise.all([
@@ -187,7 +230,7 @@ onMounted(async () => {
         ])
         // 模仿真實網站載入延遲
         await new Promise(resolve => setTimeout(resolve, 500))
-        document.title = `${(currentBoard.value||{}).name??'找不到頁面'} | 成仁樹洞`
+        document.title = `${(currentBoard.value || {}).name ?? '找不到頁面'} | 成仁樹洞`
     } catch (error) {
         console.error('載入數據時發生錯誤:', error)
     } finally {

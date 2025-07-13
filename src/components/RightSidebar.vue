@@ -21,9 +21,6 @@ const boards = [
     }
 ]
 
-const post = () => {
-    alert('累積經驗值後即可發文')
-}
 </script>
 
 <template>
@@ -31,12 +28,7 @@ const post = () => {
         class="fixed top-0 right-0 z-10 w-64 h-auto max-h-screen p-6 pt-30 transition-all duration-300 md:translate-x-0 md:opacity-100"
         :class="{ 'translate-x-64 opacity-0': !prop.show }">
         <div class="space-y-6">
-            <!-- Post Button -->
-            <button @click="post"
-                class="w-full py-3 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
-                <font-awesome-icon icon="fa-solid fa-plus" class="text-sm" />
-                我要發文
-            </button>
+            
 
             <!-- Hot Rankings -->
             <div class="bg-white/90 backdrop-blur-sm border border-emerald-200 rounded-2xl p-6 shadow-xl">
@@ -74,7 +66,7 @@ const post = () => {
                     今日統計
                 </h3>
                 <div class="space-y-3">
-                     <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center">
                         <span class="text-gray-600 text-sm">瀏覽次數</span>
                         <span class="text-emerald-600 font-semibold">562</span>
                     </div>

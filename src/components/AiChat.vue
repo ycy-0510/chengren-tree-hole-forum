@@ -2,7 +2,7 @@
     <div>
         <!-- Chat Button -->
         <button @click="open = !open"
-            class="fixed bottom-6 right-6 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full p-4 shadow-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 hover:scale-110 hover:shadow-3xl active:scale-95 animate-pulse hover:animate-none group">
+            class="fixed z-50 bottom-6 right-6 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full p-4 shadow-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 hover:scale-110 hover:shadow-3xl active:scale-95 animate-pulse hover:animate-none group">
             <svg class="w-6 h-6 transition-transform duration-300 group-hover:rotate-12" fill="none"
                 stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -13,7 +13,7 @@
         <!-- Chat Widget -->
         <Transition name="chat-slide">
             <div v-if="open"
-                class="z-50 fixed bottom-25 right-6 w-80 bg-white rounded-2xl shadow-2xl border border-emerald-200 flex flex-col overflow-hidden"
+                class="z-50 fixed bottom-25 right-6 w-100 bg-white rounded-2xl shadow-2xl border border-emerald-200 flex flex-col overflow-hidden"
                 style="height: 420px;">
                 <div
                     class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
@@ -473,7 +473,6 @@ async function sendMessage(): Promise<void> {
 
     try {
         // 發送訊息並接收流式回應
-        console.log(chat)
         let result = await chat.sendMessage(userInput)
         const functionCalls = result.response.functionCalls() ?? [];
         
@@ -482,7 +481,6 @@ async function sendMessage(): Promise<void> {
             messages.value[aiMessageIndex].parts[0].text = result.response.text()
         }
         
-        console.log(functionCalls)
 
         // 處理函數調用
         if (functionCalls.length > 0) {
@@ -571,7 +569,6 @@ async function sendMessage(): Promise<void> {
         }
 
     } catch (e) {
-        console.log(JSON.stringify(messages.value))
         console.error('Firebase AI Error:', e)
         messages.value[aiMessageIndex].parts[0].text += 'UniQA 發生錯誤'
     }
