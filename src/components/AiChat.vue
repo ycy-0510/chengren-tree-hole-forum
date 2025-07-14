@@ -617,6 +617,7 @@ onMounted(() => {
 /* Custom shadow for button hover effect */
 .hover\:shadow-3xl:hover {
     box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(16, 185, 129, 0.1);
+    border-radius: 50%;
 }
 
 /* Chat animation transitions */
