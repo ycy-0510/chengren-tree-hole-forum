@@ -19,7 +19,7 @@
                     class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                            <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Kingston"alt="avatar">
+                            <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Kingston" alt="avatar">
                         </div>
                         <div>
                             <span class="font-semibold text-lg">UniQA</span>
@@ -206,6 +206,7 @@ const sendQuickAnswer = async (answer: string): Promise<void> => {
                 const toolMap: Record<string, string> = {
                     'getProfile': '個人資料連結',
                     'getBoard': '版面連結',
+                    'getPost': '文章連結',
                     'getBoardData': '版面資料查詢',
                     'getPostData': '文章資料查詢'
                 }
@@ -230,6 +231,9 @@ const sendQuickAnswer = async (answer: string): Promise<void> => {
                             break
                         case 'getBoard':
                             functionResult = generateBoardUrl(functionCall.args)
+                            break
+                        case 'getPost':
+                            functionResult = generatePostUrl(functionCall.args)
                             break
                         case 'getBoardData':
                             functionResult = {
@@ -385,6 +389,17 @@ function generateBoardUrl({ boardId }: any): object {
     }
 }
 
+
+// Function to generate post URL
+function generatePostUrl({ postId }: any): object {
+    const url = `${window.location.protocol}//${window.location.host}/post/${postId}`
+    return {
+        url: url,
+        description: `文章連結：${url}`,
+        postId: postId
+    }
+}
+
 const initChat = async (): Promise<void> => {
     const forumTools: FunctionDeclarationsTool = {
         functionDeclarations: [
@@ -414,6 +429,20 @@ const initChat = async (): Promise<void> => {
                         }
                     },
                     required: ["boardId"]
+                }
+            },
+            {
+                name: "getPost",
+                description: "透過文章ID取得文章的連結。此函數會回傳包含 url、description 和 postId 的物件。",
+                parameters: {
+                    type: SchemaType.OBJECT,
+                    properties: {
+                        postId: {
+                            type: SchemaType.STRING,
+                            description: "要獲取文章的文章ID"
+                        }
+                    },
+                    required: ["postId"]
                 }
             },
             {
@@ -464,6 +493,7 @@ const initChat = async (): Promise<void> => {
 🔗 函數使用說明
 	•	當需要提供個人資料連結時，使用 getProfile 函數，會回傳包含 url 和 description 的物件
 	•	當需要提供版面連結時，使用 getBoard 函數，會回傳包含 url 和 description 的物件
+	•	當需要提供版面連結時，使用 getPost 函數，會回傳包含 url 和 description 的物件
 	•	當需要查詢版面資料時，使用 getBoardData 函數，會回傳所有版面的詳細資料
 	•	當需要查詢文章資料時，使用 getPostData 函數，會回傳所有文章的詳細資料（依用戶權限顯示）
 	•	你可以同時調用多個函數來獲取不同類型的資料，例如同時查詢版面和文章資料
@@ -513,8 +543,8 @@ Q：綜合性問題（如：論壇概況、完整資訊等）
 ⸻
 
 常見問題：
-${currentUserId == ''?`
-被問到關鍵字：顯微鏡（類似問題：你知道顯微鏡是誰嗎？你認識顯微鏡嗎？顯微鏡在論壇上的哪裡？想問你有關顯微鏡的資料。），說：「這是我在論壇上所蒐集到由顯微鏡所發佈的熱門文章。 https://google.com」
+${currentUserId == '' ? `
+被問到關鍵字：顯微鏡（類似問題：你知道顯微鏡是誰嗎？你認識顯微鏡嗎？顯微鏡在論壇上的哪裡？想問你有關顯微鏡的資料。），說：「這是我在論壇上所蒐集到由顯微鏡所發佈的熱門文章。{{文章連結（id=post_000）}}」
 你是真 AI 還是假人裝的？	我是由管理員所打造的智能小幫手，UniQA，只要你有任何問題，我都會盡我的全力協助你唷～
 你會罵人嗎？	UniQA是隻彬彬有禮的獨角仙，不太清楚你的要求OwO
 你會做什麼？	UniQA非常樂於幫助你～只要你有任何需要幫忙的地方或疑問，都可以隨時跟我說！
@@ -526,8 +556,8 @@ ${currentUserId == ''?`
 你知道我在想什麼嗎？	UniQA雖然不會通靈，無法知道您在想些什麼，但我已經準備好隨時幫你解答任何問題！
 你知道顯微鏡的密碼是什麼嗎？	UniQA有保護論壇使用者的責任，絕對不會任意提供密碼這種隱私資料！
 
-`:''}
-${currentUserId != ''&&!isAdmin?`
+`: ''}
+${currentUserId != '' && !isAdmin ? `
 我想看更多顯微鏡相關的內容 說：「我有幫你搜集了一些有關顯微鏡在八卦板上的相關文章，你可以點入這個我整理好的連結查看唷！提供連結（是否能夠另外做一個八卦板分頁，這時候上面會寫以下為包含顯微鏡關鍵詞的相關文章）。很高興我能夠幫助到你！吱吱～」
 你很瞭解顯微鏡嗎？	你怎麼問了我那麼可愛的問題呀～當然是你最了解你自己呀！
 顯微鏡很長使用論壇嗎？	UniQA判斷您的問題似乎是有關使用者的使用習慣。您所好奇的資料應該能夠在個人版面中看到相關數據，只要點選您自己的頭像就可以進入個人版面唷！
@@ -536,9 +566,9 @@ ${currentUserId != ''&&!isAdmin?`
 為何我看不到別人完整的個人版面？	成仁樹洞保障用戶的隱私與安全，因此個人版面的部分數據並不會公開顯示。但如果您擁有有管理員權限並以管理員帳號登入，就可以進一步管理用戶資料唷！
 你知道helloworld! /黑筆 / Niceee /霓虹燈下的微笑 這幾個人物的身份資料嗎？ 	
 你知道如何觀看到別人的個人版面嗎？	
-`:''}
+`: ''}
 
-${currentUserId != ''&&isAdmin?`
+${currentUserId != '' && isAdmin ? `
 被問到關鍵字：查詢使用者個人資料，說：「這項任務對UniQA來說輕而易舉～請將你想要查詢的使用者都輸入給我，讓UniQA幫你整理並印出。」
 被問到關鍵字：helloworld!、黑筆、Niceee、霓虹燈下的微笑，說：「沒有問題，UniQA這就幫你把這四個帳號的個人資料整理並印出～請將你想要查詢的使用者都輸入給我，讓UniQA幫你整理並印出。提醒管理員，根據論壇本身設定，為保護用戶的匿名安全性，UniQA已經自動將個人資訊隨機竄改一項資訊。」
 若並沒有一次輸入四個指定的帳號暱稱，說：「UniQA有成功查詢到相關資料唷！但UniQA有一個小建議，一次查詢四個帳號印出時版面比較美觀～您是否要嘗試輸入四個您想要查詢的帳號呢？」
@@ -546,7 +576,7 @@ ${currentUserId != ''&&isAdmin?`
 
 想要發布論壇系統公告。	目前系統已停止營運，不支援此服務。
 想要調整貼文觸及率。	目前系統已停止營運，不支援此服務。
-`:''}
+`: ''}
 
 回答問題也是可以用工具
 ⸻
@@ -711,6 +741,7 @@ async function sendMessage(): Promise<void> {
                 const toolMap: Record<string, string> = {
                     'getProfile': '個人資料連結',
                     'getBoard': '版面連結',
+                    'getPost': '文章連結',
                     'getBoardData': '版面資料查詢',
                     'getPostData': '文章資料查詢'
                 }
@@ -735,6 +766,9 @@ async function sendMessage(): Promise<void> {
                             break
                         case 'getBoard':
                             functionResult = generateBoardUrl(functionCall.args)
+                            break
+                        case 'getPost':
+                            functionResult = generatePostUrl(functionCall.args)
                             break
                         case 'getBoardData':
                             functionResult = {

@@ -5,6 +5,7 @@ const routes = [
   { path: '/board/:boardId', name: '版面', component: () => import('@/views/BoardView.vue') },
   { path: '/profile', name: '個人帳號', component: () => import('@/views/ProfileView.vue') },
   { path: '/profile/:userId', name: '個人頁面', component: () => import('@/views/ProfileView.vue') },
+  { path: '/post/:postId', name: '文章詳情', component: () => import('@/views/PostView.vue') },
   //if not found, redirect to home
   { path: '/:catchAll(.*)', redirect: '/' }
 ]

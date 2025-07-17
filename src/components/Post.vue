@@ -20,7 +20,9 @@
 
         <!-- Post Content -->
         <div class="mb-4">
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ post.title }}</h3>
+            <RouterLink :to="`/post/post_${post.id.toString().padStart(3, '0')}`">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2 hover:text-amber-600 transition-colors cursor-pointer">{{ post.title }}</h3>
+            </RouterLink>
             <p class="text-gray-700 leading-relaxed mb-3 whitespace-pre-wrap">{{ post.content }}</p>
 
             <!-- Post Image -->
