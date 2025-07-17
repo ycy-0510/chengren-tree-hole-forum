@@ -13,7 +13,7 @@ function getLocalIP() {
     for (const name of Object.keys(interfaces)) {
         for (const net of interfaces[name]) {
             // 跳過內部（非虛擬）和外部地址
-            if (net.family === 'IPv4' && !net.internal && net.address.startsWith('192.168.')) {
+            if (net.family === 'IPv4' && !net.internal) {
                 return net.address;
             }
         }
