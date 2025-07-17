@@ -4,11 +4,12 @@ export interface User {
     name: string
     avatar: string
     password: string
-    gender?: string
+    grade?: string
     birthday?: string
     relationshipStatus?: string
     favoriteBoard?: string
     postTrend?: string
+    selfIntro?: string
 }
 
 // 評論接口

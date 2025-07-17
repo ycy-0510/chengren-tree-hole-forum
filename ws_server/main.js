@@ -1,7 +1,6 @@
 import { WebSocketServer } from 'ws';
 import { createServer } from 'http';
-import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
+import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { networkInterfaces } from 'os';
 
@@ -24,7 +23,7 @@ function getLocalIP() {
 
 // WebSocket 變數表
 const variableTable = {
-    open_chat: true // 默認變數
+    open_chat: false // 默認變數
 };
 
 // 存儲連接的客戶端
@@ -725,7 +724,7 @@ function getControlPanelHTML() {
 // 定期清理不活躍的連接
 setInterval(() => {
     const now = Date.now();
-    const timeout = 5 * 60 * 1000; // 5分鐘超時
+    const timeout = 30 * 60 * 1000; // 30分鐘超時
 
     clients.forEach((client, clientId) => {
         if (now - client.lastActivity > timeout) {

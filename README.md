@@ -36,17 +36,20 @@ A modern, anonymous forum platform built with Vue.js and TypeScript, showcasing 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/ycy-0510/chengren-tree-hole-forum.git
 cd chengren-tree-hole-forum
 ```
 
 2. Install dependencies:
+
 ```bash
 yarn
 ```
 
 3. Start the development server:
+
 ```bash
 yarn dev
 ```
@@ -130,11 +133,14 @@ This is a demonstration project, but contributions are welcome for educational p
 5. Open a Pull Request
 
 ## Other Resources
+
 ### WS Server
+
 This project includes a WebSocket server for real-time features. The server is located in the `ws_server` directory.
 
 ### CMS (Content Management System)
-This project also includes a simple CMS for managing posts and users. The CMS is located in the `agent` directory.
+
+This project also includes a simple CMS for managing posts. The CMS is located in the `agent` directory.
 
 ## 📧 Contact
 

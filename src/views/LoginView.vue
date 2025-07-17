@@ -58,11 +58,6 @@
                 <div v-if="error" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                     <p class="text-red-600 text-sm text-center">{{ error }}</p>
                 </div>
-
-                <!-- Footer text -->
-                <p class="mt-6 text-center text-emerald-600 text-sm">
-                    在這裡，每個聲音都值得被聽見
-                </p>
             </div>
         </div>
     </div>
@@ -99,7 +94,6 @@ const login = () => {
 
     if (user) {
         localStorage.setItem('user', user.id)
-        alert(`歡迎 ${user.name}!`)
         router.push('/profile')
     } else {
         error.value = '帳號或密碼錯誤.'

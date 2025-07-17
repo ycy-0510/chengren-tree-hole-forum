@@ -34,8 +34,8 @@
                         <div class="flex-1 text-center sm:text-left">
                             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-1 items-center">
                                 <div class="text-center">
-                                    <p class="text-sm text-gray-500">性別</p>
-                                    <p class="text-lg font-semibold text-gray-700">{{ userProfile.gender || '未設定' }}</p>
+                                    <p class="text-sm text-gray-500">年級</p>
+                                    <p class="text-lg font-semibold text-gray-700">{{ userProfile.grade || '未設定' }}</p>
                                 </div>
                                 <div class="text-center">
                                     <p class="text-sm text-gray-500">生日</p>
@@ -52,11 +52,7 @@
                     </div>
                     <div class="text-center">
                         <p class="text-sm text-gray-500">自我介紹</p>
-                        <p class="text-md font-semibold text-gray-700 text-start">Lorem ipsum dolor sit amet consectetur
-                            adipiscing
-                            elit quisque faucibus ex sapien vitae pellentesque sem placerat in id cursus mi pretium
-                            tellus duis convallis tempus leo eu aenean sed diam.
-                        </p>
+                        <p class="text-md font-semibold text-gray-700 text-start" v-html="userProfile.selfIntro"></p>
                     </div>
                 </div>
 
@@ -64,9 +60,9 @@
                 <div v-if="isCurrentUser" class="grid grid-cols-2 gap-6 mb-6">
                     <!-- 發文趨勢圖 - 左側 1/2 -->
                     <div class="col-span-2 lg:col-span-1 bg-white rounded-lg shadow-lg p-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">發文趨勢</h3>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">發文熱度</h3>
                         <div class="h-64 flex items-end justify-between gap-1 overflow-x-auto">
-                            <img :src="userProfile.postTrend" alt="發文趨勢圖" class="w-full rounded-lg shadow" />
+                            <img :src="userProfile.postTrend" alt="發文熱度圖" class="w-full rounded-lg shadow" />
                         </div>
                     </div>
 
@@ -126,13 +122,13 @@
                                         <div class="w-2 h-2 rounded-full bg-yellow-400 mr-2"></div>
                                         <span class="text-gray-600">白天</span>
                                         <span class="ml-auto font-medium text-gray-700">{{ postTimeData.dayPercent
-                                            }}%</span>
+                                        }}%</span>
                                     </div>
                                     <div class="flex items-center text-xs">
                                         <div class="w-2 h-2 rounded-full bg-blue-600 mr-2"></div>
                                         <span class="text-gray-600">晚上</span>
                                         <span class="ml-auto font-medium text-gray-700">{{ postTimeData.nightPercent
-                                            }}%</span>
+                                        }}%</span>
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +185,7 @@
                 </div>
 
                 <!-- 近期發文 -->
-                <div class="bg-white rounded-lg shadow-lg p-6">
+                <div v-if="isCurrentUser"  class="bg-white rounded-lg shadow-lg p-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">
                         {{ isCurrentUser ? '我的發文' : `${userProfile.name}的發文` }}
                     </h3>
@@ -266,11 +262,12 @@ const userProfile = ref<User>({
     name: '',
     avatar: '',
     password: '',
-    gender: '未設定',
+    grade: '未設定',
     birthday: '未設定',
     relationshipStatus: '未設定',
     favoriteBoard: '未設定',
-    postTrend: 'https://placehold.co/400x600'
+    postTrend: 'https://placehold.co/400x600',
+    selfIntro: ''
 })
 
 // 所有用戶資料
@@ -434,7 +431,7 @@ const loadUsersData = async () => {
                 name: '請先登入',
                 avatar: '',
                 password: '',
-                gender: '未知',
+                grade: '未知',
                 birthday: '未知',
                 relationshipStatus: '未知',
                 favoriteBoard: '未知'
@@ -447,7 +444,7 @@ const loadUsersData = async () => {
         if (targetUser) {
             userProfile.value = {
                 ...targetUser,
-                gender: targetUser.gender || '未設定',
+                grade: targetUser.grade || '未設定',
                 birthday: targetUser.birthday || '未設定',
                 relationshipStatus: targetUser.relationshipStatus || '未設定',
                 favoriteBoard: targetUser.favoriteBoard || '未設定'
@@ -459,7 +456,7 @@ const loadUsersData = async () => {
                 name: '用戶不存在',
                 avatar: '',
                 password: '',
-                gender: '未知',
+                grade: '未知',
                 birthday: '未知',
                 relationshipStatus: '未知',
                 favoriteBoard: '未知'

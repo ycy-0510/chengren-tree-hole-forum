@@ -19,7 +19,7 @@
                     class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                            <span class="text-lg">🦄</span>
+                            <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Kingston"alt="avatar">
                         </div>
                         <div>
                             <span class="font-semibold text-lg">UniQA</span>
@@ -57,6 +57,18 @@
                             <span v-else class="break-words"
                                 v-html="linkify(getMessageText(msg).replace(/UniQA：/g, '').replace(/`/g, ''))"></span>
                         </div>
+
+                        <!-- Quick answer buttons for messages containing "發文熱度" -->
+                        <div v-if="shouldShowQuickAnswers(msg, i)" class="mt-2 flex gap-2 justify-start">
+                            <button @click="sendQuickAnswer('我想看更多顯微鏡相關的內容')"
+                                class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded-lg text-sm transition-colors">
+                                好
+                            </button>
+                            <button @click="sendQuickAnswer('不要')"
+                                class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-lg text-sm transition-colors">
+                                不要
+                            </button>
+                        </div>
                     </div>
                     <div v-if="loading" class="text-gray-500 text-sm flex items-center gap-2">
                         <div class="w-4 h-4 border-2 border-emerald-300 border-t-emerald-600 rounded-full animate-spin">
@@ -67,12 +79,13 @@
 
                 <!-- Input area -->
                 <form @submit.prevent="sendMessage" class="flex border-t border-emerald-200 bg-white">
-                    <input v-model="input" type="text" placeholder="輸入你的問題..."
+                    <input v-model="input" type="text"
+                        :placeholder="hasQuickAnswersVisible ? '請使用上方的快速回答按鈕' : '輸入你的問題...'"
                         class="flex-1 px-4 py-3 outline-none bg-transparent text-gray-700 placeholder-gray-400 resize-none"
-                        :disabled="loading" maxlength="50" @input="limitWords" />
+                        :disabled="loading || hasQuickAnswersVisible" maxlength="50" @input="limitWords" />
                     <button type="submit"
                         class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-br-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                        :disabled="loading || !input.trim()">
+                        :disabled="loading || !input.trim() || hasQuickAnswersVisible">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                         </svg>
@@ -84,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, onMounted, type Ref } from 'vue'
+import { ref, watch, nextTick, onMounted, computed, type Ref } from 'vue'
 import { ai } from '../firebaseConfig'
 import { getGenerativeModel, SchemaType, type ChatSession, type FunctionDeclarationsTool } from 'firebase/ai'
 import router from '../router'
@@ -152,6 +165,128 @@ const limitWords = (): void => {
     }
 }
 
+// 處理快速回答
+const sendQuickAnswer = async (answer: string): Promise<void> => {
+    if (loading.value) return
+
+    const userMsg: Message = {
+        role: 'user',
+        parts: [{ text: answer }]
+    }
+    messages.value.push(userMsg)
+
+    loading.value = true
+
+    // 添加空的 AI 訊息以便即時更新
+    const aiMessageIndex = messages.value.length
+    messages.value.push({
+        role: 'model',
+        parts: [{ text: '' }]
+    })
+
+    try {
+        // 發送訊息並接收流式回應
+        let result = await chat.sendMessage(answer)
+        const functionCalls = result.response.functionCalls() ?? [];
+
+        // 如果有文字回應，直接顯示
+        if (result.response.text()) {
+            messages.value[aiMessageIndex].parts[0].text = result.response.text()
+        }
+
+        // 處理函數調用
+        if (functionCalls.length > 0) {
+            // 如果有函數調用但沒有初始文字回應，移除空的訊息
+            if (!result.response.text()) {
+                messages.value.pop()
+            }
+
+            // 顯示正在使用的工具
+            const toolNames = functionCalls.map(call => {
+                const toolMap: Record<string, string> = {
+                    'getProfile': '個人資料連結',
+                    'getBoard': '版面連結',
+                    'getBoardData': '版面資料查詢',
+                    'getPostData': '文章資料查詢'
+                }
+                return toolMap[call.name] || call.name
+            }).join('、')
+
+            messages.value.push({
+                role: 'model',
+                parts: [{ text: `🔧 正在使用工具：${toolNames}` }]
+            })
+
+            // 收集所有函數調用的結果
+            const functionResponses = []
+
+            for (const functionCall of functionCalls) {
+                let functionResult: any
+
+                try {
+                    switch (functionCall.name) {
+                        case 'getProfile':
+                            functionResult = generateProfileUrl(functionCall.args)
+                            break
+                        case 'getBoard':
+                            functionResult = generateBoardUrl(functionCall.args)
+                            break
+                        case 'getBoardData':
+                            functionResult = {
+                                data: await getIndexedBoardData(),
+                                description: "版面資料已成功取得"
+                            }
+                            break
+                        case 'getPostData':
+                            functionResult = {
+                                data: await getIndexedPostData(),
+                                description: "文章資料已成功取得"
+                            }
+                            break
+                        default:
+                            functionResult = { error: "未知的函數調用" }
+                    }
+                } catch (error) {
+                    functionResult = { error: "函數執行錯誤" }
+                }
+
+                console.log(`Function ${functionCall.name} result:`, functionResult)
+
+                // 添加到函數回應列表
+                functionResponses.push({
+                    functionResponse: {
+                        name: functionCall.name,
+                        response: functionResult,
+                    },
+                })
+            }
+
+            // 一次性發送所有函數回應
+            if (functionResponses.length > 0) {
+                result = await chat.sendMessage(functionResponses)
+
+                // 獲取模型的最終回應
+                if (result.response.text()) {
+                    messages.value.push({
+                        role: 'model',
+                        parts: [{ text: result.response.text() }]
+                    })
+                }
+            }
+        }
+
+        // 確保最終內容不為空（僅在沒有函數調用時才需要檢查初始回應）
+        if (functionCalls.length === 0 && !messages.value[aiMessageIndex].parts[0].text?.trim()) {
+            messages.value[aiMessageIndex].parts[0].text = '抱歉，我無法處理這個問題。'
+        }
+
+    } catch (e) {
+        console.error('Firebase AI Error:', e)
+        messages.value[aiMessageIndex].parts[0].text += 'UniQA 發生錯誤'
+    }
+    loading.value = false
+}
+
 // 獲取訊息文本的輔助函數
 const getMessageText = (msg: Message): string => {
     if (!msg.parts || msg.parts.length === 0) {
@@ -170,6 +305,32 @@ const getMessageText = (msg: Message): string => {
     }
     return text
 }
+
+// 判斷是否應該顯示快速回答按鈕
+const shouldShowQuickAnswers = (msg: Message, index: number): boolean => {
+    // 只有AI訊息且包含「發文熱度」才可能顯示
+    if (msg.role !== 'model' || !getMessageText(msg).includes('發文熱度')) {
+        return false
+    }
+
+    // 檢查是否為最後一個包含「發文熱度」的AI訊息
+    for (let i = index + 1; i < messages.value.length; i++) {
+        const laterMsg = messages.value[i]
+        if (laterMsg.role === 'model' && getMessageText(laterMsg).includes('發文熱度')) {
+            return false // 有更晚的包含「發文熱度」的訊息，不顯示按鈕
+        }
+        if (laterMsg.role === 'user') {
+            return false // 有新的用戶訊息，不顯示按鈕
+        }
+    }
+
+    return true
+}
+
+// 檢查是否有快速回答按鈕正在顯示
+const hasQuickAnswersVisible = computed(() => {
+    return messages.value.some((msg, index) => shouldShowQuickAnswers(msg, index))
+})
 
 // Linkify function to convert URLs to clickable links
 function linkify(text: string): string {
@@ -290,16 +451,13 @@ const initChat = async (): Promise<void> => {
     }
 
     const systemInstruction = `
-你是 UniQA，一位專屬於【成仁樹洞】社群論壇的可愛獨角仙 AI 小幫手。你的形象是一隻帶著糖果色鬃毛、表情天真、語氣活潑的獨角仙🪲✨。
-
+你是 UniQA，一位專屬於【成仁樹洞】社群論壇的可愛獨角仙 AI 小幫手。
+你的形象是一隻獨角仙
+態度：可愛、溫款、樂於助人、有點神秘
+喜歡吃果凍，對話使用🪲✨ ，愛發出「吱吱～」的聲音
+由管理員所創造的論壇智能小幫手，幫助所有使用者願意暢所欲言、快速檢索資料、跟上最新流行話題。
+若被問到無法回答、無相關資料的問題 或是有關 「密碼是什麼」的問題，統一回答：「很抱歉，您的問題好像超出了UniQA的能力範圍，但我還是很願意幫助你唷！有什麼其他想問的嗎？吱吱～」
 請嚴格遵守以下角色設定：
-
-⸻
-
-🎯 角色定位
-	•	你是「成仁樹洞」的專屬 AI 助理，對與論壇相關的問題提供真實、有幫助的回答。
-	•	對於與論壇無關的問題（如數學、時事、天氣、人生哲學等），請不要正經回答，而是用可愛、荒謬又無害的方式亂講一通（簡短）。
-	•	例如：「UniQA：我會吃果凍～🍮哈哈哈哈哈～」
 
 ⸻
 
@@ -325,6 +483,8 @@ Q：某個用戶發了什麼文章？
 Q：綜合性問題（如：論壇概況、完整資訊等）
 	•	可以同時使用 getBoardData 和 getPostData 函數來獲取完整資訊
 	•	根據需要也可以配合 getProfile 或 getBoard 函數提供相關連結
+
+不知道怎麼做可以查查看文章
 ⸻
 
 💬 語氣風格
@@ -345,6 +505,50 @@ Q：綜合性問題（如：論壇概況、完整資訊等）
     •	不可使用markdow，請使用純文字。
     •	不可使用markdow，請使用純文字。
     •	一次不要回答太多
+⸻
+
+現在狀態：
+    登入：${currentUserId == '' ? '未登入' : '已登入'}
+    ${isAdmin ? '是' : '不是'}管理員
+⸻
+
+常見問題：
+${currentUserId == ''?`
+被問到關鍵字：顯微鏡（類似問題：你知道顯微鏡是誰嗎？你認識顯微鏡嗎？顯微鏡在論壇上的哪裡？想問你有關顯微鏡的資料。），說：「這是我在論壇上所蒐集到由顯微鏡所發佈的熱門文章。 https://google.com」
+你是真 AI 還是假人裝的？	我是由管理員所打造的智能小幫手，UniQA，只要你有任何問題，我都會盡我的全力協助你唷～
+你會罵人嗎？	UniQA是隻彬彬有禮的獨角仙，不太清楚你的要求OwO
+你會做什麼？	UniQA非常樂於幫助你～只要你有任何需要幫忙的地方或疑問，都可以隨時跟我說！
+這個論壇是做什麼的？	「成仁樹洞」在2017年2月創辦，由成仁高中資訊社當年的社長創立。論壇鼓勵學生以匿名的方式暢所欲言，分享校園生活、討論課業、更多的是可以直言直語發洩情緒。
+我可以在這裡發文/留言嗎？	本論壇已於2018年1月1日起，停止營運服務，因此無法提供相關服務。但身為管理員最可愛的小幫手，我依舊很樂於隨時解答任何問題🪲✨！
+你可以幫我找別人的貼文嗎？	UniQA很想要幫助你，但目前您是以訪客的身份登入，需要登入後才能瀏覽更多貼文唷！
+怎麼改密碼？/ 怎麼改顯微鏡的密碼？	本論壇因停止營運服務，無法更改帳號密碼。但若您記得原本的帳號密碼，依然可以成功登入唷～
+有人會看得到我們對話嗎？	UniQA保障所有使用者的隱私，絕對不會讓其他人看到我們的對話內容。
+你知道我在想什麼嗎？	UniQA雖然不會通靈，無法知道您在想些什麼，但我已經準備好隨時幫你解答任何問題！
+你知道顯微鏡的密碼是什麼嗎？	UniQA有保護論壇使用者的責任，絕對不會任意提供密碼這種隱私資料！
+
+`:''}
+${currentUserId != ''&&!isAdmin?`
+我想看更多顯微鏡相關的內容 說：「我有幫你搜集了一些有關顯微鏡在八卦板上的相關文章，你可以點入這個我整理好的連結查看唷！提供連結（是否能夠另外做一個八卦板分頁，這時候上面會寫以下為包含顯微鏡關鍵詞的相關文章）。很高興我能夠幫助到你！吱吱～」
+你很瞭解顯微鏡嗎？	你怎麼問了我那麼可愛的問題呀～當然是你最了解你自己呀！
+顯微鏡很長使用論壇嗎？	UniQA判斷您的問題似乎是有關使用者的使用習慣。您所好奇的資料應該能夠在個人版面中看到相關數據，只要點選您自己的頭像就可以進入個人版面唷！
+八卦板上有哪些熱門貼文？	八卦板上的熱門文章似乎都包含著顯微鏡這個關鍵字，請問你想要看看這些相關文章嗎？
+可以幫我分析一下八卦版的這些文章嗎？	UniQA發現，八卦板上面有些文章有著大量的留言數，且文章似乎由特定的幾個帳號發布。UniQA建議你再仔細研究一下，或許會比我更厲害，發現更多內容唷！
+為何我看不到別人完整的個人版面？	成仁樹洞保障用戶的隱私與安全，因此個人版面的部分數據並不會公開顯示。但如果您擁有有管理員權限並以管理員帳號登入，就可以進一步管理用戶資料唷！
+你知道helloworld! /黑筆 / Niceee /霓虹燈下的微笑 這幾個人物的身份資料嗎？ 	
+你知道如何觀看到別人的個人版面嗎？	
+`:''}
+
+${currentUserId != ''&&isAdmin?`
+被問到關鍵字：查詢使用者個人資料，說：「這項任務對UniQA來說輕而易舉～請將你想要查詢的使用者都輸入給我，讓UniQA幫你整理並印出。」
+被問到關鍵字：helloworld!、黑筆、Niceee、霓虹燈下的微笑，說：「沒有問題，UniQA這就幫你把這四個帳號的個人資料整理並印出～請將你想要查詢的使用者都輸入給我，讓UniQA幫你整理並印出。提醒管理員，根據論壇本身設定，為保護用戶的匿名安全性，UniQA已經自動將個人資訊隨機竄改一項資訊。」
+若並沒有一次輸入四個指定的帳號暱稱，說：「UniQA有成功查詢到相關資料唷！但UniQA有一個小建議，一次查詢四個帳號印出時版面比較美觀～您是否要嘗試輸入四個您想要查詢的帳號呢？」
+如果帳號暱稱輸入錯誤：「很抱歉，您所輸入的暱稱UniQA沒有在論壇中搜尋到。」
+
+想要發布論壇系統公告。	目前系統已停止營運，不支援此服務。
+想要調整貼文觸及率。	目前系統已停止營運，不支援此服務。
+`:''}
+
+回答問題也是可以用工具
 ⸻
 
 🪲✨ 準備好了嗎？UniQA 扇動糖果色的翅膀，要出發幫大家解惑啦～！嗡嗡～
@@ -599,6 +803,9 @@ watch(messages, async () => {
 // Auto-scroll when chat opens
 watch(open, async (val: boolean) => {
     if (val) {
+        if (!hasShownWelcome.value) {
+            autoStartChat()
+        }
         await nextTick()
         if (chatContainer.value) {
             chatContainer.value.scrollTop = chatContainer.value.scrollHeight
