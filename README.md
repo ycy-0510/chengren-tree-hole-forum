@@ -129,14 +129,12 @@ This is a demonstration project, but contributions are welcome for educational p
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 🎯 Roadmap
+## Other Resources
+### WS Server
+This project includes a WebSocket server for real-time features. The server is located in the `ws_server` directory.
 
-- [x] Make AI agent hyperlinks clickable
-- [x] Hide private info in user profiles (visible only to user and admin)
-- [x] Make avatar on posts clickable to user profile
-- [ ] Add more realistic mock data
-- [ ] Implement dark mode theme
-- [ ] Add mobile-specific optimizations
+### CMS (Content Management System)
+This project also includes a simple CMS for managing posts and users. The CMS is located in the `agent` directory.
 
 ## 📧 Contact
 

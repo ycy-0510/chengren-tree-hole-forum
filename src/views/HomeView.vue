@@ -22,39 +22,6 @@
       </div>
     </div>
 
-    <!-- Quick Stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-      <div class="bg-white rounded-xl p-4 sm:p-6 shadow-lg border border-emerald-100">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-            <font-awesome-icon icon="fa-solid fa-comments" class="text-emerald-600 text-sm sm:text-base" />
-          </div>
-          <h3 class="text-base sm:text-lg font-semibold text-gray-800">總文章數</h3>
-        </div>
-        <p class="text-gray-600 text-sm">共有 {{ totalPosts }} 篇文章</p>
-      </div>
-
-      <div class="bg-white rounded-xl p-4 sm:p-6 shadow-lg border border-emerald-100">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-8 h-8 sm:w-10 sm:h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-            <font-awesome-icon icon="fa-solid fa-heart" class="text-teal-600 text-sm sm:text-base" />
-          </div>
-          <h3 class="text-base sm:text-lg font-semibold text-gray-800">總點讚數</h3>
-        </div>
-        <p class="text-gray-600 text-sm">累計獲得 {{ totalLikes }} 個讚</p>
-      </div>
-
-      <div class="bg-white rounded-xl p-4 sm:p-6 shadow-lg border border-emerald-100 sm:col-span-2 lg:col-span-1">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 rounded-lg flex items-center justify-center">
-            <font-awesome-icon icon="fa-solid fa-users" class="text-green-600 text-sm sm:text-base" />
-          </div>
-          <h3 class="text-base sm:text-lg font-semibold text-gray-800">總留言數</h3>
-        </div>
-        <p class="text-gray-600 text-sm">共有 {{ totalComments }} 則留言</p>
-      </div>
-    </div>
-
     <!-- All Posts Section -->
     <div class="bg-white rounded-xl shadow-lg border border-emerald-100 p-4 sm:p-6">
       <div class="flex items-center gap-3 mb-4 sm:mb-6">
@@ -133,11 +100,6 @@ const allPosts = computed(() => {
     }))
   }) as PostType)
 })
-
-// Statistics
-const totalPosts = computed(() => postsData.value.length)
-const totalLikes = computed(() => postsData.value.reduce((sum, post) => sum + post.likes, 0))
-const totalComments = computed(() => postsData.value.reduce((sum, post) => sum + post.comments.length, 0))
 
 // Helper function to get author name from ID
 const getAuthorName = (authorId: string) => {

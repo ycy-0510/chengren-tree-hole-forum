@@ -20,8 +20,8 @@
 
             <!-- Login form -->
             <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-emerald-100">
-                <p class="mb-6 text-center text-emerald-700 font-medium bg-emerald-50 border border-emerald-100 rounded-lg py-2 px-4 shadow-sm">
-                    請先登入才可瀏覽這個版面
+                <p class="mb-6 text-center text-emerald-700 font-medium bg-emerald-50 border border-emerald-100 rounded-lg p-2 shadow-sm">
+                    系統公告 本論壇已於2018年1月1日起 停止營運服務
                 </p>
                 <form @submit.prevent="login" class="space-y-6">
                     <div>

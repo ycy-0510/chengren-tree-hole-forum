@@ -58,32 +58,6 @@ const boards = [
                     </li>
                 </ul>
             </div>
-
-            <!-- Quick Stats -->
-            <div class="bg-white/90 backdrop-blur-sm border border-emerald-200 rounded-2xl p-6 shadow-xl">
-                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                    <font-awesome-icon icon="fa-solid fa-chart-line" class="text-emerald-600" />
-                    今日統計
-                </h3>
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600 text-sm">瀏覽次數</span>
-                        <span class="text-emerald-600 font-semibold">562</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600 text-sm">新增貼文</span>
-                        <span class="text-emerald-600 font-semibold">22</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600 text-sm">活躍用戶</span>
-                        <span class="text-emerald-600 font-semibold">128</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600 text-sm">回覆數</span>
-                        <span class="text-emerald-600 font-semibold">256</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </aside>
 </template>

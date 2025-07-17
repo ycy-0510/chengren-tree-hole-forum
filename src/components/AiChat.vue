@@ -45,14 +45,15 @@
                     <div v-for="(msg, i) in messages" :key="i"
                         :class="msg.role === 'user' ? 'text-right' : 'text-left'">
                         <div :class="[
-                            msg.role === 'user' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white ml-12' : 
-                            getMessageText(msg).startsWith('🔧') ? 'bg-blue-50 text-blue-700 mr-12 border border-blue-200' :
-                            'bg-white text-gray-800 mr-12 border border-emerald-100',
+                            msg.role === 'user' ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white ml-12' :
+                                getMessageText(msg).startsWith('🔧') ? 'bg-blue-50 text-blue-700 mr-12 border border-blue-200' :
+                                    'bg-white text-gray-800 mr-12 border border-emerald-100',
                             { 'invisible': getMessageText(msg).replace(/UniQA：/g, '').replace(/`/g, '') == '' },
                             'inline-block px-4 py-3 rounded-2xl shadow-sm break-words max-w-full'
                         ]">
                             <span v-if="msg.role === 'user'" class="break-words">{{ getMessageText(msg) }}</span>
-                            <span v-else-if="getMessageText(msg).startsWith('🔧')" class="text-sm font-medium break-words">{{ getMessageText(msg) }}</span>
+                            <span v-else-if="getMessageText(msg).startsWith('🔧')"
+                                class="text-sm font-medium break-words">{{ getMessageText(msg) }}</span>
                             <span v-else class="break-words"
                                 v-html="linkify(getMessageText(msg).replace(/UniQA：/g, '').replace(/`/g, ''))"></span>
                         </div>
@@ -276,6 +277,18 @@ const initChat = async (): Promise<void> => {
         ],
     };
 
+
+    const currentUserId = localStorage.getItem('user') || ''
+    const isAdmin = currentUserId === 'admin'
+    let greeting = '';
+    if (currentUserId == '') {
+        greeting = '嗨～我是 UniQA！🪲✨歡迎你初次來到成仁樹洞，我已經準備好隨時幫你解答任何問題！有什麼想問的嗎？吱吱～'
+    } else if (!isAdmin) {
+        greeting = '嗨～我是 UniQA！🪲✨歡迎你回來。我在八卦板上有搜尋到了許多有關你的文章，看起來發文熱度都很高唷～'
+    } else {
+        greeting = '歡迎管理員登入論壇！身為你最可愛的小幫手，我隨時都準備好了唷！以下是幾個您常用的功能：-查詢使用者個人資料 -發布論壇系統公告 -調整貼文觸及率'
+    }
+
     const systemInstruction = `
 你是 UniQA，一位專屬於【成仁樹洞】社群論壇的可愛獨角仙 AI 小幫手。你的形象是一隻帶著糖果色鬃毛、表情天真、語氣活潑的獨角仙🪲✨。
 
@@ -344,7 +357,7 @@ Q：綜合性問題（如：論壇概況、完整資訊等）
         },
         {
             role: "model" as const,
-            parts: [{ text: "嗨～我是 UniQA！🦄✨ 我準備好幫你解答關於成仁樹洞的問題啦！有什麼想問的嗎？嗡嗡～" }]
+            parts: [{ text: greeting }]
         }
     ]
     messages.value = [history[1]]
@@ -475,12 +488,12 @@ async function sendMessage(): Promise<void> {
         // 發送訊息並接收流式回應
         let result = await chat.sendMessage(userInput)
         const functionCalls = result.response.functionCalls() ?? [];
-        
+
         // 如果有文字回應，直接顯示
         if (result.response.text()) {
             messages.value[aiMessageIndex].parts[0].text = result.response.text()
         }
-        
+
 
         // 處理函數調用
         if (functionCalls.length > 0) {
@@ -488,7 +501,7 @@ async function sendMessage(): Promise<void> {
             if (!result.response.text()) {
                 messages.value.pop()
             }
-            
+
             // 顯示正在使用的工具
             const toolNames = functionCalls.map(call => {
                 const toolMap: Record<string, string> = {
@@ -499,15 +512,15 @@ async function sendMessage(): Promise<void> {
                 }
                 return toolMap[call.name] || call.name
             }).join('、')
-            
+
             messages.value.push({
                 role: 'model',
                 parts: [{ text: `🔧 正在使用工具：${toolNames}` }]
             })
-            
+
             // 收集所有函數調用的結果
             const functionResponses = []
-            
+
             for (const functionCall of functionCalls) {
                 let functionResult: any
 
@@ -537,9 +550,9 @@ async function sendMessage(): Promise<void> {
                 } catch (error) {
                     functionResult = { error: "函數執行錯誤" }
                 }
-                
+
                 console.log(`Function ${functionCall.name} result:`, functionResult)
-                
+
                 // 添加到函數回應列表
                 functionResponses.push({
                     functionResponse: {
@@ -548,11 +561,11 @@ async function sendMessage(): Promise<void> {
                     },
                 })
             }
-            
+
             // 一次性發送所有函數回應
             if (functionResponses.length > 0) {
                 result = await chat.sendMessage(functionResponses)
-                
+
                 // 獲取模型的最終回應
                 if (result.response.text()) {
                     messages.value.push({
@@ -595,20 +608,65 @@ watch(open, async (val: boolean) => {
 
 // Watch for login status changes
 const autoStartChat = (): void => {
-    if ( !hasShownWelcome.value) {
-        hasShownWelcome.value = true
-        // Auto-open chat and show welcome message
+    // Auto-open chat and show welcome message
+    setTimeout(async () => {
         open.value = true
-        setTimeout(async () => {
+        if (!hasShownWelcome.value) {
+            hasShownWelcome.value = true
             await initChat()
-        }, 100)
-    }
+        }
+    }, 100)
+
+}
+
+const observer = () => {
+    const ws_url = localStorage.getItem("ws");
+    if (ws_url == null) return;
+
+    // 建立 WebSocket 連接來監聽變數變化
+    const ws = new WebSocket(ws_url.replace('http', 'ws'));
+
+    ws.onopen = () => {
+        console.log('WebSocket connected for variable observation');
+    };
+
+    ws.onmessage = (event) => {
+        try {
+            const data = JSON.parse(event.data);
+
+            // 監聽變數更新事件
+            if (data.type === 'variableUpdate' && data.changes.open_chat) {
+                const openChatValue = data.changes.open_chat.new;
+                if (openChatValue === true) {
+                    autoStartChat();
+                } else if (openChatValue === false) {
+                    open.value = false;
+                }
+            }
+        } catch (error) {
+            console.error('Error parsing WebSocket message:', error);
+        }
+    };
+
+    ws.onclose = () => {
+        console.log('WebSocket disconnected, attempting to reconnect...');
+        // 5 秒後重新連接
+        setTimeout(observer, 5000);
+    };
+
+    ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+    };
 }
 
 // Check login status on mount and periodically
 onMounted(() => {
-    autoStartChat()
-    setInterval(autoStartChat, 1000)
+    const currentUserId = localStorage.getItem('user') || ''
+    const isAdmin = currentUserId === 'admin'
+    if (currentUserId == '' || isAdmin) {
+        autoStartChat()
+    }
+    observer()
 })
 
 </script>

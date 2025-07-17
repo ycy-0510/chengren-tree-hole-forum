@@ -1,0 +1,18 @@
+{
+  "name": "ws_server",
+  "version": "1.0.0",
+  "description": "WebSocket server with variable control panel",
+  "main": "main.js",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node main.js",
+    "dev": "node --watch main.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "keywords": ["websocket", "server", "variables", "control-panel"],
+  "author": "",
+  "license": "MIT"
+}

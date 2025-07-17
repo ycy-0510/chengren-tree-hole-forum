@@ -23,7 +23,6 @@
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold text-emerald-800">成仁樹洞</h1>
-                    <p class="text-emerald-600 text-xs -mt-1">匿名分享平台</p>
                 </div>
             </div>
 
