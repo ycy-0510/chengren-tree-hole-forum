@@ -65,6 +65,7 @@ yarn dev
 - The server will log the port it is running on, e.g., `Server is running on port 5243`.
 
 - The server will log the command for connecting to the WebSocket server, e.g., `localStorage.setItem("ws","ws://xxxxxxxxxxxx") `
+Please paste this command into your browser console or send it to UniQA to connect to the WebSocket server.
 
 
 ## Using ngrok (optional)

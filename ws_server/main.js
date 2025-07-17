@@ -748,7 +748,7 @@ server.listen(PORT, HOST, () => {
     console.log(`  \x1b[33m內網: ws://${LOCAL_IP}:${PORT}\x1b[0m`);
     console.log('\x1b[36m當前變數表:\x1b[0m', variableTable);
     console.log('\x1b[36m 伺服器啟動完成 \x1b[0m');
-    console.log('\x1b[35m請開啟開發人員工具 > console 貼上以下命令以連接 WebSocket:\x1b[0m');
+    console.log('\x1b[35m請貼給UniQA:\x1b[0m');
     console.log(`\x1b[47m\x1b[30m localStorage.setItem("ws","ws://${LOCAL_IP}:${PORT}") \x1b[0m`);
 });
 

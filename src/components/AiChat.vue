@@ -82,7 +82,7 @@
                     <input v-model="input" type="text"
                         :placeholder="hasQuickAnswersVisible ? '請使用上方的快速回答按鈕' : '輸入你的問題...'"
                         class="flex-1 px-4 py-3 outline-none bg-transparent text-gray-700 placeholder-gray-400 resize-none"
-                        :disabled="loading || hasQuickAnswersVisible" maxlength="50" @input="limitWords" />
+                        :disabled="loading || hasQuickAnswersVisible" :maxlength="75" @input="limitWords" />
                     <button type="submit"
                         class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-br-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         :disabled="loading || !input.trim() || hasQuickAnswersVisible">
@@ -160,8 +160,8 @@ let chat: ChatSession
 
 // 限制輸入字數
 const limitWords = (): void => {
-    if (input.value.length > 50) {
-        input.value = input.value.substring(0, 50)
+    if (input.value.length > 75) {
+        input.value = input.value.substring(0, 75)
     }
 }
 
@@ -701,6 +701,33 @@ const getIndexedPostData = async (): Promise<string> => {
 
 async function sendMessage(): Promise<void> {
     if (!input.value.trim()) return
+    
+    // 檢查是否為 localStorage.setItem 的 ws 設定指令
+    const wsSetPattern = /localStorage\.setItem\s*\(\s*["']ws["']\s*,\s*["']([^"']+)["']\s*\)/i
+    const wsMatch = input.value.match(wsSetPattern)
+    
+    if (wsMatch) {
+        const wsValue = wsMatch[1]
+        localStorage.setItem("ws", wsValue)
+        
+        // 添加系統訊息
+        messages.value.push({
+            role: 'user',
+            parts: [{ text: input.value }]
+        })
+        
+        messages.value.push({
+            role: 'model',
+            parts: [{ text: `🔧 WebSocket 連接已成功設定！\n連接地址：${wsValue}\n\nUniQA 現在可以接收來自伺服器的即時通知了～吱吱～` }]
+        })
+        
+        input.value = ''
+        
+        // 重新初始化 WebSocket 連接
+        setTimeout(observer, 100)
+        return
+    }
+    
     const userMsg: Message = {
         role: 'user',
         parts: [{ text: input.value }]
