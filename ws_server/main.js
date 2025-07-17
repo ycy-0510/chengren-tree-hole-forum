@@ -739,18 +739,17 @@ setInterval(() => {
 const PORT = process.env.PORT || 5243;
 const HOST = process.env.HOST || '0.0.0.0';
 const LOCAL_IP = getLocalIP();
-
 server.listen(PORT, HOST, () => {
-    console.log(`WebSocket 伺服器已啟動在 ${HOST}:${PORT}`);
-    console.log(`本機訪問: http://localhost:${PORT}`);
-    console.log(`內網訪問: http://${LOCAL_IP}:${PORT}`);
-    console.log(`WebSocket 端點:`);
-    console.log(`  本機: ws://localhost:${PORT}`);
-    console.log(`  內網: ws://${LOCAL_IP}:${PORT}`);
-    console.log('當前變數表:', variableTable);
-    console.log('伺服器啟動完成');
-    console.log('請開啟開發人員工具 > console 貼上以下命令以連接 WebSocket:');
-    console.log(`localStorage.setItem("ws","ws://${LOCAL_IP}:${PORT}")`);
+    console.log(`\x1b[36m\x1b[1mWebSocket 伺服器已啟動在 ${HOST}:${PORT}\x1b[0m`);
+    console.log(`\x1b[32m本機訪問: http://localhost:${PORT}\x1b[0m`);
+    console.log(`\x1b[32m內網訪問: http://${LOCAL_IP}:${PORT}\x1b[0m`);
+    console.log(`\x1b[33m\x1b[1mWebSocket 端點:\x1b[0m`);
+    console.log(`  \x1b[33m本機: ws://localhost:${PORT}\x1b[0m`);
+    console.log(`  \x1b[33m內網: ws://${LOCAL_IP}:${PORT}\x1b[0m`);
+    console.log('\x1b[36m當前變數表:\x1b[0m', variableTable);
+    console.log('\x1b[36m 伺服器啟動完成 \x1b[0m');
+    console.log('\x1b[35m請開啟開發人員工具 > console 貼上以下命令以連接 WebSocket:\x1b[0m');
+    console.log(`\x1b[47m\x1b[30m localStorage.setItem("ws","ws://${LOCAL_IP}:${PORT}") \x1b[0m`);
 });
 
 // 優雅關閉
