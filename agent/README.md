@@ -16,19 +16,27 @@
 - Python 3.8+
 - 虛擬環境 (已包含)
 
+### 如何安裝
+請前往 https://python.org/downloads/ 下載並安裝 Python 3.8 或更高版本。
+
 ## 安裝和使用
 
 ### 1. 環境設置
 
-虛擬環境已經建立，所需套件已經安裝。
+```bash
+cd agent
+```
+確保切換到 `agent` 目錄，然後建立虛擬環境並安裝依賴：
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
 ### 2. 啟動服務
 
 ```bash
-cd agent
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
