@@ -2,7 +2,7 @@
 ## Requirements
 - Node.js (v18 or later)
 - Yarn (or npm)
-- ngrok (optional, for tunneling)
+- ngrok
 ### How to install 
 for macOS:
 
@@ -27,7 +27,7 @@ corepack enable yarn
 yarn -v
 ```
 
-6. Install ngrok (optional, for tunneling):
+6. Install ngrok
  (go to https://ngrok.com/download and follow the instructions for your OS)
 
 for windows:
@@ -45,7 +45,7 @@ npm install -g yarn
 ```bash
 yarn -v
 ```
-5. Install ngrok (optional, for tunneling):
+5. Install ngrok
  (go to https://ngrok.com/download and follow the instructions for your OS)
 
 
@@ -65,10 +65,12 @@ yarn dev
 - The server will log the port it is running on, e.g., `Server is running on port 5243`.
 
 - The server will log the command for connecting to the WebSocket server, e.g., `localStorage.setItem("ws","ws://xxxxxxxxxxxx") `
-Please paste this command into your browser console or send it to UniQA to connect to the WebSocket server.
+Please paste this command into your browser console or send it to UniQA to connect to the WebSocket server. 
+
+> This can only use in dev mode, in production mode browser will refuse to connect to the WebSocket server due to Mixed Content policy.
 
 
-## Using ngrok (optional)
+## Using ngrok
 If you want to expose your local WebSocket server to the internet, you can use ngrok
 1. Start ngrok
 ```bash
@@ -81,5 +83,5 @@ ngrok http 5243
 e.g., if ngrok URL is `http://12345678.ngrok.io` 
 you would use:
 ```js
-localStorage.setItem("ws","ws://12345678.ngrok.io")
+localStorage.setItem("ws","https://12345678.ngrok.io")
 ```
