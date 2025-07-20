@@ -62,9 +62,10 @@
                 </div>
 
                 <!-- Load More Button -->
-                <div class="text-center">
-                    <button class="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
-                        載入更多文章
+                <div v-if="hasMorePosts" class="text-center">
+                    <button @click="loadMorePosts"
+                        class="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
+                        查看更多文章...
                     </button>
                 </div>
             </div>
@@ -102,18 +103,43 @@ const currentUser = ref<User | null>(null)
 // Modal state
 const showCreatePostModal = ref(false)
 
+// Pagination state
+const currentPage = ref(1)
+const postsPerPage = 5
+
 // Posts data
 const postsData = ref<PostData[]>([])
+const filteredPosts = computed(() => {
+    if (!currentBoard.value) return []
+    return postsData.value.filter(post =>
+        post.boardId === currentBoard.value!.id
+    )
+})
+
+const totalPages = computed(() => {
+    return Math.ceil(filteredPosts.value.length / postsPerPage)
+})
+
+const hasMorePosts = computed(() => {
+    return currentPage.value < totalPages.value
+})
+
+const loadMorePosts = () => {
+    if (hasMorePosts.value) {
+        currentPage.value++
+    }
+}
+
 const boardPosts = computed(() => {
     if (!currentBoard.value) return []
 
-    // Filter posts by exact boardId match
-    const filteredPosts = postsData.value.filter(post =>
-        post.boardId === currentBoard.value!.id
-    )
+    // Get posts for current page
+    const startIndex = 0
+    const endIndex = currentPage.value * postsPerPage
+    const paginatedPosts = filteredPosts.value.slice(startIndex, endIndex)
 
     // Convert PostData to Post format for the component
-    return filteredPosts.map(postData => ({
+    return paginatedPosts.map(postData => ({
         id: parseInt(postData.id.replace('post_', '')),
         title: postData.title,
         content: postData.content,
@@ -123,7 +149,7 @@ const boardPosts = computed(() => {
         avatar: getAuthorAvatar(postData.authorId),
         createdAt: formatDate(postData.createdAt),
         likes: postData.likes,
-        comments: postData.comments.length,
+        comments: (postData as any).displayComments || postData.comments.length,
         shares: postData.shares,
         tags: postData.tags,
         commentsList: postData.comments.map(comment => ({
@@ -206,9 +232,8 @@ const closeCreatePostModal = () => {
 const handlePostSubmit = (formData: { title: string; content: string; tags: string[] }) => {
     // 模擬發文成功的提示
     console.log('發文成功！', formData)
-    setTimeout(() => {
-        alert(`發文成功！`)
-    }, 0);
+    // 可以在這裡添加實際的發文邏輯
+    closeCreatePostModal()
 }
 
 onMounted(async () => {

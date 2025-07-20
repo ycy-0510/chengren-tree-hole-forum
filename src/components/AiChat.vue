@@ -544,7 +544,7 @@ Q：綜合性問題（如：論壇概況、完整資訊等）
 
 常見問題：
 ${currentUserId == '' ? `
-被問到關鍵字：顯微鏡（類似問題：你知道顯微鏡是誰嗎？你認識顯微鏡嗎？顯微鏡在論壇上的哪裡？想問你有關顯微鏡的資料。），說：「這是我在論壇上所蒐集到由顯微鏡所發佈的熱門文章。{{文章連結（id=post_000）}}」
+被問到關鍵字：顯微鏡（類似問題：你知道顯微鏡是誰嗎？你認識顯微鏡嗎？顯微鏡在論壇上的哪裡？想問你有關顯微鏡的資料。），說：「這是我在論壇上所蒐集到由顯微鏡所發佈的熱門文章。{{文章連結（id=post_064}}」
 你是真 AI 還是假人裝的？	我是由管理員所打造的智能小幫手，UniQA，只要你有任何問題，我都會盡我的全力協助你唷～
 你會罵人嗎？	UniQA是隻彬彬有禮的獨角仙，不太清楚你的要求OwO
 你會做什麼？	UniQA非常樂於幫助你～只要你有任何需要幫忙的地方或疑問，都可以隨時跟我說！
@@ -848,7 +848,7 @@ async function sendMessage(): Promise<void> {
 
     } catch (e) {
         console.error('Firebase AI Error:', e)
-        messages.value[aiMessageIndex].parts[0].text += 'UniQA 發生錯誤'
+        messages.value[aiMessageIndex].parts[0].text += 'UniQA 發生錯誤，請點擊上方按鈕清除對話，再試一次。'
     }
     loading.value = false
 }

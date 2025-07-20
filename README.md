@@ -7,7 +7,7 @@ A modern, anonymous forum platform built with Vue.js and TypeScript, showcasing 
 ## 🌟 Features
 
 - **Complete Anonymity**: Users can post and interact without revealing their identity (simulated)
-- **Multiple Boards**: Organized discussion boards for different topics (Academic, Food, Life, etc.)
+- **Multiple Boards**: Organized discussion boards for different topics (Academic, Food, school, etc.)
 - **AI Chat Integration**: Built-in AI assistant for user support (demo feature)
 - **Responsive Design**: Optimized for both desktop and mobile devices
 - **User Profiles**: Optional profile system for those who want to maintain consistency

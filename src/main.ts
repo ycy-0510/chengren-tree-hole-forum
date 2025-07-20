@@ -34,7 +34,8 @@ import {
     faClipboardList,
     faInbox,
     faNewspaper,
-    faImage
+    faImage,
+    faSchool
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -65,7 +66,8 @@ library.add(
     faClipboardList,
     faInbox,
     faNewspaper,
-    faImage
+    faImage,
+    faSchool
 )
 
 const app = createApp(App)

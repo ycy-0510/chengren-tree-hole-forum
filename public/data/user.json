@@ -21,7 +21,7 @@
         "relationshipStatus": "單身中",
         "favoriteBoard": "八卦、學術",
         "postTrend": "https://placehold.co/1200x1000",
-        "selfIntro": "<img src=\"/assets/images/mys.jpg\" class=\"w-full mx-auto\" alt=\"顯微鏡的照片\" />"
+        "selfIntro": "<a href=\"/assets/images/mys.jpg\" target=\"_blank\" class=\"underline text-green-600\">我的照片</a>。"
     },
     {
         "id": "0x0x0x",
@@ -72,14 +72,26 @@
         "selfIntro": " 我們的秘密藏在：＿ ＿ ＿ 🍜"
     },
     {
+        "id" :"student_council",
+        "name": "學生會官方",
+        "avatar": "https://api.dicebear.com/9.x/icons/svg?seed=Vivian",
+        "password": "JeSEtcaTeResiCkpLEgODeMp",
+        "grade": "無",
+        "birthday": "無",
+        "relationshipStatus": "無",
+        "favoriteBoard": "校園、學術",
+        "postTrend": "https://placehold.co/1200x1000",
+        "selfIntro": "我們是學生會官方帳號，歡迎大家來信詢問校園事務！"
+    },
+    {
         "id": "user_alice_01",
-        "name": "王同學",
+        "name": "不重要的王同學",
         "avatar": "https://api.dicebear.com/9.x/icons/svg?seed=Vivian",
         "password": "JeSEtcaTeResiCkpLEgODeMp",
         "grade": "高二",
         "birthday": "03/15",
         "relationshipStatus": "單身中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -103,7 +115,7 @@
         "grade": "高三",
         "birthday": "01/15",
         "relationshipStatus": "單身中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -151,7 +163,7 @@
         "grade": "高三",
         "birthday": "05/30",
         "relationshipStatus": "交往中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -199,7 +211,7 @@
         "grade": "高三",
         "birthday": "09/14",
         "relationshipStatus": "交往中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -247,7 +259,7 @@
         "grade": "高三",
         "birthday": "01/17",
         "relationshipStatus": "交往中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -295,7 +307,7 @@
         "grade": "高三",
         "birthday": "05/07",
         "relationshipStatus": "單身中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -343,7 +355,7 @@
         "grade": "高三",
         "birthday": "09/26",
         "relationshipStatus": "單身中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -391,7 +403,7 @@
         "grade": "高三",
         "birthday": "01/06",
         "relationshipStatus": "交往中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -439,7 +451,7 @@
         "grade": "高三",
         "birthday": "05/21",
         "relationshipStatus": "交往中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -487,7 +499,7 @@
         "grade": "高三",
         "birthday": "09/03",
         "relationshipStatus": "單身中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -535,7 +547,7 @@
         "grade": "高三",
         "birthday": "01/28",
         "relationshipStatus": "交往中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -583,7 +595,7 @@
         "grade": "高三",
         "birthday": "05/13",
         "relationshipStatus": "交往中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -631,7 +643,7 @@
         "grade": "高三",
         "birthday": "09/21",
         "relationshipStatus": "單身中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },
@@ -679,7 +691,7 @@
         "grade": "高三",
         "birthday": "01/09",
         "relationshipStatus": "交往中",
-        "favoriteBoard": "生活、八卦",
+        "favoriteBoard": "校園、八卦",
         "postTrend": "https://placehold.co/1200x1000",
         "selfIntro": "大家好，我是不重要的同學！"
     },

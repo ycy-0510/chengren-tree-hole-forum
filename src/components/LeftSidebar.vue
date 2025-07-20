@@ -38,9 +38,9 @@ const boards = [
         icon: "fa-solid fa-basketball"
     },
     {
-        name: "生活",
-        path: "/board/life",
-        icon: "fa-solid fa-leaf"
+        name: "校園",
+        path: "/board/school",
+        icon: "fa-solid  fa-school"
     }
 ]
 </script>

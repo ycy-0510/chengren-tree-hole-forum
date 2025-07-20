@@ -122,13 +122,13 @@
                                         <div class="w-2 h-2 rounded-full bg-yellow-400 mr-2"></div>
                                         <span class="text-gray-600">白天</span>
                                         <span class="ml-auto font-medium text-gray-700">{{ postTimeData.dayPercent
-                                        }}%</span>
+                                            }}%</span>
                                     </div>
                                     <div class="flex items-center text-xs">
                                         <div class="w-2 h-2 rounded-full bg-blue-600 mr-2"></div>
                                         <span class="text-gray-600">晚上</span>
                                         <span class="ml-auto font-medium text-gray-700">{{ postTimeData.nightPercent
-                                        }}%</span>
+                                            }}%</span>
                                     </div>
                                 </div>
                             </div>
@@ -185,7 +185,7 @@
                 </div>
 
                 <!-- 近期發文 -->
-                <div v-if="isCurrentUser"  class="bg-white rounded-lg shadow-lg p-6">
+                <div v-if="isCurrentUser" class="bg-white rounded-lg shadow-lg p-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">
                         {{ isCurrentUser ? '我的發文' : `${userProfile.name}的發文` }}
                     </h3>
@@ -376,10 +376,15 @@ const postImageData = computed(() => {
 const userPosts = computed(() => {
     const userPostsData = postsData.value.filter(post => post.authorId === displayUserId.value)
 
-    // 按時間排序（最新的在前）
-    const sortedPosts = [...userPostsData].sort((a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
+    // 按置頂狀態和時間排序（置頂在前，然後按最新時間排序）
+    const sortedPosts = [...userPostsData].sort((a, b) => {
+        // 首先按置頂狀態排序
+        if (a.isPinned && !b.isPinned) return -1
+        if (!a.isPinned && b.isPinned) return 1
+
+        // 如果置頂狀態相同，按時間排序（最新的在前）
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    })
 
     return sortedPosts.map(postData => ({
         id: parseInt(postData.id.replace('post_', '')),
@@ -391,9 +396,10 @@ const userPosts = computed(() => {
         avatar: getAuthorAvatar(postData.authorId),
         createdAt: formatDate(postData.createdAt),
         likes: postData.likes,
-        comments: postData.comments.length,
+        comments: (postData as any).displayComments || postData.comments.length,
         shares: postData.shares,
         tags: postData.tags,
+        isPinned: postData.isPinned, // 傳遞置頂狀態
         commentsList: postData.comments.map(comment => ({
             id: `${postData.id}_comment_${comment.userId}_${comment.time}`,
             author: getAuthorName(comment.userId),

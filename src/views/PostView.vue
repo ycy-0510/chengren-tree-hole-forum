@@ -160,7 +160,7 @@ const convertPostDataToPost = (postData: PostData): PostType => {
         avatar: getAuthorAvatar(postData.authorId),
         createdAt: formatDate(postData.createdAt),
         likes: postData.likes,
-        comments: postData.comments.length,
+        comments: (postData as any).displayComments || postData.comments.length,
         shares: postData.shares,
         tags: postData.tags,
         commentsList: postData.comments.map(comment => ({

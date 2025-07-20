@@ -17,29 +17,32 @@
                 <p class="text-sm text-gray-500">{{ post.createdAt }}</p>
             </div>
         </div>
-
+        <!-- Tags -->
+        <div v-if="post.tags && post.tags.length > 0" class="mb-3">
+            <div class="flex flex-wrap gap-2">
+                <span v-for="tag in post.tags" :key="tag"
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 hover:bg-amber-200 transition-colors">
+                    #{{ tag }}
+                </span>
+            </div>
+        </div>
         <!-- Post Content -->
         <div class="mb-4">
             <RouterLink :to="`/post/post_${post.id.toString().padStart(3, '0')}`">
-                <h3 class="text-lg font-semibold text-gray-900 mb-2 hover:text-amber-600 transition-colors cursor-pointer">{{ post.title }}</h3>
+                <h3
+                    class="text-lg font-semibold text-gray-900 mb-2 hover:text-amber-600 transition-colors cursor-pointer">
+                    <!-- 置頂符號 -->
+                    <span v-if="post.isPinned" class="text-red-500 mr-2" title="置頂文章">🐞</span>
+                    {{ post.title }}
+                </h3>
             </RouterLink>
-            <p class="text-gray-700 leading-relaxed mb-3 whitespace-pre-wrap">{{ post.content }}</p>
+            <p class="text-gray-700 leading-relaxed mb-3 whitespace-pre-wrap" v-html="post.content"></p>
 
             <!-- Post Image -->
             <div v-if="post.image" class="mt-3">
                 <img :src="post.image" :alt="post.title"
                     class="w-full max-w-lg rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                     @click="openImageModal(post.image)">
-            </div>
-
-            <!-- Tags -->
-            <div v-if="post.tags && post.tags.length > 0" class="mt-3">
-                <div class="flex flex-wrap gap-2">
-                    <span v-for="tag in post.tags" :key="tag"
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 hover:bg-amber-200 transition-colors">
-                        #{{ tag }}
-                    </span>
-                </div>
             </div>
         </div>
 
@@ -83,15 +86,24 @@
                         <div class="flex items-center space-x-2 mb-1">
                             <RouterLink :to="`/profile/${comment.authorId}`">
                                 <div class="flex items-center space-x-1">
-                                    <span class="text-sm font-medium text-gray-900 hover:text-green-600"> {{ comment.author }}</span>
+                                    <span class="text-sm font-medium text-gray-900 hover:text-green-600"> {{
+                                        comment.author }}</span>
                                     <font-awesome-icon v-if="comment.authorId === 'admin'"
                                         icon="fa-solid fa-check-circle" class="text-blue-500 text-xs" title="管理員驗證" />
                                 </div>
                             </RouterLink>
                             <span class="text-xs text-gray-500">{{ comment.createdAt }}</span>
                         </div>
-                        <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ comment.content }}</p>
+                        <p class="text-sm text-gray-700 whitespace-pre-wrap" v-html="comment.content"></p>
                     </div>
+                </div>
+            </div>
+
+            <!-- 顯示還有多少則留言 -->
+            <div v-if="remainingCommentsCount > 0" class="mt-3 p-3 bg-gray-100 rounded-lg border-l-4 border-amber-400">
+                <div class="flex items-center space-x-2 text-sm text-gray-600">
+                    <font-awesome-icon icon="fa-solid fa-comments" class="text-amber-500" />
+                    <span>還有 {{ remainingCommentsCount }} 則留言</span>
                 </div>
             </div>
         </div>
@@ -113,11 +125,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import type { Post } from '../data'
 
 // Props
-defineProps<{
+const props = defineProps<{
     post: Post
 }>()
 
@@ -127,6 +139,18 @@ const selectedImage = ref<string | null>(null)
 
 // Comments state
 const showComments = ref(false)
+
+// 計算實際留言數量
+const actualCommentsCount = computed(() => {
+    return props.post.commentsList?.length || 0
+})
+
+// 計算還有多少則留言沒有顯示
+const remainingCommentsCount = computed(() => {
+    const displayCount = props.post.comments
+    const actualCount = actualCommentsCount.value
+    return displayCount > actualCount ? displayCount - actualCount : 0
+})
 
 // Image modal functions
 const openImageModal = (imageUrl: string) => {
@@ -160,5 +184,12 @@ const share = async (text: string) => {
 </script>
 
 <style scoped>
-/* Additional custom styles if needed */
+strong,
+b {
+    font-weight: 700;
+}
+
+u {
+    text-decoration: underline;
+}
 </style>

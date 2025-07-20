@@ -46,11 +46,11 @@
             "createdAt": "2017-07-11T00:00:00.000Z"
         },
         {
-            "id": "life",
-            "name": "生活",
-            "path": "/board/life",
-            "description": "生活分享、日常心得、生活小技巧",
-            "icon": "fa-solid fa-leaf",
+            "id": "school",
+            "name": "校園",
+            "path": "/board/school",
+            "description": "校園分享、日常心得",
+            "icon": "fa-solid fa-school",
             "color": "#8B5CF6",
             "createdAt": "2017-07-11T00:00:00.000Z"
         }
@@ -62,7 +62,7 @@
             "boards": [
                 "academic",
                 "gossip",
-                "lifestyle"
+                "school"
             ]
         },
         {
@@ -76,7 +76,7 @@
         }
     ],
     "settings": {
-        "defaultBoard": "lifestyle",
+        "defaultBoard": "school",
         "allowAnonymousPost": true,
         "maxPostLength": 1000,
         "maxCommentLength": 500,
