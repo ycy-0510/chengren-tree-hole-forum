@@ -19,7 +19,7 @@
             <div class="flex items-center gap-3 flex-1 text-left ms-4">
                 <div
                     class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-                    <font-awesome-icon icon="fa-solid fa-seedling" class="text-white text-lg" />
+                    <img src="/assets/images/treehodeicon.png" alt="">
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold text-emerald-800">成仁樹洞</h1>

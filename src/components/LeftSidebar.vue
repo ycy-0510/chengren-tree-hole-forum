@@ -53,7 +53,7 @@ const boards = [
         <!-- Logo Section -->
         <div class="p-6 border-b border-emerald-700/30">
             <h2 class="text-xl font-bold text-emerald-200 flex items-center gap-2">
-                <font-awesome-icon icon="fa-solid fa-seedling" class="text-emerald-400" />
+                <img src="/assets/images/treehodeicon.png" class=" h-12 w-12" alt="">
                 成仁樹洞
             </h2>
         </div>

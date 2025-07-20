@@ -9,9 +9,16 @@
                         <font-awesome-icon :icon="currentBoard.icon" class="text-2xl"
                             :style="{ color: currentBoard.color }" />
                     </div>
-                    <div>
+                <div>
                         <h1 class="text-3xl font-bold text-gray-900">{{ currentBoard.name }}</h1>
                         <p class="text-gray-600 mt-1">{{ currentBoard.description }}</p>
+                        <div v-if="searchQuery" class="mt-2">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-800">
+                                <font-awesome-icon icon="fa-solid fa-search" class="mr-1" />
+                                搜索: "{{ searchQuery }}"
+                                <span class="ml-2 text-xs">({{ filteredPosts.length }} 個結果)</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div v-else class="text-center py-8">
@@ -55,10 +62,14 @@
                 <!-- Empty State -->
                 <div v-else class="text-center py-12">
                     <div class="text-gray-400 mb-4">
-                        <font-awesome-icon icon="fa-solid fa-inbox" class="text-6xl" />
+                        <font-awesome-icon :icon="searchQuery ? 'fa-solid fa-search' : 'fa-solid fa-inbox'" class="text-6xl" />
                     </div>
-                    <h3 class="text-lg font-medium text-gray-900 mb-2">目前沒有文章</h3>
-                    <p class="text-gray-500">成為第一個在此版塊發表文章的人！</p>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">
+                        {{ searchQuery ? '找不到匹配的文章' : '目前沒有文章' }}
+                    </h3>
+                    <p class="text-gray-500">
+                        {{ searchQuery ? `沒有找到包含「${searchQuery}」的文章` : '成為第一個在此版塊發表文章的人！' }}
+                    </p>
                 </div>
 
                 <!-- Load More Button -->
@@ -86,6 +97,7 @@ import type { Board, PostData, User, Post as PostType } from '../data'
 
 const route = useRoute()
 const boardId = computed(() => route.params.boardId as string)
+const searchQuery = computed(() => route.query.q as string || '')
 
 // Board data
 const boards = ref<Board[]>([])
@@ -111,8 +123,25 @@ const postsPerPage = 5
 const postsData = ref<PostData[]>([])
 const filteredPosts = computed(() => {
     if (!currentBoard.value) return []
-    return postsData.value.filter(post =>
+    
+    // Filter posts by board ID first
+    let boardPosts = postsData.value.filter(post =>
         post.boardId === currentBoard.value!.id
+    )
+    
+    // If search query exists, filter by content or title
+    if (searchQuery.value.trim()) {
+        const query = searchQuery.value.trim().toLowerCase()
+        boardPosts = boardPosts.filter(post => 
+            post.title.toLowerCase().includes(query) || 
+            post.content.toLowerCase().includes(query) ||
+            post.tags.some(tag => tag.toLowerCase().includes(query))
+        )
+    }
+    
+    // Sort by creation time (newest first)
+    return [...boardPosts].sort((a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     )
 })
 
@@ -233,6 +262,7 @@ const handlePostSubmit = (formData: { title: string; content: string; tags: stri
     // 模擬發文成功的提示
     console.log('發文成功！', formData)
     // 可以在這裡添加實際的發文邏輯
+    alert('發文成功！')
     closeCreatePostModal()
 }
 

@@ -18,8 +18,8 @@
                 <div
                     class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                            <img src="https://api.dicebear.com/9.x/bottts/svg?seed=Kingston" alt="avatar">
+                        <div class="w-8 h-8 rounded-full bg-white/30 flex items-center justify-center">
+                            <img src="/assets/images/uniqa.png" alt="avatar">
                         </div>
                         <div>
                             <span class="font-semibold text-lg">UniQA</span>
@@ -558,7 +558,7 @@ ${currentUserId == '' ? `
 
 `: ''}
 ${currentUserId != '' && !isAdmin ? `
-我想看更多顯微鏡相關的內容 說：「我有幫你搜集了一些有關顯微鏡在八卦板上的相關文章，你可以點入這個我整理好的連結查看唷！提供連結（是否能夠另外做一個八卦板分頁，這時候上面會寫以下為包含顯微鏡關鍵詞的相關文章）。很高興我能夠幫助到你！吱吱～」
+我想看更多顯微鏡相關的內容 說：「我有幫你搜集了一些有關顯微鏡在八卦板上的相關文章，你可以點入這個我整理好的連結查看唷！"https://thetreehole.web.app/board/gossip?q=%E9%A1%AF%E5%BE%AE%E9%8F%A1"。很高興我能夠幫助到你！吱吱～」
 你很瞭解顯微鏡嗎？	你怎麼問了我那麼可愛的問題呀～當然是你最了解你自己呀！
 顯微鏡很長使用論壇嗎？	UniQA判斷您的問題似乎是有關使用者的使用習慣。您所好奇的資料應該能夠在個人版面中看到相關數據，只要點選您自己的頭像就可以進入個人版面唷！
 八卦板上有哪些熱門貼文？	八卦板上的熱門文章似乎都包含著顯微鏡這個關鍵字，請問你想要看看這些相關文章嗎？

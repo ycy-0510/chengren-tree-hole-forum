@@ -1,31 +1,17 @@
 <template>
-    <div
-        class="flex items-center justify-center min-h-screen bg-gradient-to-br from-emerald-100 via-teal-50 to-green-100">
-        <!-- Background decoration -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute -top-40 -right-40 w-80 h-80 bg-emerald-200/30 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-teal-200/30 rounded-full blur-3xl"></div>
-        </div>
+    <div class="flex items-center justify-center min-h-screen bg-gradient-to-br from-emerald-100 via-teal-50 to-green-100"
+        style="background-image:url('/assets/background/login.png'); background-size: cover; background-repeat: no-repeat;">
 
-        <div class="relative w-full max-w-md mx-4">
-            <!-- Logo and title -->
-            <div class="text-center mb-8">
-                <div
-                    class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg">
-                    <font-awesome-icon icon="fa-solid fa-seedling" class="text-white text-2xl" />
-                </div>
-                <h1 class="text-3xl font-bold text-emerald-800 mb-2">成仁樹洞</h1>
-                <p class="text-emerald-600">匿名分享平台</p>
-            </div>
-
+        <div class=" absolute w-full max-w-md mx-4 left-20 top-60">
             <!-- Login form -->
             <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-emerald-100">
-                <p class="mb-6 text-center text-emerald-700 font-medium bg-emerald-50 border border-emerald-100 rounded-lg p-2 shadow-sm">
-                    系統公告 本論壇已於2018年1月1日起 停止營運服務
+                <p
+                    class="mb-6 text-center text-emerald-700 font-medium bg-emerald-50 border border-emerald-100 rounded-lg p-2 shadow-sm">
+                    系統公告<br>本論壇已於2018年1月1日起 停止營運服務
                 </p>
                 <form @submit.prevent="login" class="space-y-6">
                     <div>
-                        <label class="block text-emerald-700 text-sm font-semibold mb-2">使用者名稱</label>
+                        <label class="block text-emerald-700 text-sm font-semibold mb-2">使用者ID</label>
                         <div class="relative">
                             <font-awesome-icon icon="fa-solid fa-user" class="absolute left-3 top-4 text-emerald-400" />
                             <input v-model="username" type="text"
@@ -46,7 +32,7 @@
 
                     <button type="submit"
                         class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 px-4 rounded-lg hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                        🌱 輕敲樹洞入口
+                        輕敲樹洞入口
                     </button>
 
                     <router-link to="/"

@@ -67,7 +67,7 @@
         <div v-if="showComments && post.commentsList && post.commentsList.length > 0"
             class="mt-4 pt-4 border-t border-gray-200">
             <div class="flex items-center justify-between mb-3">
-                <h4 class="text-sm font-medium text-gray-700">評論 ({{ post.commentsList.length }})</h4>
+                <h4 class="text-sm font-medium text-gray-700">評論 ({{ post.comments||post.commentsList.length }})</h4>
                 <button @click="toggleComments" class="text-sm text-gray-500 hover:text-gray-700">
                     <font-awesome-icon icon="fa-solid fa-chevron-up" />
                 </button>

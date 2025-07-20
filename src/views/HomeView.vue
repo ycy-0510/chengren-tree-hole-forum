@@ -4,7 +4,7 @@
     <div class="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12 text-white">
       <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-          <font-awesome-icon icon="fa-solid fa-seedling" class="text-lg sm:text-2xl" />
+          <img src="/assets/images/treehodeicon.png" alt="">
         </div>
         <div class="text-center sm:text-left">
           <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">歡迎來到成仁樹洞</h1>

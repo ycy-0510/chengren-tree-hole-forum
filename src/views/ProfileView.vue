@@ -122,13 +122,13 @@
                                         <div class="w-2 h-2 rounded-full bg-yellow-400 mr-2"></div>
                                         <span class="text-gray-600">白天</span>
                                         <span class="ml-auto font-medium text-gray-700">{{ postTimeData.dayPercent
-                                            }}%</span>
+                                        }}%</span>
                                     </div>
                                     <div class="flex items-center text-xs">
                                         <div class="w-2 h-2 rounded-full bg-blue-600 mr-2"></div>
                                         <span class="text-gray-600">晚上</span>
                                         <span class="ml-auto font-medium text-gray-700">{{ postTimeData.nightPercent
-                                            }}%</span>
+                                        }}%</span>
                                     </div>
                                 </div>
                             </div>
@@ -212,6 +212,9 @@
                             {{ isCurrentUser ? '開始分享你的想法吧！' : '期待他的第一篇文章' }}
                         </p>
                     </div>
+                </div>
+                <div v-else-if="!isLoggedIn" class="bg-amber-100 border border-amber-800 text-amber-800 rounded-lg shadow-lg p-6">
+                    <p>登入方可看更詳細資料！！</p>
                 </div>
             </div>
         </div>

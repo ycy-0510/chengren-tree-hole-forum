@@ -4,7 +4,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="flex items-center gap-3 mb-4 md:mb-0">
                     <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                        <font-awesome-icon icon="fa-solid fa-seedling" class="text-emerald-200" />
+                        <img src="/assets/images/treehodeicon.png" alt="">
                     </div>
                     <div>
                         <h3 class="font-semibold text-emerald-200">成仁樹洞</h3>
