@@ -10,6 +10,14 @@ export interface User {
     favoriteBoard?: string
     postTrend?: string
     selfIntro?: string
+    postTime?: {
+        day: number
+        night: number
+    }
+    postPractice?: {
+        photo: number
+        text: number
+    }
 }
 
 // 評論接口

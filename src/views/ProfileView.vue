@@ -309,6 +309,24 @@ const formatDate = (dateString: string) => {
 
 // 發文時間統計（白天/晚上，以下午6點為界）
 const postTimeData = computed(() => {
+    // 優先使用用戶資料中的 postTime 數據
+    const currentUser = users.value.find(u => u.id === displayUserId.value)
+    if (currentUser && currentUser.postTime) {
+        const { day, night } = currentUser.postTime
+        const total = day + night
+        if (total > 0) {
+            const dayPercent = Math.round((day / total) * 100)
+            const nightPercent = Math.round((night / total) * 100)
+            return {
+                day: dayPercent,
+                night: nightPercent,
+                dayPercent,
+                nightPercent
+            }
+        }
+    }
+
+    // 如果沒有用戶統計數據，則從實際發文計算
     const userPostsData = postsData.value.filter(post => post.authorId === displayUserId.value)
 
     if (userPostsData.length === 0) {
@@ -342,6 +360,24 @@ const postTimeData = computed(() => {
 
 // 發文習慣統計（有圖/沒圖）
 const postImageData = computed(() => {
+    // 優先使用用戶資料中的 postPractice 數據
+    const currentUser = users.value.find(u => u.id === displayUserId.value)
+    if (currentUser && currentUser.postPractice) {
+        const { photo, text } = currentUser.postPractice
+        const total = photo + text
+        if (total > 0) {
+            const withImagePercent = Math.round((photo / total) * 100)
+            const withoutImagePercent = Math.round((text / total) * 100)
+            return {
+                withImage: withImagePercent,
+                withoutImage: withoutImagePercent,
+                withImagePercent,
+                withoutImagePercent
+            }
+        }
+    }
+
+    // 如果沒有用戶統計數據，則從實際發文計算
     const userPostsData = postsData.value.filter(post => post.authorId === displayUserId.value)
 
     if (userPostsData.length === 0) {

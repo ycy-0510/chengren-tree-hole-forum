@@ -33,7 +33,15 @@
         "relationshipStatus": "交往中",
         "favoriteBoard": "八卦、運動",
         "postTrend": "/assets/trend/HelloWorld!.png",
-        "selfIntro": "👋 Hi，歡迎來到這個資訊世界！<br>資訊自由就是力量，真相就藏在流量後面。<br><br>我們的秘密藏在：⚫️ ＿ ＿ ＿ "
+        "selfIntro": "👋 Hi，歡迎來到這個資訊世界！<br>資訊自由就是力量，真相就藏在流量後面。<br><br>我們的秘密藏在：⚫️ ＿ ＿ ＿ ",
+        "postTime": {
+            "day": 1,
+            "night": 0
+        },
+        "postPractice": {
+            "photo": 0,
+            "text": 1
+        }
     },
     {
         "id": "penlee",
@@ -45,7 +53,15 @@
         "relationshipStatus": "單身中",
         "favoriteBoard": "美食、八卦",
         "postTrend": "/assets/trend/blackpen.png",
-        "selfIntro": "八卦、爆料，只要你敢看，我就敢寫。<br>🖋 點開前，請準備好懷疑你所信的。<br><br>我們的秘密藏在：＿ 🧎 ＿ ＿"
+        "selfIntro": "八卦、爆料，只要你敢看，我就敢寫。<br>🖋 點開前，請準備好懷疑你所信的。<br><br>我們的秘密藏在：＿ 🧎 ＿ ＿",
+        "postTime": {
+            "day": 0,
+            "night": 1
+        },
+        "postPractice": {
+            "photo": 1,
+            "text": 0
+        }
     },
     {
         "id": "wuluviol",
@@ -57,7 +73,15 @@
         "relationshipStatus": "交往中",
         "favoriteBoard": "八卦、時尚",
         "postTrend": "/assets/trend/Niceee.png",
-        "selfIntro": "我不攻擊人，我只是提供另一種看法 😇<br>👎 別太玻璃心，這裡是討論區<br>👎 如果你不能被質疑，那你應該沉默<br><br>我們的秘密藏在：＿ ＿ 👸 ＿ "
+        "selfIntro": "我不攻擊人，我只是提供另一種看法 😇<br>👎 別太玻璃心，這裡是討論區<br>👎 如果你不能被質疑，那你應該沉默<br><br>我們的秘密藏在：＿ ＿ 👸 ＿ ",
+        "postTime": {
+            "day": 0,
+            "night": 2
+        },
+        "postPractice": {
+            "photo": 1,
+            "text": 0
+        }
     },
     {
         "id": "h.v.t.photo",
@@ -69,10 +93,18 @@
         "relationshipStatus": "失戀中",
         "favoriteBoard": "美食、運動",
         "postTrend": "/assets/trend/smile.png",
-        "selfIntro": " 📸 Hi，我是霓虹燈下的微笑。<br>喜歡在虛實之間捕捉表情。<br>我用影像說話，也用色調表態。<br><br>我們的秘密藏在：＿ ＿ ＿ 🍜"
+        "selfIntro": " 📸 Hi，我是霓虹燈下的微笑。<br>喜歡在虛實之間捕捉表情。<br>我用影像說話，也用色調表態。<br><br>我們的秘密藏在：＿ ＿ ＿ 🍜",
+        "postTime": {
+            "day": 1,
+            "night": 0
+        },
+        "postPractice": {
+            "photo": 0,
+            "text": 2
+        }
     },
     {
-        "id" :"student_council",
+        "id": "student_council",
         "name": "學生會官方",
         "avatar": "/assets/avatars/icon-10.png",
         "password": "JeSEtcaTeResiCkpLEgODeMp",

@@ -1,5 +1,5 @@
 <template>
-  <LoginView v-if="user == '' && path != '/' &&!path.startsWith('/profile/')&&!path.startsWith('/post/post')" />
+  <LoginView v-if="user == '' && path != '/' && !path.startsWith('/profile/') && !path.startsWith('/post/post')" />
   <div v-else class="min-h-screen flex flex-col bg-gradient-to-br from-emerald-50 via-white to-teal-50">
     <Header />
     <main class="flex-1 container p-6 lg:ps-72 md:pe-52">
@@ -24,6 +24,10 @@ router.afterEach((to, _, __) => {
   path.value = to.path
   console.log(path.value)
   document.title = `${String(to.name)} | 成仁樹洞`
+  // Auto scroll to top when route changes
+  setTimeout(() => {
+    window.scrollTo(0, 0)
+  }, 200);
 })
 
 const user = ref('')
