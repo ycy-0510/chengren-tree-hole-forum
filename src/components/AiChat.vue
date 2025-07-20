@@ -2,12 +2,8 @@
     <div>
         <!-- Chat Button -->
         <button @click="open = !open"
-            class="fixed z-50 bottom-6 right-6 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-full p-4 shadow-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 hover:scale-110 hover:shadow-3xl active:scale-95 animate-pulse hover:animate-none group">
-            <svg class="w-6 h-6 transition-transform duration-300 group-hover:rotate-12" fill="none"
-                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.8L3 21l1.8-4A7.96 7.96 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
+            class="fixed z-50 bottom-6 right-6 bg-gradient-to-r from-emerald-400 to-teal-400 text-white rounded-full p-2 shadow-2xl hover:from-emerald-500 hover:to-teal-500 transition-all duration-300 hover:scale-110 hover:shadow-3xl active:scale-95 animate-pulse hover:animate-none group">
+            <img src="/assets/images/uniqa.png" class="h-12 w-12" alt="avatar">
         </button>
 
         <!-- Chat Widget -->

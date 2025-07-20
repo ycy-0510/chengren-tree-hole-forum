@@ -214,7 +214,7 @@
                     </div>
                 </div>
                 <div v-else-if="!isLoggedIn" class="bg-amber-100 border border-amber-800 text-amber-800 rounded-lg shadow-lg p-6">
-                    <p>登入方可看更詳細資料！！</p>
+                    <p>登入後查看詳細資料！！</p>
                 </div>
             </div>
         </div>
