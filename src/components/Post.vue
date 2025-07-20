@@ -7,13 +7,13 @@
                 <font-awesome-icon v-else icon="fa-solid fa-user" class="text-gray-600" />
             </div>
             <div>
-                <RouterLink :to="`/profile/${post.authorId}`">
+                <a :href="`/profile/${post.authorId}`" target="_blank">
                     <div class="flex items-center space-x-1">
                         <p class="font-medium text-gray-900 hover:text-green-600">{{ post.author }}</p>
                         <font-awesome-icon v-if="post.authorId === 'AdminAccess'" icon="fa-solid fa-check-circle"
                             class="text-blue-500 text-sm" title="管理員驗證" />
                     </div>
-                </RouterLink>
+                </a>
                 <p class="text-sm text-gray-500">{{ post.createdAt }}</p>
             </div>
         </div>
