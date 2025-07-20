@@ -168,7 +168,7 @@
                                 <div class="mt-3 space-y-1">
                                     <div class="flex items-center text-xs">
                                         <div class="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
-                                        <span class="text-gray-600">文圖並茂</span>
+                                        <span class="text-gray-600">圖文並茂</span>
                                         <span class="ml-auto font-medium text-gray-700">{{
                                             postImageData.withImagePercent }}%</span>
                                     </div>
@@ -281,7 +281,7 @@ const isLoading = ref(true)
 const isLoggedIn = computed(() => !!currentUserId.value)
 
 // 判斷是否是當前用戶
-const isCurrentUser = computed(() => displayUserId.value === currentUserId.value || currentUserId.value == 'admin')
+const isCurrentUser = computed(() => displayUserId.value === currentUserId.value || currentUserId.value == 'AdminAccess')
 
 // 版面資料
 const boardsData = ref<any[]>([])
@@ -476,7 +476,7 @@ const loadUsersData = async () => {
 // 載入文章資料
 const loadPostsData = async () => {
     try {
-        const response = await fetch('/data/post.json')
+        const response = await fetch(`/data/post.json?$timestamp=${new Date().getTime()}`)
         const data = await response.json()
         postsData.value = data
     } catch (error) {

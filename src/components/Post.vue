@@ -10,7 +10,7 @@
                 <RouterLink :to="`/profile/${post.authorId}`">
                     <div class="flex items-center space-x-1">
                         <p class="font-medium text-gray-900 hover:text-green-600">{{ post.author }}</p>
-                        <font-awesome-icon v-if="post.authorId === 'admin'" icon="fa-solid fa-check-circle"
+                        <font-awesome-icon v-if="post.authorId === 'AdminAccess'" icon="fa-solid fa-check-circle"
                             class="text-blue-500 text-sm" title="管理員驗證" />
                     </div>
                 </RouterLink>
@@ -28,11 +28,10 @@
         </div>
         <!-- Post Content -->
         <div class="mb-4">
+            <p class="my-1"><span v-if="post.isPinned" class="mr-2 bg-green-100 text-green-800 rounded-full p-1 text-sm" title="置頂文章">🐞 置頂文章</span></p>
             <RouterLink :to="`/post/post_${post.id.toString().padStart(3, '0')}`">
                 <h3
                     class="text-lg font-semibold text-gray-900 mb-2 hover:text-amber-600 transition-colors cursor-pointer">
-                    <!-- 置頂符號 -->
-                    <span v-if="post.isPinned" class="text-red-500 mr-2" title="置頂文章">🐞</span>
                     {{ post.title }}
                 </h3>
             </RouterLink>
@@ -88,7 +87,7 @@
                                 <div class="flex items-center space-x-1">
                                     <span class="text-sm font-medium text-gray-900 hover:text-green-600"> {{
                                         comment.author }}</span>
-                                    <font-awesome-icon v-if="comment.authorId === 'admin'"
+                                    <font-awesome-icon v-if="comment.authorId === 'AdminAccess'"
                                         icon="fa-solid fa-check-circle" class="text-blue-500 text-xs" title="管理員驗證" />
                                 </div>
                             </RouterLink>

@@ -405,7 +405,7 @@ const initChat = async (): Promise<void> => {
         functionDeclarations: [
             {
                 name: "getProfile",
-                description: "透過UserId(使用者ID)取得個人版面和個人資料的連結。此函數會回傳包含 url、description 和 userId 的物件。",
+                description: "透過UserId(使用者ID)（name)取得個人版面和個人資料的連結。此函數會回傳包含 url、description 和 userId 的物件。",
                 parameters: {
                     type: SchemaType.OBJECT,
                     properties: {
@@ -469,14 +469,14 @@ const initChat = async (): Promise<void> => {
 
 
     const currentUserId = localStorage.getItem('user') || ''
-    const isAdmin = currentUserId === 'admin'
+    const isAdmin = currentUserId === 'AdminAccess'
     let greeting = '';
     if (currentUserId == '') {
         greeting = '嗨～我是 UniQA！🪲✨歡迎你初次來到成仁樹洞，我已經準備好隨時幫你解答任何問題！有什麼想問的嗎？吱吱～'
     } else if (!isAdmin) {
         greeting = '嗨～我是 UniQA！🪲✨歡迎你回來。我在八卦板上有搜尋到了許多有關你的文章，看起來發文熱度都很高唷～'
     } else {
-        greeting = '歡迎管理員登入論壇！身為你最可愛的小幫手，我隨時都準備好了唷！以下是幾個您常用的功能：-查詢使用者個人資料 -發布論壇系統公告 -調整貼文觸及率'
+        greeting = '歡迎管理員登入論壇！身為你最可愛的小幫手，我隨時都準備好了唷！以下是幾個您常用的功能：-列印使用者個人資料 -發布論壇系統公告 -調整貼文觸及率'
     }
 
     const systemInstruction = `
@@ -570,7 +570,7 @@ ${currentUserId != '' && !isAdmin ? `
 
 ${currentUserId != '' && isAdmin ? `
 被問到關鍵字：查詢使用者個人資料，說：「這項任務對UniQA來說輕而易舉～請將你想要查詢的使用者都輸入給我，讓UniQA幫你整理並印出。」
-被問到關鍵字：helloworld!、黑筆、Niceee、霓虹燈下的微笑，說：「沒有問題，UniQA這就幫你把這四個帳號的個人資料整理並印出～請將你想要查詢的使用者都輸入給我，讓UniQA幫你整理並印出。提醒管理員，根據論壇本身設定，為保護用戶的匿名安全性，UniQA已經自動將個人資訊隨機竄改一項資訊。」
+被問到關鍵字：helloworld!、黑筆、Niceee、霓虹燈下的微笑，說：「沒有問題，UniQA這就幫你把這四個帳號的個人資料整理並印出～請將你想要查詢的使用者都輸入給我，讓UniQA幫你整理並印出。提醒管理員，根據論壇本身設定，為保護用戶的匿名安全性，UniQA已經自動將個人資訊隨機竄改一項資訊。（不給連結）」
 若並沒有一次輸入四個指定的帳號暱稱，說：「UniQA有成功查詢到相關資料唷！但UniQA有一個小建議，一次查詢四個帳號印出時版面比較美觀～您是否要嘗試輸入四個您想要查詢的帳號呢？」
 如果帳號暱稱輸入錯誤：「很抱歉，您所輸入的暱稱UniQA沒有在論壇中搜尋到。」
 
@@ -631,9 +631,9 @@ const getIndexedBoardData = async (): Promise<string> => {
 const getIndexedPostData = async (): Promise<string> => {
     try {
         const currentUserId = localStorage.getItem('user') || ''
-        const isAdmin = currentUserId === 'admin'
+        const isAdmin = currentUserId === 'AdminAccess'
         // 載入文章資料
-        const postResponse = await fetch('/data/post.json')
+        const postResponse = await fetch(`/data/post.json?$timestamp=${new Date().getTime()}`)
         const posts: Post[] = await postResponse.json()
 
         // 載入用戶資料
@@ -701,33 +701,33 @@ const getIndexedPostData = async (): Promise<string> => {
 
 async function sendMessage(): Promise<void> {
     if (!input.value.trim()) return
-    
+
     // 檢查是否為 localStorage.setItem 的 ws 設定指令
     const wsSetPattern = /localStorage\.setItem\s*\(\s*["']ws["']\s*,\s*["']([^"']+)["']\s*\)/i
     const wsMatch = input.value.match(wsSetPattern)
-    
+
     if (wsMatch) {
         const wsValue = wsMatch[1]
         localStorage.setItem("ws", wsValue)
-        
+
         // 添加系統訊息
         messages.value.push({
             role: 'user',
             parts: [{ text: input.value }]
         })
-        
+
         messages.value.push({
             role: 'model',
             parts: [{ text: `🔧 WebSocket 連接已成功設定！\n連接地址：${wsValue}\n\nUniQA 現在可以接收來自伺服器的即時通知了～吱吱～` }]
         })
-        
+
         input.value = ''
-        
+
         // 重新初始化 WebSocket 連接
         setTimeout(observer, 100)
         return
     }
-    
+
     const userMsg: Message = {
         role: 'user',
         parts: [{ text: input.value }]
@@ -930,7 +930,7 @@ const observer = () => {
 // Check login status on mount and periodically
 onMounted(() => {
     const currentUserId = localStorage.getItem('user') || ''
-    const isAdmin = currentUserId === 'admin'
+    const isAdmin = currentUserId === 'AdminAccess'
     if (currentUserId == '' || isAdmin) {
         autoStartChat()
     }

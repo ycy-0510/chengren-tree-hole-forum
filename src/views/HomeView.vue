@@ -74,7 +74,7 @@ const allPosts = computed(() => {
   )
 
   // Take only the latest 10 posts
-  const latestPosts = sortedPosts.slice(0, 10)
+  const latestPosts = sortedPosts.filter((post) => post.authorId != 'ECHO').slice(0, 10)
 
   // Convert PostData to Post format for the component
   return latestPosts.map(postData => ({
@@ -133,7 +133,7 @@ const loadUsersData = async () => {
 // Load posts data
 const loadPostsData = async () => {
   try {
-    const response = await fetch('/data/post.json')
+    const response = await fetch(`/data/post.json?$timestamp=${new Date().getTime()}`)
     const data = await response.json()
     postsData.value = data
   } catch (error) {

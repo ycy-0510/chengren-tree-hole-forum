@@ -28,84 +28,6 @@
                 <div class="bg-white rounded-lg shadow-sm p-6">
                     <Post :post="currentPost" />
                 </div>
-
-                <!-- More Posts Section -->
-                <div v-if="morePosts.length > 0" class="bg-white rounded-lg shadow-sm p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                        <font-awesome-icon icon="fa-solid fa-newspaper" class="text-amber-600 mr-2" />
-                        更多文章
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div v-for="post in morePosts" :key="post.id"
-                            class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-                            @click="navigateToPost(post.id)">
-                            <!-- Post Thumbnail -->
-                            <div class="mb-3">
-                                <div v-if="post.image" class="w-full h-32 rounded-lg overflow-hidden">
-                                    <img :src="post.image" :alt="post.title"
-                                        class="w-full h-full object-cover hover:scale-105 transition-transform">
-                                </div>
-                                <div v-else
-                                    class="w-full h-32 bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
-                                    <font-awesome-icon icon="fa-solid fa-image" class="text-gray-400 text-2xl" />
-                                </div>
-                            </div>
-
-                            <!-- Post Info -->
-                            <div class="space-y-2">
-                                <h4
-                                    class="font-medium text-gray-900 line-clamp-2 hover:text-amber-600 transition-colors">
-                                    {{ post.title }}
-                                </h4>
-                                <p class="text-sm text-gray-600 line-clamp-3">
-                                    {{ post.content }}
-                                </p>
-
-                                <!-- Post Meta -->
-                                <div class="flex items-center justify-between text-xs text-gray-500">
-                                    <div class="flex items-center space-x-1">
-                                        <div
-                                            class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center overflow-hidden">
-                                            <img v-if="post.avatar" :src="post.avatar" :alt="post.author"
-                                                class="w-full h-full object-cover">
-                                            <font-awesome-icon v-else icon="fa-solid fa-user"
-                                                class="text-gray-600 text-xs" />
-                                        </div>
-                                        <span>{{ post.author }}</span>
-                                    </div>
-                                    <span>{{ formatRelativeTime(post.createdAt) }}</span>
-                                </div>
-
-                                <!-- Post Stats -->
-                                <div class="flex items-center space-x-4 text-xs text-gray-500">
-                                    <div class="flex items-center space-x-1">
-                                        <font-awesome-icon icon="fa-solid fa-heart" />
-                                        <span>{{ post.likes }}</span>
-                                    </div>
-                                    <div class="flex items-center space-x-1">
-                                        <font-awesome-icon icon="fa-solid fa-comments" />
-                                        <span>{{ post.comments }}</span>
-                                    </div>
-                                    <div class="flex items-center space-x-1">
-                                        <font-awesome-icon icon="fa-solid fa-share" />
-                                        <span>{{ post.shares }}</span>
-                                    </div>
-                                </div>
-
-                                <!-- Tags -->
-                                <div v-if="post.tags && post.tags.length > 0" class="flex flex-wrap gap-1">
-                                    <span v-for="tag in post.tags.slice(0, 3)" :key="tag"
-                                        class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                                        #{{ tag }}
-                                    </span>
-                                    <span v-if="post.tags.length > 3" class="text-xs text-gray-500">
-                                        +{{ post.tags.length - 3 }}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -113,12 +35,11 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import Post from '../components/Post.vue'
 import type { PostData, User, Post as PostType } from '../data'
 
 const route = useRoute()
-const router = useRouter()
 const postId = computed(() => route.params.postId as string)
 
 // Data
@@ -134,18 +55,6 @@ const currentPost = computed(() => {
     if (!postData) return null
 
     return convertPostDataToPost(postData)
-})
-
-// More posts (random selection excluding current post)
-const morePosts = computed(() => {
-    if (!postsData.value.length || !currentPost.value) return []
-
-    // Filter out current post and get random posts
-    const otherPosts = postsData.value.filter(post => post.id !== postId.value)
-
-    // Shuffle and take 6 random posts
-    const shuffled = [...otherPosts].sort(() => 0.5 - Math.random())
-    return shuffled.slice(0, 3).map(convertPostDataToPost)
 })
 
 // Helper function to convert PostData to Post
@@ -192,32 +101,10 @@ const formatDate = (dateString: string) => {
     return date.toLocaleString('zh-TW')
 }
 
-// Helper function to format relative time
-const formatRelativeTime = (dateString: string) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diff = now.getTime() - date.getTime()
-
-    const seconds = Math.floor(diff / 1000)
-    const minutes = Math.floor(seconds / 60)
-    const hours = Math.floor(minutes / 60)
-    const days = Math.floor(hours / 24)
-
-    if (days > 0) return `${days}天前`
-    if (hours > 0) return `${hours}小時前`
-    if (minutes > 0) return `${minutes}分鐘前`
-    return '剛剛'
-}
-
-// Navigation function
-const navigateToPost = (postId: number) => {
-    router.push(`/post/post_${postId.toString().padStart(3, '0')}`)
-}
-
 // Load posts data
 const loadPostsData = async () => {
     try {
-        const response = await fetch('/data/post.json')
+        const response = await fetch(`/data/post.json?$timestamp=${new Date().getTime()}`)
         const data = await response.json()
         postsData.value = data
     } catch (error) {

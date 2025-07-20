@@ -212,7 +212,7 @@ const loadUsersData = async () => {
 // Load posts data
 const loadPostsData = async () => {
     try {
-        const response = await fetch('/data/post.json')
+        const response = await fetch(`/data/post.json?$timestamp=${new Date().getTime()}`)
         const data = await response.json()
         postsData.value = data
     } catch (error) {

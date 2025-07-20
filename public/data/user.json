@@ -1,7 +1,7 @@
 [
     {
-        "id": "admin",
-        "name": "AdminAccess",
+        "id": "AdminAccess",
+        "name": "管理員",
         "avatar": "https://api.dicebear.com/9.x/icons/svg?seed=Vivian",
         "password": "ITclub2017Key",
         "grade": "高三",
