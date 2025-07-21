@@ -21,7 +21,7 @@
         "relationshipStatus": "單身中",
         "favoriteBoard": "八卦、學術",
         "postTrend": "/assets/trend/microlin.webp",
-        "selfIntro": "該說的話都說了，該和這個虛擬世界說再見了...<br>給那些還願意相信我的人，想知道真相的就登入我的帳號密碼吧...<br>密碼：<a href=\"#\" onclick=\"let newWin = window.open('/assets/images/18293c327f2d91536397e21c130a69d9848ecd45efa4c69ac536397e21c130a69d9848d536397536397e21c1536397e21c130a69536397e21c130a69d9848d984830a69d9848e21c130a69d98484f8b536397e21c130a69d9848580f38ed42536397e21c130a69d9848f35a2b2f76413278400b857673d1f9852dc4e9b.webp', '_blank', 'width=8000,height=4500,toolbar=no,location=no,directories=no, status=no,menubar=mo,scrollbars=yes,toolbar=no'); newWin.onblur = function() { newWin.close(); }; return false;\" class=\"underline text-green-600\">圖片線索</a>。"
+        "selfIntro": "該說的話都說了，該和這個虛擬世界說再見了...<br>給那些還願意相信我的人，想知道真相的就登入我的帳號密碼吧...<br>密碼：<a href=\"#\" onclick=\"let newWin = window.open('/assets/images/18293c327f2d91536397e21c130a69d9848ecd45efa4c69ac536397e21c130a69d9848d536397536397e21c1536397e21c130a69536397e21c130a69d9848d984830a69d9848e21c130a69d98484f8b536397e21c130a69d9848580f38ed42536397e21c130a69d9848f35a2b2f76413278400b857673d1f9852dc4e9b.webp', '_blank', 'width=8000,height=4500,toolbar=no,location=no,directories=no, status=no,menubar=mo,scrollbars=yes,toolbar=no'); newWin.onblur = function() { let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent); if(!isMobile){ newWin.close();}}; return false;\" class=\"underline text-green-600\">圖片線索</a>。"
     },
     {
         "id": "0x0x0x",
