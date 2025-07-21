@@ -213,7 +213,7 @@
                         </p>
                     </div>
                 </div>
-                <div v-else-if="!isLoggedIn" class="bg-amber-100 border border-amber-800 text-amber-800 rounded-lg shadow-lg p-6">
+                <div v-else class="bg-amber-100 border border-amber-800 text-amber-800 rounded-lg shadow-lg p-6">
                     <p>登入後查看詳細資料！！</p>
                 </div>
             </div>
@@ -464,7 +464,7 @@ const loadBoardsData = async () => {
 // 載入用戶資料
 const loadUsersData = async () => {
     try {
-        const response = await fetch('/data/user.json')
+        const response = await fetch(`/data/user.json?$timestamp=${new Date().getTime()}`)
         const data = await response.json()
         users.value = data
 

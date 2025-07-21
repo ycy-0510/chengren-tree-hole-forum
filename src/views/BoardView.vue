@@ -224,7 +224,7 @@ const loadBoardData = async () => {
 // Load users data
 const loadUsersData = async () => {
     try {
-        const response = await fetch('/data/user.json')
+        const response = await fetch(`/data/user.json?$timestamp=${new Date().getTime()}`)
         const data = await response.json()
         users.value = data
 

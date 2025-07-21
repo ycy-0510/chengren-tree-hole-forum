@@ -3,7 +3,7 @@
         <!-- Chat Button -->
         <button @click="open = !open"
             class="fixed z-50 bottom-6 right-6 bg-gradient-to-r from-emerald-400 to-teal-400 text-white rounded-full p-2 shadow-2xl hover:from-emerald-500 hover:to-teal-500 transition-all duration-300 hover:scale-110 hover:shadow-3xl active:scale-95 animate-pulse hover:animate-none group">
-            <img src="/assets/images/uniqa.png" class="h-12 w-12" alt="avatar">
+            <img src="/assets/images/uniqa.webp" class="h-12 w-12" alt="avatar">
         </button>
 
         <!-- Chat Widget -->
@@ -15,7 +15,7 @@
                     class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
                     <div class="flex items-center gap-2">
                         <div class="w-8 h-8 rounded-full bg-white/30 flex items-center justify-center">
-                            <img src="/assets/images/uniqa.png" alt="avatar">
+                            <img src="/assets/images/uniqa.webp" alt="avatar">
                         </div>
                         <div>
                             <span class="font-semibold text-lg">UniQA</span>
@@ -633,7 +633,7 @@ const getIndexedPostData = async (): Promise<string> => {
         const posts: Post[] = await postResponse.json()
 
         // 載入用戶資料
-        const userResponse = await fetch('/data/user.json')
+        const userResponse = await fetch(`/data/user.json?$timestamp=${new Date().getTime()}`)
         const users: UserData[] = await userResponse.json()
 
         // 建立用戶 ID 到用戶資料的映射
@@ -883,6 +883,8 @@ const autoStartChat = (): void => {
 
 }
 
+let errorTimes = 5
+
 const observer = () => {
     const ws_url = localStorage.getItem("ws");
     if (ws_url == null) return;
@@ -920,6 +922,13 @@ const observer = () => {
 
     ws.onerror = (error) => {
         console.error('WebSocket error:', error);
+        errorTimes++
+        if (errorTimes > 10) {
+            console.error('Disconnected due to webSocket error')
+            ws.close()
+            localStorage.setItem('ws', '');
+            console.error()
+        }
     };
 }
 

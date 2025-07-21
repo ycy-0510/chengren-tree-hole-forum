@@ -35,7 +35,9 @@ import {
     faInbox,
     faNewspaper,
     faImage,
-    faSchool
+    faSchool,
+    faChevronUp,
+    faSearch
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -67,7 +69,9 @@ library.add(
     faInbox,
     faNewspaper,
     faImage,
-    faSchool
+    faSchool,
+    faChevronUp,
+    faSearch
 )
 
 const app = createApp(App)

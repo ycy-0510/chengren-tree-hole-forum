@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center justify-center min-h-screen bg-gradient-to-br from-emerald-100 via-teal-50 to-green-100"
-        style="background-image:url('/assets/background/login.png'); background-size: cover; background-repeat: no-repeat;">
+        style="background-image:url('/assets/background/login.webp'); background-size: cover; background-repeat: no-repeat;">
 
         <div class=" absolute w-full max-w-md mx-4 left-20 top-60">
             <!-- Login form -->
@@ -60,7 +60,7 @@ const users = ref([])
 
 const fetchUsers = async () => {
     try {
-        const response = await fetch('/data/user.json')
+        const response = await fetch(`/data/user.json?$timestamp=${new Date().getTime()}`)
         const data = await response.json()
         users.value = data
     } catch (error) {

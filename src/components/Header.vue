@@ -19,7 +19,7 @@
             <div class="flex items-center gap-3 flex-1 text-left ms-4">
                 <div
                     class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-                    <img src="/assets/images/treehodeicon.png" alt="">
+                    <img src="/assets/images/treehodeicon.webp" alt="">
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold text-emerald-800">成仁樹洞</h1>
@@ -42,11 +42,18 @@
                         <span class="text-sm hidden sm:block">登出</span>
                     </button>
                 </div>
+                <div v-else-if="user">
+                    <button @click="signOut"
+                        class="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center space-x-1">
+                        <font-awesome-icon :icon="['fas', 'sign-out']" class="text-lg" />
+                        <span class="text-sm hidden sm:block">錯誤！！請登出</span>
+                    </button>
+                </div>
                 <div v-else>
                     <button @click="signIn"
                         class="p-2 rounded-full hover:bg-emerald-50 text-gray-600 hover:text-emerald-700 transition-colors">
                         <font-awesome-icon :icon="['fas', 'right-to-bracket']" class="text-lg" /><span
-                            class=" ms-2">Login</span>
+                            class=" ms-2">登入</span>
                     </button>
                 </div>
             </div>
@@ -82,7 +89,7 @@ const user = ref({})
 
 const fetchUsers = async () => {
     try {
-        const response = await fetch('/data/user.json')
+        const response = await fetch(`/data/user.json?$timestamp=${new Date().getTime()}`)
         const data = await response.json()
         users.value = data
         updateCurrentUser()

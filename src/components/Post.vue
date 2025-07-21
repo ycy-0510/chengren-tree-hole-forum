@@ -40,7 +40,7 @@
             <!-- Post Image -->
             <div v-if="post.image" class="mt-3">
                 <img :src="post.image" :alt="post.title"
-                    class="w-full max-w-lg rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                    class="w-84 max-w-xl rounded-lg shadow-sm hover:shadow-md cursor-pointer hover:w-full  transition-all duration-300 ease-in-out"
                     @click="openImageModal(post.image)">
             </div>
         </div>
