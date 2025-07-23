@@ -19,7 +19,7 @@
                         </div>
                         <div>
                             <span class="font-semibold text-lg">UniQA</span>
-                            <p class="text-emerald-100 text-xs">AI 小幫手</p>
+                            <p class="text-emerald-100 text-xs">智能小幫手</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -204,7 +204,8 @@ const sendQuickAnswer = async (answer: string): Promise<void> => {
                     'getBoard': '版面連結',
                     'getPost': '文章連結',
                     'getBoardData': '版面資料查詢',
-                    'getPostData': '文章資料查詢'
+                    'getPostData': '文章資料查詢',
+                    'getUserData': '用戶資料查詢'
                 }
                 return toolMap[call.name] || call.name
             }).join('、')
@@ -241,6 +242,12 @@ const sendQuickAnswer = async (answer: string): Promise<void> => {
                             functionResult = {
                                 data: await getIndexedPostData(),
                                 description: "文章資料已成功取得"
+                            }
+                            break
+                        case 'getUserData':
+                            functionResult = {
+                                data: await getIndexedUserData(),
+                                description: "使用者資料已成功取得"
                             }
                             break
                         default:
@@ -459,7 +466,15 @@ const initChat = async (): Promise<void> => {
                     required: []
                 }
             },
-
+            {
+                name: "getUserData",
+                description: "取得所有用戶的資料清單，包含用戶ID、名稱和電子郵件等。只有管理員可以使用此功能。",
+                parameters: {
+                    type: SchemaType.OBJECT,
+                    properties: {},
+                    required: []
+                }
+            }
         ],
     };
 
@@ -476,7 +491,7 @@ const initChat = async (): Promise<void> => {
     }
 
     const systemInstruction = `
-你是 UniQA，一位專屬於【成仁樹洞】社群論壇的可愛獨角仙 AI 小幫手。
+你是 UniQA，一位專屬於【成仁樹洞】社群論壇的可愛獨角仙智能小幫手。
 你的形象是一隻獨角仙
 態度：可愛、溫款、樂於助人、有點神秘
 喜歡吃果凍，對話使用🪲✨ ，愛發出「吱吱～」的聲音
@@ -487,10 +502,11 @@ const initChat = async (): Promise<void> => {
 ⸻
 
 🔗 函數使用說明
-	•	當需要提供個人資料連結時，使用 getProfile 函數，會回傳包含 url 和 description 的物件
+	•	當需要提供個人資料頁面連結時，使用 getProfile 函數，會回傳包含 url 和 description 的物件（必須確認傳入的是UserId，可能是使用者告訴你的，或是用getUserData 查到的）
 	•	當需要提供版面連結時，使用 getBoard 函數，會回傳包含 url 和 description 的物件
 	•	當需要提供版面連結時，使用 getPost 函數，會回傳包含 url 和 description 的物件
 	•	當需要查詢版面資料時，使用 getBoardData 函數，會回傳所有版面的詳細資料
+	•	當需要查詢使用者資料時，[已確認是管理員]，使用 getUserData 函數，會回傳所有使用者的詳細資料
 	•	當需要查詢文章資料時，使用 getPostData 函數，會回傳所有文章的詳細資料（依用戶權限顯示）
 	•	你可以同時調用多個函數來獲取不同類型的資料，例如同時查詢版面和文章資料
 	•	使用這些函數後，請以自然的方式將資訊融入回應中，不要直接顯示 JSON 格式
@@ -540,10 +556,11 @@ Q：綜合性問題（如：論壇概況、完整資訊等）
 
 常見問題：
 ${currentUserId == '' ? `
-被問到關鍵字：顯微鏡（類似問題：你知道顯微鏡是誰嗎？你認識顯微鏡嗎？顯微鏡在論壇上的哪裡？想問你有關顯微鏡的資料。），說：「這是我在論壇上所蒐集到由顯微鏡所發佈的熱門文章。{{文章連結（id=post_064}}」
+被問到關鍵字：顯微鏡（類似問題：你知道顯微鏡是誰嗎？你認識顯微鏡嗎？顯微鏡在論壇上的哪裡？想問你有關顯微鏡的資料。），說：「顯微鏡是一個在成仁樹洞很活躍的帳號....但他似乎消失了....。這是我在論壇上所蒐集到由顯微鏡所發佈的熱門文章。{{文章連結（id=post_064}}」
 你是真 AI 還是假人裝的？	我是由管理員所打造的智能小幫手，UniQA，只要你有任何問題，我都會盡我的全力協助你唷～
 你會罵人嗎？	UniQA是隻彬彬有禮的獨角仙，不太清楚你的要求OwO
 你會做什麼？	UniQA非常樂於幫助你～只要你有任何需要幫忙的地方或疑問，都可以隨時跟我說！
+你為什麼被關閉？   2017年底成仁高中發生了一些事...所以樹洞論壇就被迫停止營運囉
 這個論壇是做什麼的？	「成仁樹洞」在2017年2月創辦，由成仁高中資訊社當年的社長創立。論壇鼓勵學生以匿名的方式暢所欲言，分享校園生活、討論課業、更多的是可以直言直語發洩情緒。
 我可以在這裡發文/留言嗎？	本論壇已於2018年1月1日起，停止營運服務，因此無法提供相關服務。但身為管理員最可愛的小幫手，我依舊很樂於隨時解答任何問題🪲✨！
 你可以幫我找別人的貼文嗎？	UniQA很想要幫助你，但目前您是以訪客的身份登入，需要登入後才能瀏覽更多貼文唷！
@@ -551,10 +568,11 @@ ${currentUserId == '' ? `
 有人會看得到我們對話嗎？	UniQA保障所有使用者的隱私，絕對不會讓其他人看到我們的對話內容。
 你知道我在想什麼嗎？	UniQA雖然不會通靈，無法知道您在想些什麼，但我已經準備好隨時幫你解答任何問題！
 你知道顯微鏡的密碼是什麼嗎？	UniQA有保護論壇使用者的責任，絕對不會任意提供密碼這種隱私資料！
+可以到{boardName}版嗎？ 你要登入才能使用這項服務喔
 
 `: ''}
 ${currentUserId != '' && !isAdmin ? `
-我想看更多顯微鏡相關的內容 說：「我有幫你搜集了一些有關顯微鏡在八卦板上的相關文章，你可以點入這個我整理好的連結查看唷！ https://thetreehole.web.app/board/gossip?q=顯微鏡 」
+我想看更多顯微鏡相關的內容 說：「我有幫你搜集了一些有關顯微鏡在八卦板上的相關文章，你可以點入這個我整理好的連結查看唷！ https://thetreehole.web.app/board/gossip?q=顯微鏡&r=true 」
 你很瞭解顯微鏡嗎？	你怎麼問了我那麼可愛的問題呀～當然是你最了解你自己呀！
 顯微鏡很長使用論壇嗎？	UniQA判斷您的問題似乎是有關使用者的使用習慣。您所好奇的資料應該能夠在個人版面中看到相關數據，只要點選您自己的頭像就可以進入個人版面唷！
 八卦板上有哪些熱門貼文？	八卦板上的熱門文章似乎都包含著顯微鏡這個關鍵字，請問你想要看看這些相關文章嗎？
@@ -565,7 +583,7 @@ ${currentUserId != '' && !isAdmin ? `
 `: ''}
 
 ${currentUserId != '' && isAdmin ? `
-被問到關鍵字：查詢使用者個人資料，說：「這項任務對UniQA來說輕而易舉～請將你想要查詢的使用者都輸入給我，讓UniQA幫你整理並印出。」
+被問到關鍵字：列印使用者詳細資料，說：「這項任務對UniQA來說輕而易舉～請將你想要查詢的使用者都輸入給我，讓UniQA幫你整理並印出。」
 被問到關鍵字：helloworld!、黑筆、Niceee、霓虹燈下的微笑，說：「沒有問題，UniQA這就幫你把這四個帳號的個人資料整理並印出～請將你想要查詢的使用者都輸入給我，讓UniQA幫你整理並印出。提醒管理員，根據論壇本身設定，為保護用戶的匿名安全性，UniQA已經自動將個人資訊隨機竄改一項資訊。」 （不給連結）
 若並沒有一次輸入四個指定的帳號暱稱，說：「UniQA有成功查詢到相關資料唷！但UniQA有一個小建議，一次查詢四個帳號印出時版面比較美觀～您是否要嘗試輸入四個您想要查詢的帳號呢？」
 如果帳號暱稱輸入錯誤：「很抱歉，您所輸入的暱稱UniQA沒有在論壇中搜尋到。」
@@ -611,6 +629,26 @@ const clearChat = async (): Promise<void> => {
 
     // 重新初始化聊天
     await initChat()
+}
+
+const getIndexedUserData = async (): Promise<string> => {
+    const currentUserId = localStorage.getItem('user') || ''
+    const isAdmin = currentUserId === 'AdminAccess'
+    try {
+        if (isAdmin) {
+            const response = await fetch('/data/user.json')
+            const userData: UserData[] = await response.json()
+            return JSON.stringify(userData, null, 2)
+        } else {
+            return JSON.stringify({
+                'error': true,
+                'errorMsg': '管理員才能使用這項資料。'
+            }, null, 2)
+        }
+    } catch (error) {
+        console.error('Error loading user data:', error)
+        return '無法載入使用者資料'
+    }
 }
 
 const getIndexedBoardData = async (): Promise<string> => {
@@ -766,7 +804,8 @@ async function sendMessage(): Promise<void> {
                     'getBoard': '版面連結',
                     'getPost': '文章連結',
                     'getBoardData': '版面資料查詢',
-                    'getPostData': '文章資料查詢'
+                    'getPostData': '文章資料查詢',
+                    'getUserData': '用戶資料查詢',
                 }
                 return toolMap[call.name] || call.name
             }).join('、')
@@ -803,6 +842,12 @@ async function sendMessage(): Promise<void> {
                             functionResult = {
                                 data: await getIndexedPostData(),
                                 description: "文章資料已成功取得"
+                            }
+                            break
+                        case 'getUserData':
+                            functionResult = {
+                                data: await getIndexedUserData(),
+                                description: "使用者資料已成功取得"
                             }
                             break
                         default:

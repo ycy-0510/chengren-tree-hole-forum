@@ -21,14 +21,14 @@
         <div v-if="post.tags && post.tags.length > 0" class="mb-3">
             <div class="flex flex-wrap gap-2">
                 <span v-for="tag in post.tags" :key="tag"
-                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 hover:bg-amber-200 transition-colors">
-                    #{{ tag }}
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-amber-100 text-amber-800 hover:bg-amber-200 transition-colors" :class="{'bg-green-100 text-green-800 hover:bg-green-200':tag.includes('月熱門')}">
+                    {{   (tag.includes('月熱門') ? '🔥' : '#') + tag }}
                 </span>
             </div>
         </div>
         <!-- Post Content -->
         <div class="mb-4">
-            <p class="my-1"><span v-if="post.isPinned" class="mr-2 bg-green-100 text-green-800 rounded-full p-1 text-sm" title="置頂文章">🐞 置頂文章</span></p>
+            <p class="my-1"><span v-if="post.order && post.order > 0" class="mr-2 bg-green-100 text-green-800 rounded-full p-1 text-sm" title="置頂文章">🐞 置頂文章</span></p>
             <RouterLink :to="`/post/post_${post.id.toString().padStart(3, '0')}`">
                 <h3
                     class="text-lg font-semibold text-gray-900 mb-2 hover:text-amber-600 transition-colors cursor-pointer">
@@ -40,7 +40,7 @@
             <!-- Post Image -->
             <div v-if="post.image" class="mt-3">
                 <img :src="post.image" :alt="post.title"
-                    class="w-84 max-w-xl rounded-lg shadow-sm hover:shadow-md cursor-pointer hover:w-full  transition-all duration-300 ease-in-out"
+                    class="w-84 max-w-xl rounded-lg shadow-sm hover:shadow-md cursor-zoom-in hover:w-full  transition-all duration-300 ease-in-out"
                     @click="openImageModal(post.image)">
             </div>
         </div>
@@ -109,7 +109,7 @@
 
         <!-- Image Modal -->
         <div v-if="showImageModal"
-            class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+            class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 cursor-zoom-out"
             @click="closeImageModal">
             <div class="relative max-w-4xl max-h-full">
                 <img :src="selectedImage || ''" :alt="'放大圖片'"

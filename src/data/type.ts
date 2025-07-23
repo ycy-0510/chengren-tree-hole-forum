@@ -51,7 +51,7 @@ export interface PostData {
     likes: number
     shares: number
     comments: CommentData[]
-    isPinned?: boolean // 是否置頂
+    order?: number // 排序優先級，默認為0（時間排序），數值越高越靠前
 }
 
 // 組件使用的文章接口（經過處理的格式）
@@ -71,7 +71,7 @@ export interface Post {
     commentsList?: Comment[]
     // 用於顯示的假留言數（可選，如果不設定則使用實際留言數）
     displayComments?: number
-    isPinned?: boolean // 是否置頂
+    order?: number // 排序優先級，默認為0（時間排序），數值越高越靠前
 }
 
 // 版塊接口

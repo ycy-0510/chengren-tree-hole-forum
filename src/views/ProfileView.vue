@@ -51,8 +51,8 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <p class="text-sm text-gray-500">自我介紹</p>
-                        <p class="text-md font-semibold text-gray-700 text-start" v-html="userProfile.selfIntro"></p>
+                        <p class="text-base text-gray-500">自我介紹</p>
+                        <p class="text-lg font-semibold text-gray-700 text-start" v-html="userProfile.selfIntro"></p>
                     </div>
                 </div>
 
@@ -62,7 +62,9 @@
                     <div class="col-span-2 lg:col-span-1 bg-white rounded-lg shadow-lg p-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">發文熱度</h3>
                         <div class="h-64 flex items-end justify-between gap-1 overflow-x-auto">
-                            <img :src="userProfile.postTrend" alt="發文熱度圖" class="w-full rounded-lg shadow" />
+                            <img :src="userProfile.postTrend" alt="發文熱度圖"
+                                class="w-full rounded-lg shadow cursor-zoom-in hover:shadow-lg transition-shadow duration-300"
+                                @click="userProfile.postTrend && openImageModal(userProfile.postTrend)" />
                         </div>
                     </div>
 
@@ -122,13 +124,13 @@
                                         <div class="w-2 h-2 rounded-full bg-yellow-400 mr-2"></div>
                                         <span class="text-gray-600">白天</span>
                                         <span class="ml-auto font-medium text-gray-700">{{ postTimeData.dayPercent
-                                        }}%</span>
+                                            }}%</span>
                                     </div>
                                     <div class="flex items-center text-xs">
                                         <div class="w-2 h-2 rounded-full bg-blue-600 mr-2"></div>
                                         <span class="text-gray-600">晚上</span>
                                         <span class="ml-auto font-medium text-gray-700">{{ postTimeData.nightPercent
-                                        }}%</span>
+                                            }}%</span>
                                     </div>
                                 </div>
                             </div>
@@ -218,6 +220,20 @@
                 </div>
             </div>
         </div>
+
+        <!-- 圖片放大模態框 -->
+        <div v-if="showImageModal"
+            class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 cursor-zoom-out"
+            @click="closeImageModal">
+            <div class="relative max-w-4xl max-h-full">
+                <img :src="selectedImage || ''" :alt="'放大圖片'"
+                    class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
+                <button @click="closeImageModal"
+                    class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors">
+                    <font-awesome-icon icon="fa-solid fa-times" class="text-2xl" />
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -279,6 +295,10 @@ const users = ref<User[]>([])
 // 文章資料
 const postsData = ref<PostData[]>([])
 const isLoading = ref(true)
+
+// 圖片放大模態框狀態
+const showImageModal = ref(false)
+const selectedImage = ref<string | null>(null)
 
 // 判斷是否已登入
 const isLoggedIn = computed(() => !!currentUserId.value)
@@ -415,13 +435,14 @@ const postImageData = computed(() => {
 const userPosts = computed(() => {
     const userPostsData = postsData.value.filter(post => post.authorId === displayUserId.value)
 
-    // 按置頂狀態和時間排序（置頂在前，然後按最新時間排序）
+    // 按 order 和時間排序（order 越高越靠前，然後按最新時間排序）
     const sortedPosts = [...userPostsData].sort((a, b) => {
-        // 首先按置頂狀態排序
-        if (a.isPinned && !b.isPinned) return -1
-        if (!a.isPinned && b.isPinned) return 1
+        // 首先按 order 排序（數值越高越靠前）
+        const orderA = a.order || 0
+        const orderB = b.order || 0
+        if (orderA !== orderB) return orderB - orderA
 
-        // 如果置頂狀態相同，按時間排序（最新的在前）
+        // 如果 order 相同，按時間排序（最新的在前）
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     })
 
@@ -438,7 +459,7 @@ const userPosts = computed(() => {
         comments: (postData as any).displayComments || postData.comments.length,
         shares: postData.shares,
         tags: postData.tags,
-        isPinned: postData.isPinned, // 傳遞置頂狀態
+        order: postData.order, // 傳遞排序優先級
         commentsList: postData.comments.map(comment => ({
             id: `${postData.id}_comment_${comment.userId}_${comment.time}`,
             author: getAuthorName(comment.userId),
@@ -459,6 +480,17 @@ const loadBoardsData = async () => {
     } catch (error) {
         console.error('載入版面數據失敗:', error)
     }
+}
+
+// 圖片放大模態框功能
+const openImageModal = (imageUrl: string) => {
+    selectedImage.value = imageUrl
+    showImageModal.value = true
+}
+
+const closeImageModal = () => {
+    showImageModal.value = false
+    selectedImage.value = null
 }
 
 // 載入用戶資料

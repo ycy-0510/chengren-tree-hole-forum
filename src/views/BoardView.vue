@@ -9,11 +9,12 @@
                         <font-awesome-icon :icon="currentBoard.icon" class="text-2xl"
                             :style="{ color: currentBoard.color }" />
                     </div>
-                <div>
+                    <div>
                         <h1 class="text-3xl font-bold text-gray-900">{{ currentBoard.name }}</h1>
                         <p class="text-gray-600 mt-1">{{ currentBoard.description }}</p>
                         <div v-if="searchQuery" class="mt-2">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-800">
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-amber-100 text-amber-800">
                                 <font-awesome-icon icon="fa-solid fa-search" class="mr-1" />
                                 搜索: "{{ searchQuery }}"
                                 <span class="ml-2 text-xs">({{ filteredPosts.length }} 個結果)</span>
@@ -62,7 +63,8 @@
                 <!-- Empty State -->
                 <div v-else class="text-center py-12">
                     <div class="text-gray-400 mb-4">
-                        <font-awesome-icon :icon="searchQuery ? 'fa-solid fa-search' : 'fa-solid fa-inbox'" class="text-6xl" />
+                        <font-awesome-icon :icon="searchQuery ? 'fa-solid fa-search' : 'fa-solid fa-inbox'"
+                            class="text-6xl" />
                     </div>
                     <h3 class="text-lg font-medium text-gray-900 mb-2">
                         {{ searchQuery ? '找不到匹配的文章' : '目前沒有文章' }}
@@ -98,6 +100,7 @@ import type { Board, PostData, User, Post as PostType } from '../data'
 const route = useRoute()
 const boardId = computed(() => route.params.boardId as string)
 const searchQuery = computed(() => route.query.q as string || '')
+const isReverse = computed(() => (route.query.r as string || '') == 'true')
 
 // Board data
 const boards = ref<Board[]>([])
@@ -123,25 +126,25 @@ const postsPerPage = 5
 const postsData = ref<PostData[]>([])
 const filteredPosts = computed(() => {
     if (!currentBoard.value) return []
-    
+
     // Filter posts by board ID first
     let boardPosts = postsData.value.filter(post =>
         post.boardId === currentBoard.value!.id
     )
-    
+
     // If search query exists, filter by content or title
     if (searchQuery.value.trim()) {
         const query = searchQuery.value.trim().toLowerCase()
-        boardPosts = boardPosts.filter(post => 
-            post.title.toLowerCase().includes(query) || 
+        boardPosts = boardPosts.filter(post =>
+            post.title.toLowerCase().includes(query) ||
             post.content.toLowerCase().includes(query) ||
             post.tags.some(tag => tag.toLowerCase().includes(query))
         )
     }
-    
+
     // Sort by creation time (newest first)
     return [...boardPosts].sort((a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        (new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) * (isReverse.value ? -1 : 1)
     )
 })
 
