@@ -42,13 +42,6 @@
                         <span class="text-sm hidden sm:block">登出</span>
                     </button>
                 </div>
-                <div v-else-if="user">
-                    <button @click="signOut"
-                        class="p-2 rounded-full hover:bg-red-50 text-gray-600 hover:text-red-600 transition-colors flex items-center space-x-1">
-                        <font-awesome-icon :icon="['fas', 'sign-out']" class="text-lg" />
-                        <span class="text-sm hidden sm:block">錯誤！！請登出</span>
-                    </button>
-                </div>
                 <div v-else>
                     <button @click="signIn"
                         class="p-2 rounded-full hover:bg-emerald-50 text-gray-600 hover:text-emerald-700 transition-colors">
