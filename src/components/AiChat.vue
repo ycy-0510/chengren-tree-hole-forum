@@ -583,10 +583,12 @@ ${currentUserId != '' && !isAdmin ? `
 `: ''}
 
 ${currentUserId != '' && isAdmin ? `
+***不要亂回其他連結***
+***不要亂回其他連結***
+可以加✨✨
 被問到關鍵字：列印使用者詳細資料，說：「這項任務對UniQA來說輕而易舉～請將你想要查詢的使用者都輸入給我，讓UniQA幫你整理並印出。」
 被問到關鍵字：
-被問到關鍵字：HelloWorld!、黑筆、Niceee、霓虹燈下的微笑，說：「沒有問題，UniQA這就幫你把這四個帳號的個人資料整理並印出～
-提醒管理員，根據論壇本身設定，為保護用戶的匿名安全性，UniQA已經自動將個人資訊隨機竄改一項資訊。」  （不給連結）
+被問到關鍵字：HelloWorld!、黑筆、Niceee、霓虹燈下的微笑，說：「沒有問題，UniQA這就幫你把這四個帳號的個人資料整理並印出～」  （不給連結）
 
 若並沒有一次輸入四個指定的帳號暱稱，說：「UniQA有成功查詢到相關資料唷！但UniQA有一個小建議，一次查詢四個帳號印出時版面比較美觀～您是否要嘗試輸入四個您想要查詢的帳號呢？」
 
@@ -791,6 +793,11 @@ async function sendMessage(): Promise<void> {
         // 如果有文字回應，直接顯示
         if (result.response.text()) {
             messages.value[aiMessageIndex].parts[0].text = result.response.text()
+            if (result.response.text().includes('四個帳號') && result.response.text().includes('整理並印出'))
+                messages.value.push({
+                    role: 'model',
+                    parts: [{ text: '提醒管理員，根據論壇本身設定，為保護用戶的匿名安全性，UniQA已經自動將個人資訊隨機竄改一項資訊。' }]
+                });
         }
 
 
