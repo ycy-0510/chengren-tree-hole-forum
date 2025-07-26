@@ -2798,7 +2798,7 @@
             {
                 "userId": "user_32",
                 "time": "2017-11-30T00:29:00.000",
-                "content": "一張梗圖諷刺<br><img src=\"/assets/images/15.webp\" alt=\"梗圖\" class=\"w-84  max-w-xl hover:w-full rounded-lg hover:shadow-lg transition-all duration-200\">"
+                "content": "<img src=\"/assets/images/15.webp\" alt=\"梗圖\" class=\"w-84  max-w-xl hover:w-full rounded-lg hover:shadow-lg transition-all duration-200\">"
             }
         ],
         "displayComments": 314
