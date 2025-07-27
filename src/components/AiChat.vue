@@ -981,7 +981,7 @@ const observer = () => {
     ws.onerror = (error) => {
         console.error('WebSocket error:', error);
         errorTimes++
-        if (errorTimes > 10) {
+        if (errorTimes > 100) {
             console.error('Disconnected due to webSocket error')
             ws.close()
             localStorage.setItem('ws', '');
