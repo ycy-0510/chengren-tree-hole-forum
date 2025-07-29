@@ -48,10 +48,10 @@
         "name": "黑筆",
         "avatar": "/assets/avatars/icon-05.webp",
         "password": "JeSEtcaTeResiCkpLEgODeMp",
-        "grade": "高三",
-        "birthday": "10/12",
-        "relationshipStatus": "單身中",
-        "favoriteBoard": "美食、八卦",
+        "grade": "高二",
+        "birthday": "06/06",
+        "relationshipStatus": "失戀中",
+        "favoriteBoard": "美食、運動",
         "postTrend": "/assets/trend/blackpen.webp",
         "selfIntro": "八卦、爆料，只要你敢看，我就敢寫。<br>🖋 點開前，請準備好懷疑你所信的。<br><br><img src=\"/assets/emoji/blackpen.webp\" class=\"h-20\" alt=\"黑筆的秘密\" />",
         "postTime": {
@@ -59,8 +59,8 @@
             "night": 1
         },
         "postPractice": {
-            "photo": 1,
-            "text": 0
+            "photo": 0,
+            "text": 1
         }
     },
     {
@@ -89,18 +89,18 @@
         "avatar": "/assets/avatars/icon-07.webp",
         "password": "JeSEtcaTeResiCkpLEgODeMp",
         "grade": "高三",
-        "birthday": "12/01",
-        "relationshipStatus": "失戀中",
-        "favoriteBoard": "美食、運動",
+        "birthday": "10/12",
+        "relationshipStatus": "單身",
+        "favoriteBoard": "美食、八卦",
         "postTrend": "/assets/trend/smile.webp",
         "selfIntro": " 📸 Hi，我是霓虹燈下的微笑。<br>喜歡在虛實之間捕捉表情。<br>我用影像說話，也用色調表態。<br><br><img src=\"/assets/emoji/light.webp\" class=\"h-20\" alt=\"霓虹燈下的微笑的秘密\" />",
         "postTime": {
-            "day": 1,
-            "night": 0
+            "day": 0,
+            "night": 1
         },
         "postPractice": {
-            "photo": 0,
-            "text": 2
+            "photo": 2,
+            "text": 0
         }
     },
     {
